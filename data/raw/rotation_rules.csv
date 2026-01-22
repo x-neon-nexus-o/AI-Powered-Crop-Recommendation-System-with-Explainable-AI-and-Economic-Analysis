@@ -1,0 +1,343 @@
+Crop1,Crop2,Season1,Season2,Compatibility_Score,Soil_Impact
+Rice,Maize,Kharif,Kharif,0.6,Negative
+Rice,Sorghum,Kharif,Kharif,0.7,Neutral
+Rice,Bajra,Kharif,Kharif,0.7,Neutral
+Rice,Soybean,Kharif,Kharif,0.85,Positive
+Rice,Cotton,Kharif,Kharif,0.7,Neutral
+Rice,Groundnut,Kharif,Kharif,0.75,Neutral
+Rice,Sesame,Kharif,Kharif,0.7,Neutral
+Rice,Wheat,Kharif,Rabi,0.6,Negative
+Rice,Barley,Kharif,Rabi,0.6,Negative
+Rice,Mustard,Kharif,Rabi,0.75,Neutral
+Rice,Chickpea,Kharif,Rabi,0.85,Positive
+Rice,Lentil,Kharif,Rabi,0.85,Positive
+Rice,Pea,Kharif,Rabi,0.85,Positive
+Rice,Linseed,Kharif,Rabi,0.7,Neutral
+Rice,Mung Bean,Kharif,Zaid,0.85,Positive
+Rice,Pumpkin,Kharif,Zaid,0.7,Neutral
+Rice,Cucumber,Kharif,Zaid,0.7,Neutral
+Rice,Watermelon,Kharif,Zaid,0.7,Neutral
+Maize,Rice,Kharif,Kharif,0.6,Negative
+Maize,Sorghum,Kharif,Kharif,0.7,Neutral
+Maize,Bajra,Kharif,Kharif,0.7,Neutral
+Maize,Soybean,Kharif,Kharif,0.85,Positive
+Maize,Cotton,Kharif,Kharif,0.7,Neutral
+Maize,Groundnut,Kharif,Kharif,0.75,Neutral
+Maize,Sesame,Kharif,Kharif,0.7,Neutral
+Maize,Wheat,Kharif,Rabi,0.6,Negative
+Maize,Barley,Kharif,Rabi,0.6,Negative
+Maize,Mustard,Kharif,Rabi,0.75,Neutral
+Maize,Chickpea,Kharif,Rabi,0.85,Positive
+Maize,Lentil,Kharif,Rabi,0.85,Positive
+Maize,Pea,Kharif,Rabi,0.85,Positive
+Maize,Linseed,Kharif,Rabi,0.7,Neutral
+Maize,Mung Bean,Kharif,Zaid,0.85,Positive
+Maize,Pumpkin,Kharif,Zaid,0.7,Neutral
+Maize,Cucumber,Kharif,Zaid,0.7,Neutral
+Maize,Watermelon,Kharif,Zaid,0.7,Neutral
+Sorghum,Rice,Kharif,Kharif,0.7,Neutral
+Sorghum,Maize,Kharif,Kharif,0.7,Neutral
+Sorghum,Bajra,Kharif,Kharif,0.7,Neutral
+Sorghum,Soybean,Kharif,Kharif,0.85,Positive
+Sorghum,Cotton,Kharif,Kharif,0.7,Neutral
+Sorghum,Groundnut,Kharif,Kharif,0.75,Neutral
+Sorghum,Sesame,Kharif,Kharif,0.7,Neutral
+Sorghum,Wheat,Kharif,Rabi,0.7,Neutral
+Sorghum,Barley,Kharif,Rabi,0.7,Neutral
+Sorghum,Mustard,Kharif,Rabi,0.75,Neutral
+Sorghum,Chickpea,Kharif,Rabi,0.85,Positive
+Sorghum,Lentil,Kharif,Rabi,0.85,Positive
+Sorghum,Pea,Kharif,Rabi,0.85,Positive
+Sorghum,Linseed,Kharif,Rabi,0.7,Neutral
+Sorghum,Mung Bean,Kharif,Zaid,0.85,Positive
+Sorghum,Pumpkin,Kharif,Zaid,0.7,Neutral
+Sorghum,Cucumber,Kharif,Zaid,0.7,Neutral
+Sorghum,Watermelon,Kharif,Zaid,0.7,Neutral
+Bajra,Rice,Kharif,Kharif,0.7,Neutral
+Bajra,Maize,Kharif,Kharif,0.7,Neutral
+Bajra,Sorghum,Kharif,Kharif,0.7,Neutral
+Bajra,Soybean,Kharif,Kharif,0.85,Positive
+Bajra,Cotton,Kharif,Kharif,0.7,Neutral
+Bajra,Groundnut,Kharif,Kharif,0.75,Neutral
+Bajra,Sesame,Kharif,Kharif,0.7,Neutral
+Bajra,Wheat,Kharif,Rabi,0.7,Neutral
+Bajra,Barley,Kharif,Rabi,0.7,Neutral
+Bajra,Mustard,Kharif,Rabi,0.75,Neutral
+Bajra,Chickpea,Kharif,Rabi,0.85,Positive
+Bajra,Lentil,Kharif,Rabi,0.85,Positive
+Bajra,Pea,Kharif,Rabi,0.85,Positive
+Bajra,Linseed,Kharif,Rabi,0.7,Neutral
+Bajra,Mung Bean,Kharif,Zaid,0.85,Positive
+Bajra,Pumpkin,Kharif,Zaid,0.7,Neutral
+Bajra,Cucumber,Kharif,Zaid,0.7,Neutral
+Bajra,Watermelon,Kharif,Zaid,0.7,Neutral
+Soybean,Rice,Kharif,Kharif,0.7,Neutral
+Soybean,Maize,Kharif,Kharif,0.7,Neutral
+Soybean,Sorghum,Kharif,Kharif,0.7,Neutral
+Soybean,Bajra,Kharif,Kharif,0.7,Neutral
+Soybean,Cotton,Kharif,Kharif,0.7,Neutral
+Soybean,Groundnut,Kharif,Kharif,0.75,Neutral
+Soybean,Sesame,Kharif,Kharif,0.7,Neutral
+Soybean,Wheat,Kharif,Rabi,0.7,Neutral
+Soybean,Barley,Kharif,Rabi,0.7,Neutral
+Soybean,Mustard,Kharif,Rabi,0.75,Neutral
+Soybean,Chickpea,Kharif,Rabi,0.7,Neutral
+Soybean,Lentil,Kharif,Rabi,0.7,Neutral
+Soybean,Pea,Kharif,Rabi,0.7,Neutral
+Soybean,Linseed,Kharif,Rabi,0.7,Neutral
+Soybean,Mung Bean,Kharif,Zaid,0.7,Neutral
+Soybean,Pumpkin,Kharif,Zaid,0.7,Neutral
+Soybean,Cucumber,Kharif,Zaid,0.7,Neutral
+Soybean,Watermelon,Kharif,Zaid,0.7,Neutral
+Cotton,Rice,Kharif,Kharif,0.7,Neutral
+Cotton,Maize,Kharif,Kharif,0.7,Neutral
+Cotton,Sorghum,Kharif,Kharif,0.7,Neutral
+Cotton,Bajra,Kharif,Kharif,0.7,Neutral
+Cotton,Soybean,Kharif,Kharif,0.75,Neutral
+Cotton,Groundnut,Kharif,Kharif,0.75,Neutral
+Cotton,Sesame,Kharif,Kharif,0.7,Neutral
+Cotton,Wheat,Kharif,Rabi,0.7,Neutral
+Cotton,Barley,Kharif,Rabi,0.7,Neutral
+Cotton,Mustard,Kharif,Rabi,0.75,Neutral
+Cotton,Chickpea,Kharif,Rabi,0.7,Neutral
+Cotton,Lentil,Kharif,Rabi,0.7,Neutral
+Cotton,Pea,Kharif,Rabi,0.7,Neutral
+Cotton,Linseed,Kharif,Rabi,0.7,Neutral
+Cotton,Mung Bean,Kharif,Zaid,0.7,Neutral
+Cotton,Pumpkin,Kharif,Zaid,0.7,Neutral
+Cotton,Cucumber,Kharif,Zaid,0.7,Neutral
+Cotton,Watermelon,Kharif,Zaid,0.7,Neutral
+Groundnut,Rice,Kharif,Kharif,0.7,Neutral
+Groundnut,Maize,Kharif,Kharif,0.7,Neutral
+Groundnut,Sorghum,Kharif,Kharif,0.7,Neutral
+Groundnut,Bajra,Kharif,Kharif,0.7,Neutral
+Groundnut,Soybean,Kharif,Kharif,0.75,Neutral
+Groundnut,Cotton,Kharif,Kharif,0.7,Neutral
+Groundnut,Sesame,Kharif,Kharif,0.7,Neutral
+Groundnut,Wheat,Kharif,Rabi,0.7,Neutral
+Groundnut,Barley,Kharif,Rabi,0.7,Neutral
+Groundnut,Mustard,Kharif,Rabi,0.75,Neutral
+Groundnut,Chickpea,Kharif,Rabi,0.7,Neutral
+Groundnut,Lentil,Kharif,Rabi,0.7,Neutral
+Groundnut,Pea,Kharif,Rabi,0.7,Neutral
+Groundnut,Linseed,Kharif,Rabi,0.7,Neutral
+Groundnut,Mung Bean,Kharif,Zaid,0.7,Neutral
+Groundnut,Pumpkin,Kharif,Zaid,0.7,Neutral
+Groundnut,Cucumber,Kharif,Zaid,0.7,Neutral
+Groundnut,Watermelon,Kharif,Zaid,0.7,Neutral
+Sesame,Rice,Kharif,Kharif,0.7,Neutral
+Sesame,Maize,Kharif,Kharif,0.7,Neutral
+Sesame,Sorghum,Kharif,Kharif,0.7,Neutral
+Sesame,Bajra,Kharif,Kharif,0.7,Neutral
+Sesame,Soybean,Kharif,Kharif,0.75,Neutral
+Sesame,Cotton,Kharif,Kharif,0.7,Neutral
+Sesame,Groundnut,Kharif,Kharif,0.75,Neutral
+Sesame,Wheat,Kharif,Rabi,0.7,Neutral
+Sesame,Barley,Kharif,Rabi,0.7,Neutral
+Sesame,Mustard,Kharif,Rabi,0.75,Neutral
+Sesame,Chickpea,Kharif,Rabi,0.7,Neutral
+Sesame,Lentil,Kharif,Rabi,0.7,Neutral
+Sesame,Pea,Kharif,Rabi,0.7,Neutral
+Sesame,Linseed,Kharif,Rabi,0.7,Neutral
+Sesame,Mung Bean,Kharif,Zaid,0.7,Neutral
+Sesame,Pumpkin,Kharif,Zaid,0.7,Neutral
+Sesame,Cucumber,Kharif,Zaid,0.7,Neutral
+Sesame,Watermelon,Kharif,Zaid,0.7,Neutral
+Wheat,Rice,Rabi,Kharif,0.6,Negative
+Wheat,Maize,Rabi,Kharif,0.6,Negative
+Wheat,Sorghum,Rabi,Kharif,0.7,Neutral
+Wheat,Bajra,Rabi,Kharif,0.7,Neutral
+Wheat,Soybean,Rabi,Kharif,0.85,Positive
+Wheat,Cotton,Rabi,Kharif,0.7,Neutral
+Wheat,Groundnut,Rabi,Kharif,0.75,Neutral
+Wheat,Sesame,Rabi,Kharif,0.7,Neutral
+Wheat,Barley,Rabi,Rabi,0.6,Negative
+Wheat,Mustard,Rabi,Rabi,0.75,Neutral
+Wheat,Chickpea,Rabi,Rabi,0.85,Positive
+Wheat,Lentil,Rabi,Rabi,0.85,Positive
+Wheat,Pea,Rabi,Rabi,0.85,Positive
+Wheat,Linseed,Rabi,Rabi,0.7,Neutral
+Wheat,Mung Bean,Rabi,Zaid,0.85,Positive
+Wheat,Pumpkin,Rabi,Zaid,0.7,Neutral
+Wheat,Cucumber,Rabi,Zaid,0.7,Neutral
+Wheat,Watermelon,Rabi,Zaid,0.7,Neutral
+Barley,Rice,Rabi,Kharif,0.6,Negative
+Barley,Maize,Rabi,Kharif,0.6,Negative
+Barley,Sorghum,Rabi,Kharif,0.7,Neutral
+Barley,Bajra,Rabi,Kharif,0.7,Neutral
+Barley,Soybean,Rabi,Kharif,0.85,Positive
+Barley,Cotton,Rabi,Kharif,0.7,Neutral
+Barley,Groundnut,Rabi,Kharif,0.75,Neutral
+Barley,Sesame,Rabi,Kharif,0.7,Neutral
+Barley,Wheat,Rabi,Rabi,0.6,Negative
+Barley,Mustard,Rabi,Rabi,0.75,Neutral
+Barley,Chickpea,Rabi,Rabi,0.85,Positive
+Barley,Lentil,Rabi,Rabi,0.85,Positive
+Barley,Pea,Rabi,Rabi,0.85,Positive
+Barley,Linseed,Rabi,Rabi,0.7,Neutral
+Barley,Mung Bean,Rabi,Zaid,0.85,Positive
+Barley,Pumpkin,Rabi,Zaid,0.7,Neutral
+Barley,Cucumber,Rabi,Zaid,0.7,Neutral
+Barley,Watermelon,Rabi,Zaid,0.7,Neutral
+Mustard,Rice,Rabi,Kharif,0.7,Neutral
+Mustard,Maize,Rabi,Kharif,0.7,Neutral
+Mustard,Sorghum,Rabi,Kharif,0.7,Neutral
+Mustard,Bajra,Rabi,Kharif,0.7,Neutral
+Mustard,Soybean,Rabi,Kharif,0.75,Neutral
+Mustard,Cotton,Rabi,Kharif,0.7,Neutral
+Mustard,Groundnut,Rabi,Kharif,0.75,Neutral
+Mustard,Sesame,Rabi,Kharif,0.7,Neutral
+Mustard,Wheat,Rabi,Rabi,0.7,Neutral
+Mustard,Barley,Rabi,Rabi,0.7,Neutral
+Mustard,Chickpea,Rabi,Rabi,0.7,Neutral
+Mustard,Lentil,Rabi,Rabi,0.7,Neutral
+Mustard,Pea,Rabi,Rabi,0.7,Neutral
+Mustard,Linseed,Rabi,Rabi,0.7,Neutral
+Mustard,Mung Bean,Rabi,Zaid,0.7,Neutral
+Mustard,Pumpkin,Rabi,Zaid,0.7,Neutral
+Mustard,Cucumber,Rabi,Zaid,0.7,Neutral
+Mustard,Watermelon,Rabi,Zaid,0.7,Neutral
+Chickpea,Rice,Rabi,Kharif,0.7,Neutral
+Chickpea,Maize,Rabi,Kharif,0.7,Neutral
+Chickpea,Sorghum,Rabi,Kharif,0.7,Neutral
+Chickpea,Bajra,Rabi,Kharif,0.7,Neutral
+Chickpea,Soybean,Rabi,Kharif,0.75,Neutral
+Chickpea,Cotton,Rabi,Kharif,0.7,Neutral
+Chickpea,Groundnut,Rabi,Kharif,0.75,Neutral
+Chickpea,Sesame,Rabi,Kharif,0.7,Neutral
+Chickpea,Wheat,Rabi,Rabi,0.7,Neutral
+Chickpea,Barley,Rabi,Rabi,0.7,Neutral
+Chickpea,Mustard,Rabi,Rabi,0.75,Neutral
+Chickpea,Lentil,Rabi,Rabi,0.7,Neutral
+Chickpea,Pea,Rabi,Rabi,0.7,Neutral
+Chickpea,Linseed,Rabi,Rabi,0.7,Neutral
+Chickpea,Mung Bean,Rabi,Zaid,0.7,Neutral
+Chickpea,Pumpkin,Rabi,Zaid,0.7,Neutral
+Chickpea,Cucumber,Rabi,Zaid,0.7,Neutral
+Chickpea,Watermelon,Rabi,Zaid,0.7,Neutral
+Lentil,Rice,Rabi,Kharif,0.7,Neutral
+Lentil,Maize,Rabi,Kharif,0.7,Neutral
+Lentil,Sorghum,Rabi,Kharif,0.7,Neutral
+Lentil,Bajra,Rabi,Kharif,0.7,Neutral
+Lentil,Soybean,Rabi,Kharif,0.75,Neutral
+Lentil,Cotton,Rabi,Kharif,0.7,Neutral
+Lentil,Groundnut,Rabi,Kharif,0.75,Neutral
+Lentil,Sesame,Rabi,Kharif,0.7,Neutral
+Lentil,Wheat,Rabi,Rabi,0.7,Neutral
+Lentil,Barley,Rabi,Rabi,0.7,Neutral
+Lentil,Mustard,Rabi,Rabi,0.75,Neutral
+Lentil,Chickpea,Rabi,Rabi,0.7,Neutral
+Lentil,Pea,Rabi,Rabi,0.7,Neutral
+Lentil,Linseed,Rabi,Rabi,0.7,Neutral
+Lentil,Mung Bean,Rabi,Zaid,0.7,Neutral
+Lentil,Pumpkin,Rabi,Zaid,0.7,Neutral
+Lentil,Cucumber,Rabi,Zaid,0.7,Neutral
+Lentil,Watermelon,Rabi,Zaid,0.7,Neutral
+Pea,Rice,Rabi,Kharif,0.7,Neutral
+Pea,Maize,Rabi,Kharif,0.7,Neutral
+Pea,Sorghum,Rabi,Kharif,0.7,Neutral
+Pea,Bajra,Rabi,Kharif,0.7,Neutral
+Pea,Soybean,Rabi,Kharif,0.75,Neutral
+Pea,Cotton,Rabi,Kharif,0.7,Neutral
+Pea,Groundnut,Rabi,Kharif,0.75,Neutral
+Pea,Sesame,Rabi,Kharif,0.7,Neutral
+Pea,Wheat,Rabi,Rabi,0.7,Neutral
+Pea,Barley,Rabi,Rabi,0.7,Neutral
+Pea,Mustard,Rabi,Rabi,0.75,Neutral
+Pea,Chickpea,Rabi,Rabi,0.7,Neutral
+Pea,Lentil,Rabi,Rabi,0.7,Neutral
+Pea,Linseed,Rabi,Rabi,0.7,Neutral
+Pea,Mung Bean,Rabi,Zaid,0.7,Neutral
+Pea,Pumpkin,Rabi,Zaid,0.7,Neutral
+Pea,Cucumber,Rabi,Zaid,0.7,Neutral
+Pea,Watermelon,Rabi,Zaid,0.7,Neutral
+Linseed,Rice,Rabi,Kharif,0.7,Neutral
+Linseed,Maize,Rabi,Kharif,0.7,Neutral
+Linseed,Sorghum,Rabi,Kharif,0.7,Neutral
+Linseed,Bajra,Rabi,Kharif,0.7,Neutral
+Linseed,Soybean,Rabi,Kharif,0.75,Neutral
+Linseed,Cotton,Rabi,Kharif,0.7,Neutral
+Linseed,Groundnut,Rabi,Kharif,0.75,Neutral
+Linseed,Sesame,Rabi,Kharif,0.7,Neutral
+Linseed,Wheat,Rabi,Rabi,0.7,Neutral
+Linseed,Barley,Rabi,Rabi,0.7,Neutral
+Linseed,Mustard,Rabi,Rabi,0.75,Neutral
+Linseed,Chickpea,Rabi,Rabi,0.7,Neutral
+Linseed,Lentil,Rabi,Rabi,0.7,Neutral
+Linseed,Pea,Rabi,Rabi,0.7,Neutral
+Linseed,Mung Bean,Rabi,Zaid,0.7,Neutral
+Linseed,Pumpkin,Rabi,Zaid,0.7,Neutral
+Linseed,Cucumber,Rabi,Zaid,0.7,Neutral
+Linseed,Watermelon,Rabi,Zaid,0.7,Neutral
+Mung Bean,Rice,Zaid,Kharif,0.7,Neutral
+Mung Bean,Maize,Zaid,Kharif,0.7,Neutral
+Mung Bean,Sorghum,Zaid,Kharif,0.7,Neutral
+Mung Bean,Bajra,Zaid,Kharif,0.7,Neutral
+Mung Bean,Soybean,Zaid,Kharif,0.75,Neutral
+Mung Bean,Cotton,Zaid,Kharif,0.7,Neutral
+Mung Bean,Groundnut,Zaid,Kharif,0.75,Neutral
+Mung Bean,Sesame,Zaid,Kharif,0.7,Neutral
+Mung Bean,Wheat,Zaid,Rabi,0.7,Neutral
+Mung Bean,Barley,Zaid,Rabi,0.7,Neutral
+Mung Bean,Mustard,Zaid,Rabi,0.75,Neutral
+Mung Bean,Chickpea,Zaid,Rabi,0.7,Neutral
+Mung Bean,Lentil,Zaid,Rabi,0.7,Neutral
+Mung Bean,Pea,Zaid,Rabi,0.7,Neutral
+Mung Bean,Linseed,Zaid,Rabi,0.7,Neutral
+Mung Bean,Pumpkin,Zaid,Zaid,0.7,Neutral
+Mung Bean,Cucumber,Zaid,Zaid,0.7,Neutral
+Mung Bean,Watermelon,Zaid,Zaid,0.7,Neutral
+Pumpkin,Rice,Zaid,Kharif,0.7,Neutral
+Pumpkin,Maize,Zaid,Kharif,0.7,Neutral
+Pumpkin,Sorghum,Zaid,Kharif,0.7,Neutral
+Pumpkin,Bajra,Zaid,Kharif,0.7,Neutral
+Pumpkin,Soybean,Zaid,Kharif,0.75,Neutral
+Pumpkin,Cotton,Zaid,Kharif,0.7,Neutral
+Pumpkin,Groundnut,Zaid,Kharif,0.75,Neutral
+Pumpkin,Sesame,Zaid,Kharif,0.7,Neutral
+Pumpkin,Wheat,Zaid,Rabi,0.7,Neutral
+Pumpkin,Barley,Zaid,Rabi,0.7,Neutral
+Pumpkin,Mustard,Zaid,Rabi,0.75,Neutral
+Pumpkin,Chickpea,Zaid,Rabi,0.7,Neutral
+Pumpkin,Lentil,Zaid,Rabi,0.7,Neutral
+Pumpkin,Pea,Zaid,Rabi,0.7,Neutral
+Pumpkin,Linseed,Zaid,Rabi,0.7,Neutral
+Pumpkin,Mung Bean,Zaid,Zaid,0.7,Neutral
+Pumpkin,Cucumber,Zaid,Zaid,0.7,Neutral
+Pumpkin,Watermelon,Zaid,Zaid,0.7,Neutral
+Cucumber,Rice,Zaid,Kharif,0.7,Neutral
+Cucumber,Maize,Zaid,Kharif,0.7,Neutral
+Cucumber,Sorghum,Zaid,Kharif,0.7,Neutral
+Cucumber,Bajra,Zaid,Kharif,0.7,Neutral
+Cucumber,Soybean,Zaid,Kharif,0.75,Neutral
+Cucumber,Cotton,Zaid,Kharif,0.7,Neutral
+Cucumber,Groundnut,Zaid,Kharif,0.75,Neutral
+Cucumber,Sesame,Zaid,Kharif,0.7,Neutral
+Cucumber,Wheat,Zaid,Rabi,0.7,Neutral
+Cucumber,Barley,Zaid,Rabi,0.7,Neutral
+Cucumber,Mustard,Zaid,Rabi,0.75,Neutral
+Cucumber,Chickpea,Zaid,Rabi,0.7,Neutral
+Cucumber,Lentil,Zaid,Rabi,0.7,Neutral
+Cucumber,Pea,Zaid,Rabi,0.7,Neutral
+Cucumber,Linseed,Zaid,Rabi,0.7,Neutral
+Cucumber,Mung Bean,Zaid,Zaid,0.7,Neutral
+Cucumber,Pumpkin,Zaid,Zaid,0.7,Neutral
+Cucumber,Watermelon,Zaid,Zaid,0.7,Neutral
+Watermelon,Rice,Zaid,Kharif,0.7,Neutral
+Watermelon,Maize,Zaid,Kharif,0.7,Neutral
+Watermelon,Sorghum,Zaid,Kharif,0.7,Neutral
+Watermelon,Bajra,Zaid,Kharif,0.7,Neutral
+Watermelon,Soybean,Zaid,Kharif,0.75,Neutral
+Watermelon,Cotton,Zaid,Kharif,0.7,Neutral
+Watermelon,Groundnut,Zaid,Kharif,0.75,Neutral
+Watermelon,Sesame,Zaid,Kharif,0.7,Neutral
+Watermelon,Wheat,Zaid,Rabi,0.7,Neutral
+Watermelon,Barley,Zaid,Rabi,0.7,Neutral
+Watermelon,Mustard,Zaid,Rabi,0.75,Neutral
+Watermelon,Chickpea,Zaid,Rabi,0.7,Neutral
+Watermelon,Lentil,Zaid,Rabi,0.7,Neutral
+Watermelon,Pea,Zaid,Rabi,0.7,Neutral
+Watermelon,Linseed,Zaid,Rabi,0.7,Neutral
+Watermelon,Mung Bean,Zaid,Zaid,0.7,Neutral
+Watermelon,Pumpkin,Zaid,Zaid,0.7,Neutral
+Watermelon,Cucumber,Zaid,Zaid,0.7,Neutral
