@@ -1,0 +1,2 @@
+original_rows,cleaned_rows,rows_removed,missing_values_before,missing_values_after,duplicates_removed,data_retention_rate
+2200,2200,0,0,0,0,100.0
