@@ -14,7 +14,7 @@ This semester project develops an advanced crop recommendation system that goes 
 4. **Ensemble ML Models** - Stacking Random Forest, XGBoost, and LightGBM
 5. **Interactive Web Dashboard** - Flask-based application with visualizations
 
-**Alignment with Research Gaps:** Addresses 5 major gaps identified in existing literature - no XAI implementation, no economic analysis, no crop rotation planning, static datasets, and lack of regional customization. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/281231/6f937956-8f5c-4e8c-9f67-398198cdd951/MAJ-2025-1221-FD_1754609106.pdf)
+**Alignment with Research Gaps:** Addresses 5 major gaps identified in existing literature - no XAI implementation, no economic analysis, no crop rotation planning, static datasets, and lack of regional customization.
 
 ***
 
