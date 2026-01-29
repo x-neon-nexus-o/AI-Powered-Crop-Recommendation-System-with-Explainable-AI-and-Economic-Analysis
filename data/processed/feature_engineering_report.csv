@@ -1,0 +1,9 @@
+Metric,Value
+Original Features,7
+Engineered Features (Numerical),11
+Engineered Features (Categorical → Encoded),8
+Total Features After Engineering,39
+Dataset Rows,2200
+Data Completeness,100.00%
+Memory Usage (KB),670.73
+Ready for ML,YES
