@@ -1,0 +1,14 @@
+Metric,Value
+Original Dataset Shape,2200 x 40
+Total Features,39
+Total Samples,2200
+Target Classes,22
+Train Samples,1760
+Test Samples,440
+Train-Test Ratio,80% - 20%
+Stratification,Yes(Balanced across classes)
+Scaling Methods,"StandardScaler, MinMaxScaler"
+Label Encoding,Crops → Integers (0-21)
+Missing Values (Train),0
+Missing Values (Test),0
+Ready for ML,YES
