@@ -1,0 +1,16 @@
+|-- climate_index <= -1.76
+|  |-- NPK_product <= -0.27
+|  |  |-- class: 9
+|  |-- NPK_product >  -0.27
+|  |  |-- class: 3
+|-- climate_index >  -1.76
+|  |-- NPK_sum <= 1.75
+|  |  |-- NPK_product <= 0.65
+|  |  |  |-- class: 2
+|  |  |-- NPK_product >  0.65
+|  |  |  |-- class: 1
+|  |-- NPK_sum >  1.75
+|  |  |-- moisture_index <= 0.03
+|  |  |  |-- class: 7
+|  |  |-- moisture_index >  0.03
+|  |  |  |-- class: 0
