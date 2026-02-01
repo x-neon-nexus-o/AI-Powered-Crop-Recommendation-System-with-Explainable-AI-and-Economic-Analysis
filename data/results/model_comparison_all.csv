@@ -3,6 +3,6 @@ Test Accuracy,97.73%,95.68%,99.32%,97.95%
 Test Precision,97.93%,95.92%,99.35%,98.09%
 Test Recall,97.73%,95.68%,99.32%,97.95%
 Test F1-Score,97.71%,95.70%,99.32%,97.94%
-Training Time (sec),0.2027,0.0194,0.3761,20.8793
-Prediction Time (ms),0.0028,0.0042,0.2568,0.1816
+Training Time (sec),0.2027,0.0194,0.3761,19.0283
+Prediction Time (ms),0.0028,0.0042,0.2568,0.1586
 Overfitting Gap,1.14%,1.88%,0.57%,1.48%
