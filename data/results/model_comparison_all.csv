@@ -1,0 +1,8 @@
+Metric,Logistic_Regression,Decision_Tree,Random_Forest
+Test Accuracy,97.73%,95.68%,99.32%
+Test Precision,97.93%,95.92%,99.35%
+Test Recall,97.73%,95.68%,99.32%
+Test F1-Score,97.71%,95.70%,99.32%
+Training Time (sec),0.2027,0.0194,0.3761
+Prediction Time (ms),0.0028,0.0042,0.2568
+Overfitting Gap,1.14%,1.88%,0.57%
