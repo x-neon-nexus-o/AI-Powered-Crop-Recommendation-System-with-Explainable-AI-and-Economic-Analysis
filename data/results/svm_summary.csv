@@ -1,10 +1,2 @@
-Metric,Value
-Test Accuracy,97.95%
-Test Precision,98.09%
-Test Recall,97.95%
-Test F1-Score,97.94%
-Train Accuracy,99.43%
-Overfitting Gap,1.48%
-Kernel,rbf
-C Parameter,100
-Support Vectors,646
+Test_Accuracy,Test_Precision,Test_Recall,Test_F1_Score,Train_Accuracy,Overfitting_Gap
+97.95%,98.09%,97.95%,97.94%,99.43%,1.48%
