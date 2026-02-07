@@ -1,0 +1,6 @@
+starting_crop,starting_season,rotation_sequence,sustainability_score,rating,n_balance,p_balance,k_balance
+rice,Kharif,rice → chickpea → mung bean → soybean,94.2,Excellent,20,-36,-46
+wheat,Rabi,wheat → mung bean → soybean → mustard,90.6,Excellent,-5,-33,-36
+cotton,Kharif,cotton → mustard → mung bean → soybean,89.3,Excellent,-3,-36,-41
+chickpea,Rabi,chickpea → mung bean → soybean → mustard,70.0,Good,35,-29,-31
+maize,Kharif,maize → chickpea → mung bean → soybean,86.7,Excellent,23,-31,-44

@@ -1,0 +1,2 @@
+total_rotation_combinations,unique_crops,seasons,avg_compatibility,high_compatibility_count,positive_soil_impact_count,neutral_soil_impact_count,negative_soil_impact_count,best_rotation_strategy,best_strategy_score
+342,19,"['Kharif', 'Rabi', 'Zaid']",0.717,30,30,300,12,Traditional,86.7

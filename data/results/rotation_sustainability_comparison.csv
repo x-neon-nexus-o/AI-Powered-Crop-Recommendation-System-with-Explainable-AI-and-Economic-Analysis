@@ -1,0 +1,7 @@
+strategy,crops,total_score,rating,diversity,soil_health,compatibility,legume,n_balance
+Cereal Only,rice->wheat->maize->rice,36.8,Poor,33.3,25.0,60.0,30.0,-92
+Legume Focus,chickpea->mungbean->lentil->pea,69.2,Good,66.7,50.0,70.0,100.0,40
+Balanced,rice->chickpea->wheat->mungbean,67.9,Good,100.0,25.0,77.5,80.0,-35
+Oilseed Mix,groundnut->mustard->soybean->sesame,62.7,Good,33.3,100.0,73.3,30.0,0
+Traditional,rice->lentil->wheat->chickpea,86.7,Excellent,66.7,100.0,80.0,100.0,-7
+Intensive,rice->wheat->rice->wheat,36.8,Poor,33.3,25.0,60.0,30.0,-90
