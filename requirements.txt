@@ -27,6 +27,9 @@ lightgbm==4.0.0
 # Explainability
 shap==0.42.1
 
+# PDF Export
+fpdf2==2.7.6
+
 # Utilities
 joblib==1.3.2
 openpyxl==3.1.2

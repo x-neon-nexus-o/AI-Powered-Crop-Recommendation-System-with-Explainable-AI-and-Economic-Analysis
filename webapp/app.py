@@ -3,7 +3,7 @@ Flask Web Application for Crop Recommendation System
 With Explainable AI and Economic Analysis
 """
 
-from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session, Response
 import numpy as np
 import os
 import uuid
@@ -24,6 +24,7 @@ from economic import (
     load_economic_data, calculate_roi, get_economic_summary,
     cost_benefit_analysis, rank_by_profitability, risk_assessment
 )
+from pdf_report import generate_crop_report
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'crop-recommendation-secret-key-2024')
@@ -523,6 +524,74 @@ def compare():
 def about():
     """About page - Project information."""
     return render_template('about.html')
+
+
+@app.route('/export-pdf')
+def export_pdf():
+    """Generate and download a PDF report of the last prediction."""
+    last_pred = session.get('last_prediction')
+    if not last_pred:
+        flash('Please make a prediction first', 'warning')
+        return redirect(url_for('predict'))
+
+    inputs = last_pred['inputs']
+    session_id = last_pred.get('session_id', '')
+    crop_idx = last_pred.get('top_crop_idx', 0)
+
+    # Rebuild full predictions with economic + rotation data
+    predictions = []
+    for pred in last_pred['predictions']:
+        crop_name = pred['crop']
+        economic = get_economic_summary(crop_name)
+        rotation = get_rotation_suggestion(crop_name, inputs.get('season', 'Kharif'))
+        predictions.append({
+            'crop': crop_name,
+            'probability': pred['probability'],
+            'confidence': pred['confidence'],
+            'category': categorize_recommendation(pred['probability']),
+            'category_class': get_category_class(pred['probability']),
+            'economic': economic,
+            'rotation': rotation
+        })
+
+    top_crop = predictions[0]['crop']
+    economic_data = predictions[0]['economic']
+    rotation_data = predictions[0]['rotation']
+
+    # Generate SHAP explanation
+    explanation_data = None
+    shap_plot_path = None
+    try:
+        feature_keys = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
+        features = engineer_features(**{k: inputs[k] for k in feature_keys})
+        features_scaled = get_scaler().transform(features)
+        explanation_data = generate_shap_explanation(features_scaled, crop_idx, FEATURE_NAMES)
+
+        # Check for existing SHAP waterfall plot
+        static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+        waterfall_file = os.path.join(static_dir, 'images', 'shap_plots', f'waterfall_{session_id}.png')
+        if os.path.isfile(waterfall_file):
+            shap_plot_path = waterfall_file
+    except Exception:
+        pass
+
+    # Generate PDF
+    pdf_bytes = generate_crop_report(
+        inputs=inputs,
+        predictions=predictions,
+        economic_data=economic_data,
+        rotation_data=rotation_data,
+        explanation_data=explanation_data,
+        shap_plot_path=shap_plot_path
+    )
+
+    filename = f'CropAI_Report_{top_crop}_{datetime.now().strftime("%Y%m%d_%H%M")}.pdf'
+
+    return Response(
+        pdf_bytes,
+        mimetype='application/pdf',
+        headers={'Content-Disposition': f'attachment; filename="{filename}"'}
+    )
 
 
 # ==================== API ENDPOINTS ====================

@@ -256,6 +256,9 @@
 
     <!-- Actions -->
     <div class="text-center mt-5">
+        <a href="{{ url_for('export_pdf') }}" class="btn btn-danger btn-lg me-2">
+            <i class="bi bi-file-earmark-pdf me-2"></i>Download PDF Report
+        </a>
         <a href="{{ url_for('explain') }}" class="btn btn-warning btn-lg me-2">
             <i class="bi bi-lightbulb me-2"></i>View Explanation (XAI)
         </a>

@@ -21,5 +21,8 @@ scipy==1.11.2
 # Explainability
 shap==0.42.1
 
+# PDF Export
+fpdf2==2.7.6
+
 # Utilities
 joblib==1.3.2
