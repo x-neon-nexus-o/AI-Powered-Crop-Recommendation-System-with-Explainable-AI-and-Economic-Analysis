@@ -36,12 +36,18 @@ def load_models():
     """Load all required models on application startup."""
     global _model, _scaler, _label_encoder
 
-    # Load stacking ensemble model
+    # Load stacking ensemble model (may fail if xgboost/lightgbm not installed)
     try:
         with open(os.path.join(MODELS_PATH, "ensemble", "stacking_ensemble.pkl"), 'rb') as f:
             _model = pickle.load(f)
         print("✅ Stacking Ensemble loaded")
     except FileNotFoundError:
+        print("⚠️ Stacking Ensemble not found, trying Random Forest...")
+        with open(os.path.join(MODELS_PATH, "random_forest_model.pkl"), 'rb') as f:
+            _model = pickle.load(f)
+        print("✅ Random Forest loaded (fallback)")
+    except Exception as e:
+        print(f"⚠️ Stacking Ensemble failed ({e}), using Random Forest...")
         with open(os.path.join(MODELS_PATH, "random_forest_model.pkl"), 'rb') as f:
             _model = pickle.load(f)
         print("✅ Random Forest loaded (fallback)")
