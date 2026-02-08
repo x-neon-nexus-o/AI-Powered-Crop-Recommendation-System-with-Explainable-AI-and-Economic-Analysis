@@ -110,7 +110,7 @@
                             <td><strong>Risk Level</strong></td>
                             {% for crop in crops %}
                             <td class="text-center">
-                                <span class="badge 
+                                <span class="badge
                                     {% if crop.risk.category == 'Low' %}bg-success
                                     {% elif crop.risk.category == 'Medium' %}bg-warning
                                     {% else %}bg-danger{% endif %}">
@@ -131,47 +131,114 @@
                             <td class="text-center">{{ "%.1f"|format(crop.risk.volatility) }}%</td>
                             {% endfor %}
                         </tr>
+                        <tr>
+                            <td><strong>Sustainability</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">
+                                <span class="badge
+                                    {% if crop.rotation.sustainability_score >= 80 %}bg-success
+                                    {% elif crop.rotation.sustainability_score >= 60 %}bg-info
+                                    {% elif crop.rotation.sustainability_score >= 40 %}bg-warning
+                                    {% else %}bg-danger{% endif %}">
+                                    {{ crop.rotation.sustainability_score }}/100
+                                </span>
+                            </td>
+                            {% endfor %}
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
+    <!-- Row 1: ROI + Revenue vs Cost -->
+    <div class="row g-4 mb-4">
         <!-- ROI Comparison Chart -->
         <div class="col-lg-6">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="fw-bold mb-4">
-                        <i class="bi bi-bar-chart me-2"></i>ROI Comparison
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-bar-chart me-2 text-success"></i>ROI Comparison
                     </h5>
-                    <canvas id="roiChart" height="250"></canvas>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="roiChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Radar Chart -->
+        <!-- Revenue vs Cost Chart -->
         <div class="col-lg-6">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="fw-bold mb-4">
-                        <i class="bi bi-diagram-3 me-2"></i>Multi-Dimensional Comparison
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-currency-rupee me-2 text-primary"></i>Revenue vs Cost
                     </h5>
-                    <canvas id="radarChart" height="250"></canvas>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="revenueCostChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Profit vs Risk Scatter -->
-    <div class="row mt-4">
-        <div class="col-lg-8 mx-auto">
-            <div class="card">
+    <!-- Row 2: Radar + Cost Breakdown -->
+    <div class="row g-4 mb-4">
+        <!-- Radar Chart -->
+        <div class="col-lg-6">
+            <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="fw-bold mb-4">
-                        <i class="bi bi-bullseye me-2"></i>Profit vs Risk Analysis
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-diagram-3 me-2 text-info"></i>Multi-Dimensional Comparison
                     </h5>
-                    <canvas id="scatterChart" height="250"></canvas>
+                    <div style="position: relative; height: 320px;">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Breakdown Chart -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-pie-chart me-2 text-warning"></i>Cost Breakdown
+                    </h5>
+                    <div style="position: relative; height: 320px;">
+                        <canvas id="costBreakdownChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Profit vs Risk Scatter + Profit Comparison -->
+    <div class="row g-4 mb-4">
+        <!-- Scatter Chart -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-bullseye me-2 text-danger"></i>Profit vs Risk Analysis
+                    </h5>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="scatterChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profit Horizontal Bar -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-cash-stack me-2 text-success"></i>Profit Comparison (₹/acre)
+                    </h5>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="profitChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -203,14 +270,25 @@
             var cropNames = crops.map(function (c) { return c.crop; });
             var roiValues = crops.map(function (c) { return Math.round(c.economic.roi * 10) / 10; });
             var profitValues = crops.map(function (c) { return Math.round(c.economic.profit); });
+            var revenueValues = crops.map(function (c) { return Math.round(c.economic.revenue); });
+            var costValues = crops.map(function (c) { return Math.round(c.economic.total_cost); });
             var riskScores = crops.map(function (c) { return c.risk.risk_score; });
             var profitMargins = crops.map(function (c) { return Math.round(c.economic.profit_margin * 10) / 10; });
             var sustainScores = crops.map(function (c) { return c.rotation.sustainability_score; });
+            var volatility = crops.map(function (c) { return c.risk.volatility; });
 
-            var colors = ['rgba(40, 167, 69, 0.7)', 'rgba(13, 110, 253, 0.7)', 'rgba(255, 193, 7, 0.7)',
-                'rgba(220, 53, 69, 0.7)', 'rgba(111, 66, 193, 0.7)'];
+            // Cost breakdown arrays
+            var seedCosts = crops.map(function (c) { return c.economic.cost_breakdown ? c.economic.cost_breakdown.seed : 0; });
+            var fertCosts = crops.map(function (c) { return c.economic.cost_breakdown ? c.economic.cost_breakdown.fertilizer : 0; });
+            var laborCosts = crops.map(function (c) { return c.economic.cost_breakdown ? c.economic.cost_breakdown.labor : 0; });
+            var miscCosts = crops.map(function (c) { return c.economic.cost_breakdown ? c.economic.cost_breakdown.misc : 0; });
 
-            // ROI Bar Chart
+            var colors = ['rgba(40, 167, 69, 0.8)', 'rgba(13, 110, 253, 0.8)', 'rgba(255, 193, 7, 0.8)',
+                'rgba(220, 53, 69, 0.8)', 'rgba(111, 66, 193, 0.8)'];
+            var borderColors = ['rgb(40, 167, 69)', 'rgb(13, 110, 253)', 'rgb(255, 193, 7)',
+                'rgb(220, 53, 69)', 'rgb(111, 66, 193)'];
+
+            // ===== 1. ROI Bar Chart =====
             new Chart(document.getElementById('roiChart').getContext('2d'), {
                 type: 'bar',
                 data: {
@@ -219,70 +297,271 @@
                         label: 'ROI (%)',
                         data: roiValues,
                         backgroundColor: colors,
+                        borderColor: borderColors,
+                        borderWidth: 2,
                         borderRadius: 8
                     }]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return v + '%'; } } } }
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) { return 'ROI: ' + ctx.raw + '%'; }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { callback: function (v) { return v + '%'; } },
+                            title: { display: true, text: 'Return on Investment (%)' }
+                        }
+                    }
                 }
             });
 
-            // Radar Chart
-            var maxProfit = Math.max.apply(null, profitValues);
+            // ===== 2. Revenue vs Cost Grouped Bar =====
+            new Chart(document.getElementById('revenueCostChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: cropNames,
+                    datasets: [
+                        {
+                            label: 'Revenue (₹)',
+                            data: revenueValues,
+                            backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                            borderColor: 'rgb(40, 167, 69)',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Total Cost (₹)',
+                            data: costValues,
+                            backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                            borderColor: 'rgb(220, 53, 69)',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Profit (₹)',
+                            data: profitValues,
+                            backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                            borderColor: 'rgb(13, 110, 253)',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) { return ctx.dataset.label + ': ₹' + ctx.raw.toLocaleString(); }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { callback: function (v) { return '₹' + (v / 1000).toFixed(0) + 'k'; } },
+                            title: { display: true, text: 'Amount (₹/acre)' }
+                        }
+                    }
+                }
+            });
+
+            // ===== 3. Radar Chart =====
+            // Normalize all values to 0-100 scale for radar
+            var maxROI = Math.max.apply(null, roiValues) || 1;
+            var maxProfit = Math.max.apply(null, profitValues) || 1;
+
             new Chart(document.getElementById('radarChart').getContext('2d'), {
                 type: 'radar',
                 data: {
-                    labels: ['ROI', 'Profit Margin', 'Safety Score', 'Revenue', 'Sustainability'],
+                    labels: ['ROI', 'Profit Margin', 'Safety Score', 'Profit', 'Sustainability'],
                     datasets: cropNames.map(function (name, i) {
                         return {
                             label: name,
                             data: [
-                                roiValues[i],
+                                Math.min((roiValues[i] / maxROI) * 100, 100),
                                 profitMargins[i],
                                 riskScores[i],
                                 (profitValues[i] / maxProfit) * 100,
                                 sustainScores[i]
                             ],
-                            backgroundColor: colors[i].replace('0.7', '0.2'),
-                            borderColor: colors[i],
-                            borderWidth: 2
+                            backgroundColor: colors[i].replace('0.8', '0.15'),
+                            borderColor: borderColors[i],
+                            borderWidth: 2,
+                            pointBackgroundColor: borderColors[i],
+                            pointRadius: 4,
+                            pointHoverRadius: 6
                         };
                     })
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: { legend: { position: 'bottom' } },
-                    scales: { r: { beginAtZero: true, max: 100 } }
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { stepSize: 20, display: false },
+                            grid: { color: 'rgba(0,0,0,0.08)' },
+                            pointLabels: { font: { size: 12, weight: '500' } }
+                        }
+                    }
                 }
             });
 
-            // Scatter Chart (Profit vs Risk)
+            // ===== 4. Cost Breakdown Stacked Bar =====
+            new Chart(document.getElementById('costBreakdownChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: cropNames,
+                    datasets: [
+                        {
+                            label: 'Seed',
+                            data: seedCosts,
+                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                            borderColor: 'rgb(40, 167, 69)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Fertilizer',
+                            data: fertCosts,
+                            backgroundColor: 'rgba(13, 110, 253, 0.8)',
+                            borderColor: 'rgb(13, 110, 253)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Labor',
+                            data: laborCosts,
+                            backgroundColor: 'rgba(255, 193, 7, 0.8)',
+                            borderColor: 'rgb(255, 193, 7)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Miscellaneous',
+                            data: miscCosts,
+                            backgroundColor: 'rgba(108, 117, 125, 0.8)',
+                            borderColor: 'rgb(108, 117, 125)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) { return ctx.dataset.label + ': ₹' + ctx.raw.toLocaleString(); }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: { callback: function (v) { return '₹' + (v / 1000).toFixed(0) + 'k'; } },
+                            title: { display: true, text: 'Cost (₹/acre)' }
+                        }
+                    }
+                }
+            });
+
+            // ===== 5. Scatter Chart (Profit vs Safety) =====
             new Chart(document.getElementById('scatterChart').getContext('2d'), {
                 type: 'scatter',
                 data: {
                     datasets: cropNames.map(function (name, i) {
                         return {
                             label: name,
-                            data: [{ x: 100 - riskScores[i], y: profitValues[i] }],
+                            data: [{ x: riskScores[i], y: profitValues[i] }],
                             backgroundColor: colors[i],
-                            pointRadius: 12,
-                            pointHoverRadius: 15
+                            borderColor: borderColors[i],
+                            borderWidth: 2,
+                            pointRadius: 14,
+                            pointHoverRadius: 18,
+                            pointStyle: 'rectRounded'
                         };
                     })
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { position: 'bottom' } },
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    return ctx.dataset.label + ': Safety ' + ctx.raw.x + '/100, Profit ₹' + ctx.raw.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
                     scales: {
-                        x: { title: { display: true, text: 'Risk Level (Higher = Riskier)' }, min: 0, max: 100 },
-                        y: { title: { display: true, text: 'Profit (₹)' }, beginAtZero: true }
+                        x: {
+                            title: { display: true, text: 'Safety Score (Higher = Safer)' },
+                            min: 0,
+                            max: 100,
+                            ticks: { stepSize: 20 }
+                        },
+                        y: {
+                            title: { display: true, text: 'Profit (₹/acre)' },
+                            beginAtZero: true,
+                            ticks: { callback: function (v) { return '₹' + (v / 1000).toFixed(0) + 'k'; } }
+                        }
                     }
                 }
             });
 
-            console.log('✅ Comparison charts created!');
+            // ===== 6. Profit Horizontal Bar =====
+            new Chart(document.getElementById('profitChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: cropNames,
+                    datasets: [{
+                        label: 'Profit (₹/acre)',
+                        data: profitValues,
+                        backgroundColor: colors,
+                        borderColor: borderColors,
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) { return 'Profit: ₹' + ctx.raw.toLocaleString() + '/acre'; }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { callback: function (v) { return '₹' + (v / 1000).toFixed(0) + 'k'; } },
+                            title: { display: true, text: 'Profit (₹/acre)' }
+                        }
+                    }
+                }
+            });
+
+            console.log('All comparison charts created successfully');
         } catch (error) {
             console.error('Chart error:', error);
         }
