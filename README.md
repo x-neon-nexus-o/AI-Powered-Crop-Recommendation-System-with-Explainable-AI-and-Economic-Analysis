@@ -22,6 +22,7 @@
   <a href="https://shap.readthedocs.io/"><img src="https://img.shields.io/badge/SHAP-Explainable%20AI-purple?style=flat-square" alt="SHAP"/></a>
   <a href="https://render.com/"><img src="https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat-square&logo=render" alt="Render"/></a>
   <a href="https://openweathermap.org/"><img src="https://img.shields.io/badge/Weather-OpenWeatherMap-orange?style=flat-square&logo=openweathermap" alt="OpenWeatherMap"/></a>
+  <img src="https://img.shields.io/badge/PWA-Installable-5A0FC8?style=flat-square&logo=pwa" alt="PWA"/>
 </p>
 
 ---
@@ -140,6 +141,7 @@ This semester project develops an advanced crop recommendation system that goes 
 ### **Deployment**
 - **Pickle** - Model serialization
 - **Gunicorn** - WSGI server
+- **Progressive Web App (PWA)** - Offline access, installable on mobile/desktop
 
 ### **External APIs**
 - **OpenWeatherMap** - Real-time weather data (temperature, humidity, rainfall) via free tier API
@@ -241,12 +243,15 @@ AI-Powered Crop Recommendation System/
 │   │   ├── comparison.html                # Crop comparison
 │   │   ├── model_dashboard.html           # Model metrics
 │   │   ├── about.html                     # About page
+│   │   ├── offline.html                   # PWA offline fallback
 │   │   └── error.html                     # Error page
 │   │
 │   └── static/                            # Static assets
 │       ├── css/                           # Stylesheets
 │       ├── js/                            # JavaScript
-│       └── images/                        # Images & SHAP plots
+│       ├── images/                        # Images & SHAP plots
+│       ├── manifest.json                  # PWA manifest
+│       └── service-worker.js              # PWA service worker
 │
 ├── 📄 docs/                                # Documentation
 │   ├── project_report/
@@ -786,12 +791,13 @@ python app.py
 8. ✅ Interactive dashboards (5 HTML templates)
 9. ✅ Responsive UI (Bootstrap 5)
 10. ✅ API endpoints for all features
+11. ✅ Progressive Web App (offline access, installable)
 
 ### **Documentation**
-11. ✅ Comprehensive README
-12. ✅ Project report (30-40 pages)
-13. ✅ Presentation (15-20 slides)
-14. ✅ Demo video (5-7 minutes)
+12. ✅ Comprehensive README
+13. ✅ Project report (30-40 pages)
+14. ✅ Presentation (15-20 slides)
+15. ✅ Demo video (5-7 minutes)
 
 ***
 
@@ -804,4 +810,5 @@ python app.py
 5. ✅ **Stacking Ensemble** - Advanced ML beyond papers
 6. ✅ **Clean Separation** - Notebooks (.ipynb) for ML, Python (.py) for web only
 7. ✅ **Live Weather Integration** - OpenWeatherMap API for real-time climate auto-fill
+8. ✅ **Progressive Web App (PWA)** - Installable on mobile/desktop with offline support for areas with poor connectivity
 
