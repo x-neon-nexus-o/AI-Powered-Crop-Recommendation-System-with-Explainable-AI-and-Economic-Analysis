@@ -154,6 +154,20 @@
         .badge-secondary {
             background: #6c757d !important;
         }
+
+        footer .footer-link {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer .footer-link:hover {
+            color: #fff;
+        }
+
+        footer .text-muted {
+            color: #bbb !important;
+        }
     </style>
 </head>
 
@@ -222,7 +236,7 @@
     <footer>
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h5 class="text-white mb-3">
                         <i class="bi bi-flower1 me-2"></i>Crop Recommendation System
                     </h5>
@@ -230,28 +244,42 @@
                         AI-powered crop recommendations with explainable AI and economic analysis.
                     </p>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <h6 class="text-white mb-3">Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{{ url_for('index') }}" class="text-muted">Home</a></li>
-                        <li><a href="{{ url_for('predict') }}" class="text-muted">Predict</a></li>
-                        <li><a href="{{ url_for('compare') }}" class="text-muted">Compare</a></li>
-                        <li><a href="{{ url_for('about') }}" class="text-muted">About</a></li>
+                        <li><a href="{{ url_for('index') }}" class="footer-link">Home</a></li>
+                        <li><a href="{{ url_for('predict') }}" class="footer-link">Predict</a></li>
+                        <li><a href="{{ url_for('compare') }}" class="footer-link">Compare</a></li>
+                        <li><a href="{{ url_for('about') }}" class="footer-link">About</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="text-white mb-3">Data Sources</h6>
+                    <ul class="list-unstyled text-muted small">
+                        <li><i class="bi bi-database me-1"></i>Crop Dataset &mdash; Kaggle</li>
+                        <li><i class="bi bi-currency-rupee me-1"></i>Market Prices &mdash; Agmarknet (GoI)</li>
+                        <li><i class="bi bi-arrow-repeat me-1"></i>Rotation Rules &mdash; ICAR Research</li>
                     </ul>
                 </div>
                 <div class="col-md-3">
                     <h6 class="text-white mb-3">Technology</h6>
-                    <ul class="list-unstyled text-muted">
+                    <ul class="list-unstyled text-muted small">
                         <li>Flask + Python</li>
                         <li>Scikit-learn + SHAP</li>
-                        <li>Bootstrap 5</li>
+                        <li>XGBoost + LightGBM</li>
+                        <li>Bootstrap 5 + Chart.js</li>
                     </ul>
                 </div>
             </div>
             <hr class="my-4" style="border-color: #333;">
-            <p class="text-center mb-0 text-muted">
-                &copy; 2024 Crop Recommendation System | Machine Learning Project
-            </p>
+            <div class="text-center text-muted">
+                <p class="mb-1">
+                    Developed by <span class="text-white fw-semibold">Prathamesh Bhushan Gawas</span>
+                </p>
+                <p class="mb-0 small">
+                    &copy; 2024 Crop Recommendation System | AI &amp; Machine Learning Project
+                </p>
+            </div>
         </div>
     </footer>
 

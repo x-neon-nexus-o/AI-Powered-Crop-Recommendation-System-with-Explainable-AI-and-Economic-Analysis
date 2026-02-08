@@ -11,6 +11,7 @@ dist/
 build/
 eggs/
 *.whl
+pip-log.txt
 
 # ========================
 # Virtual Environments
@@ -83,3 +84,13 @@ logs/
 *.tmp
 *.bak
 *.orig
+
+# ========================
+# Deployment (DO NOT ignore)
+# ========================
+# Keep these tracked for Render/cloud:
+#   render.yaml
+#   Procfile
+#   runtime.txt
+#   requirements.txt
+#   models/ (needed at runtime)

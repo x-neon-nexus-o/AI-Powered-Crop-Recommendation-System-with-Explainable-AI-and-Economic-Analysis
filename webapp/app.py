@@ -26,7 +26,7 @@ from economic import (
 )
 
 app = Flask(__name__)
-app.secret_key = 'crop-recommendation-secret-key-2024'
+app.secret_key = os.environ.get('SECRET_KEY', 'crop-recommendation-secret-key-2024')
 
 # Load all models on startup
 print("🚀 Loading ML models...")
@@ -593,4 +593,6 @@ def server_error(e):
 # ==================== MAIN ====================
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    debug = os.environ.get('FLASK_ENV', 'development') != 'production'
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=debug, host='0.0.0.0', port=port)
