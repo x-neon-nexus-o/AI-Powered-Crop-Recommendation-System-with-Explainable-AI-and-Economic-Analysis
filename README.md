@@ -331,13 +331,14 @@ Size: 50-100 rotation combinations
 
 ***
 
-## **Jupyter Notebooks Detailed Breakdown**
+## **📓 Jupyter Notebooks Detailed Breakdown**
 
-### **Notebook 01: Data Collection and Loading** (Week 1)
+### **Notebook 1: Data Collection and Loading**
 ```python
+# File: 1.Data Collection and Loading.ipynb
 # Content Overview:
 - Import pandas, numpy
-- Load crop_recommendation.csv
+- Load Crop_recommendation.csv from Kaggle
 - Explore DataFrame structure (.info(), .describe(), .head())
 - Check data types and missing values
 - Load additional datasets (prices, rotation rules)
@@ -346,8 +347,9 @@ Size: 50-100 rotation combinations
 # Key Learning: Unit I - Pandas basics, data loading
 ```
 
-### **Notebook 02: Data Cleaning and Preprocessing** (Week 1-2)
+### **Notebook 2: Data Cleaning and Preprocessing**
 ```python
+# File: 2.Data Cleaning and Preprocessing.ipynb
 # Content Overview:
 - Check for missing values (isnull().sum())
 - Handle missing data (dropna(), fillna() with mean/median)
@@ -360,8 +362,9 @@ Size: 50-100 rotation combinations
 # Key Learning: Unit I - Data cleansing, handling missing data
 ```
 
-### **Notebook 03: Exploratory Data Analysis** (Week 2)
+### **Notebook 3: Exploratory Data Analysis**
 ```python
+# File: 3.Exploratory Data Analysis.ipynb
 # Content Overview:
 - Matplotlib visualizations:
   * Histograms for feature distributions
@@ -378,8 +381,9 @@ Size: 50-100 rotation combinations
 # Key Learning: Unit II - Matplotlib, Seaborn plotting
 ```
 
-### **Notebook 04: Feature Engineering** (Week 3)
+### **Notebook 4: Feature Engineering**
 ```python
+# File: 4.Feature Engineering.ipynb
 # Content Overview:
 - Create new features:
   * NPK_ratio = N / (P + K)
@@ -393,80 +397,82 @@ Size: 50-100 rotation combinations
 # Key Learning: Unit I - Data transformation, aggregation, merging
 ```
 
-### **Notebook 05: Statistical Analysis** (Week 3)
+### **Notebook 5: Train Test Split and Preparation**
 ```python
-# Content Overview:
-- Descriptive statistics (describe())
-- Correlation analysis (corr())
-- Covariance matrix
-- ANOVA test for feature significance
-- Chi-square test for categorical relationships
-- T-test for group comparisons
-- Feature selection based on p-values
-- Save statistical_results.csv
-
-# Key Learning: Unit II - SciPy statistics, hypothesis testing
-```
-
-### **Notebook 06: Data Normalization and Splitting** (Week 3)
-```python
+# File: 5.Train Test Split and Preparation.ipynb
 # Content Overview:
 - Import StandardScaler from sklearn
-- Normalize features (fit_transform)
-- Train-test split (80-20, stratified)
+- Feature scaling (StandardScaler, MinMaxScaler)
+- Train-test split (80-20, stratified by crop)
 - Save X_train, X_test, y_train, y_test
 - Save scaler object (pickle)
-- Verify split balance
+- Verify class distribution balance
 
 # Key Learning: Unit I - Data preparation for ML
 ```
 
-### **Notebook 07: Baseline Classification Models** (Week 4-5)
+### **Notebook 6: Model Training - Logistic Regression**
 ```python
+# File: 6.Model Training Logistic Regression.ipynb
 # Content Overview:
-- Logistic Regression
-- k-Nearest Neighbors (k=5)
-- Naïve Bayes (GaussianNB)
-- Support Vector Machine (kernel='rbf')
+- Build Logistic Regression classifier (multi-class)
+- Hyperparameter tuning (C, solver, max_iter)
 - Model training and prediction
-- Accuracy, confusion matrix, classification report
-- Save all baseline models
-- Create comparison table
+- Evaluation: accuracy, confusion matrix, classification report
+- ROC-AUC curves per class
+- Save logistic_regression_model.pkl
 
-# Key Learning: Unit III - Supervised classification algorithms
+# Key Learning: Unit III - Logistic Regression for classification
 ```
 
-### **Notebook 08: Decision Tree Classifier** (Week 5)
+### **Notebook 7: Model Training - Decision Tree**
 ```python
+# File: 7.Model Training Decision Tree.ipynb
 # Content Overview:
-- Build Decision Tree (max_depth=10)
+- Build Decision Tree (max_depth experiments)
 - Hyperparameter tuning (GridSearchCV)
-- Feature importance extraction
-- Visualize tree structure
+- Feature importance extraction (.feature_importances_)
+- Visualize tree structure (plot_tree)
 - Plot feature importance bar chart
-- Save decision_tree.pkl
+- Save decision_tree_model.pkl
 
 # Key Learning: Unit IV - Decision Trees
 ```
 
-### **Notebook 09: Random Forest Classifier** (Week 6)
+### **Notebook 8: Model Training - Random Forest**
 ```python
+# File: 8.Model Training Random Forest.ipynb
 # Content Overview:
-- Build Random Forest (n_estimators=100)
-- GridSearchCV for optimization
+- Build Random Forest (n_estimators optimization)
+- GridSearchCV for hyperparameter tuning
 - 5-fold cross-validation
 - Feature importance analysis
-- Out-of-bag score
-- Save random_forest.pkl
+- Out-of-bag (OOB) score
+- Save random_forest_model.pkl
 
 # Key Learning: Unit IV - Random Forests, ensemble learning
 ```
 
-### **Notebook 10: XGBoost and LightGBM** (Week 6)
+### **Notebook 9: Model Training - SVM**
 ```python
+# File: 9.Model Training SVM.ipynb
 # Content Overview:
-- Build XGBoost classifier
-- Build LightGBM classifier
+- Build Support Vector Machine classifier
+- Kernel experiments (linear, rbf, poly)
+- Hyperparameter tuning (C, gamma)
+- Model training and prediction
+- Evaluation metrics
+- Save svm_model.pkl
+
+# Key Learning: Unit III - Support Vector Machines
+```
+
+### **Notebook 10: XGBoost and LightGBM**
+```python
+# File: 10.XGBoost and LightGBM.ipynb
+# Content Overview:
+- Build XGBoost classifier (learning_rate, max_depth)
+- Build LightGBM classifier (num_leaves, learning_rate)
 - Hyperparameter tuning for both
 - Performance comparison
 - ROC-AUC curves
@@ -475,8 +481,9 @@ Size: 50-100 rotation combinations
 # Key Learning: Unit IV - Advanced ensemble methods
 ```
 
-### **Notebook 11: Stacking Ensemble Model** (Week 7)
+### **Notebook 11: Stacking Ensemble Model**
 ```python
+# File: 11.Stacking Ensemble Model.ipynb
 # Content Overview:
 - Create StackingClassifier
 - Base estimators: Random Forest, XGBoost, LightGBM
@@ -488,10 +495,11 @@ Size: 50-100 rotation combinations
 # Key Learning: Unit IV - Stacking ensemble
 ```
 
-### **Notebook 12: Model Comparison and Selection** (Week 7)
+### **Notebook 12: Model Comparison and Selection**
 ```python
+# File: 12.Model Comparison and Selection.ipynb
 # Content Overview:
-- Load all saved models
+- Load all saved models (9 total)
 - Compare accuracy, precision, recall, F1-score
 - ROC-AUC curves for all models
 - Confusion matrices side-by-side
@@ -502,10 +510,10 @@ Size: 50-100 rotation combinations
 # Key Learning: Unit III - Model evaluation
 ```
 
-### **Notebook 13: Explainable AI with SHAP** (Week 8-9)
+### **Notebook 13: Explainable AI with SHAP**
 ```python
+# File: 13.Explainable AI with SHAP.ipynb
 # Content Overview:
-- Install SHAP library
 - Load best model (Stacking Ensemble)
 - Create TreeExplainer
 - Generate SHAP values for test set
@@ -515,27 +523,29 @@ Size: 50-100 rotation combinations
   * SHAP force plot (interactive)
   * SHAP dependence plots
 - Interpret feature contributions
-- Save shap_explainer.pkl
+- Save shap_explainer.pkl, shap_values.npy
 
 # Key Learning: Beyond syllabus - Explainable AI
 ```
 
-### **Notebook 14: Economic Viability Analysis** (Week 9-10)
+### **Notebook 14: Economic Viability Analysis**
 ```python
+# File: 14.Economic Viability Analysis.ipynb
 # Content Overview:
-- Load crop_prices.csv
+- Load market price data
 - Build profit calculator function
 - Calculate ROI: (Expected_Yield × Market_Price - Input_Costs) / Input_Costs
 - Risk scoring (price volatility analysis)
 - Cost-benefit analysis for each crop
 - Rank crops by profitability
-- Save economic_analysis.csv
+- Save economic_analyzer.pkl
 
 # Key Learning: Beyond syllabus - Economic modeling
 ```
 
-### **Notebook 15: Crop Rotation Planning** (Week 10-11)
+### **Notebook 15: Crop Rotation Planning**
 ```python
+# File: 15.Crop Rotation Planning.ipynb
 # Content Overview:
 - Load rotation_rules.csv
 - Build rule-based recommendation engine
@@ -545,13 +555,14 @@ Size: 50-100 rotation combinations
   * Season 3: Soil recovery crop
 - Soil nutrient depletion/addition tracking
 - Sustainability score calculation
-- Save rotation planning functions
+- Save rotation_planner.pkl
 
 # Key Learning: Beyond syllabus - Rule-based AI
 ```
 
-### **Notebook 16: Final Pipeline and Export** (Week 11)
+### **Notebook 16: Final Pipeline and Export**
 ```python
+# File: 16.Final Pipeline and Export.ipynb
 # Content Overview:
 - Load all components (model, scaler, explainer)
 - Create end-to-end prediction pipeline
@@ -562,7 +573,7 @@ Size: 50-100 rotation combinations
   * Economic analysis
   * Rotation plan
 - Export deployment-ready files
-- Generate metadata (feature names, crop labels)
+- Generate metadata (feature_names.json, crop_labels.json)
 
 # Key Learning: Integration and deployment preparation
 ```
