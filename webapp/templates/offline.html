@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Offline - CropAI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+            <div class="card shadow-lg p-5">
+                <div class="feature-icon mx-auto mb-4" style="background: linear-gradient(135deg, #5a7a4a 0%, #8aaa76 100%);">
+                    <i class="bi bi-wifi-off"></i>
+                </div>
+                <h2 class="fw-bold mb-3">You're Offline</h2>
+                <p class="text-muted mb-4">
+                    It looks like you've lost your internet connection.
+                    Crop predictions require a live connection to our AI models.
+                </p>
+
+                <button class="btn btn-primary btn-lg mb-4" onclick="tryReconnect()">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Try Again
+                </button>
+
+                <hr>
+
+                <div class="text-start mt-3">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-check-circle text-success me-2"></i>Available Offline</h6>
+                    <ul class="list-unstyled text-muted small">
+                        <li class="mb-1"><i class="bi bi-check me-1"></i>Previously visited pages (cached)</li>
+                        <li class="mb-1"><i class="bi bi-check me-1"></i>Dark mode preference</li>
+                        <li class="mb-1"><i class="bi bi-check me-1"></i>App interface and styling</li>
+                    </ul>
+
+                    <h6 class="fw-bold mb-3 mt-4"><i class="bi bi-x-circle text-danger me-2"></i>Requires Internet</h6>
+                    <ul class="list-unstyled text-muted small">
+                        <li class="mb-1"><i class="bi bi-x me-1"></i>Crop predictions (AI model)</li>
+                        <li class="mb-1"><i class="bi bi-x me-1"></i>SHAP explanations</li>
+                        <li class="mb-1"><i class="bi bi-x me-1"></i>Economic analysis</li>
+                        <li class="mb-1"><i class="bi bi-x me-1"></i>Weather auto-fill</li>
+                        <li class="mb-1"><i class="bi bi-x me-1"></i>PDF report export</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function tryReconnect() {
+        if (navigator.onLine) {
+            window.location.reload();
+        } else {
+            var btn = event.target.closest('button');
+            btn.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>Still Offline';
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-secondary');
+            setTimeout(function () {
+                btn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Try Again';
+                btn.classList.remove('btn-outline-secondary');
+                btn.classList.add('btn-primary');
+            }, 2000);
+        }
+    }
+
+    // Auto-reload when connection comes back
+    window.addEventListener('online', function () {
+        window.location.reload();
+    });
+</script>
+{% endblock %}

@@ -531,6 +531,18 @@ def about():
     return render_template('about.html')
 
 
+@app.route('/offline')
+def offline():
+    """Offline fallback page for PWA."""
+    return render_template('offline.html')
+
+
+@app.route('/service-worker.js')
+def service_worker():
+    """Serve service worker from root scope for PWA."""
+    return app.send_static_file('service-worker.js')
+
+
 @app.route('/export-pdf')
 def export_pdf():
     """Generate and download a PDF report of the last prediction."""
