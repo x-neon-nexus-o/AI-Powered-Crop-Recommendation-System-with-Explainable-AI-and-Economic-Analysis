@@ -1,3 +1,97 @@
+<p align="center">
+  <img src="https://img.icons8.com/color/96/000000/plant-under-sun--v1.png" alt="CropAI Logo"/>
+</p>
+
+<h1 align="center">🌾 AI-Powered Crop Recommendation System</h1>
+
+<p align="center">
+  <strong>Explainable AI • Economic Analysis • Smart Crop Rotation</strong>
+</p>
+
+<p align="center">
+  <a href="#features"><img src="https://img.shields.io/badge/Features-5%20Innovations-success?style=for-the-badge" alt="Features"/></a>
+  <a href="#tech-stack"><img src="https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python"/></a>
+  <a href="#accuracy"><img src="https://img.shields.io/badge/Accuracy-98.5%25-brightgreen?style=for-the-badge" alt="Accuracy"/></a>
+  <a href="#license"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License"/></a>
+</p>
+
+<p align="center">
+  <a href="https://flask.palletsprojects.com/"><img src="https://img.shields.io/badge/Flask-3.0-black?style=flat-square&logo=flask" alt="Flask"/></a>
+  <a href="https://scikit-learn.org/"><img src="https://img.shields.io/badge/scikit--learn-1.5+-orange?style=flat-square&logo=scikit-learn" alt="scikit-learn"/></a>
+  <a href="https://xgboost.readthedocs.io/"><img src="https://img.shields.io/badge/XGBoost-2.0+-blue?style=flat-square" alt="XGBoost"/></a>
+  <a href="https://shap.readthedocs.io/"><img src="https://img.shields.io/badge/SHAP-Explainable%20AI-purple?style=flat-square" alt="SHAP"/></a>
+  <a href="https://render.com/"><img src="https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat-square&logo=render" alt="Render"/></a>
+</p>
+
+---
+
+## 🎯 What Makes This Project Unique?
+
+<table>
+<tr>
+<td width="50%">
+
+### 🧠 Explainable AI (XAI)
+Unlike black-box ML models, our system provides **SHAP-based explanations** that tell farmers *why* a crop is recommended.
+
+> *"Rice is recommended because: High Rainfall (+35%), Suitable Temperature (+28%), Optimal pH (+22%)"*
+
+</td>
+<td width="50%">
+
+### 💰 Economic Viability Analysis
+Go beyond predictions with **ROI calculations**, market price integration, and profit projections per acre.
+
+> *"ROI: 145% | Profit: ₹32,000/acre | Risk: Low"*
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🔄 Smart Crop Rotation
+AI-powered **multi-season rotation planning** for sustainable farming and soil health preservation.
+
+> *"Season 1: Rice → Season 2: Wheat → Season 3: Mung Bean (Soil Recovery)"*
+
+</td>
+<td width="50%">
+
+### 🏆 Stacking Ensemble Model
+Combines **Random Forest + XGBoost + LightGBM** with a meta-learner for industry-leading 98.5% accuracy.
+
+> *"Outperforms single models by 2-3% through intelligent model stacking"*
+
+</td>
+</tr>
+</table>
+
+---
+
+## 📊 Key Statistics
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Crops%20Supported-22-green?style=for-the-badge" alt="Crops"/>
+  <img src="https://img.shields.io/badge/ML%20Models-9-blue?style=for-the-badge" alt="Models"/>
+  <img src="https://img.shields.io/badge/Accuracy-98.5%25-brightgreen?style=for-the-badge" alt="Accuracy"/>
+  <img src="https://img.shields.io/badge/Engineered%20Features-39-orange?style=for-the-badge" alt="Features"/>
+</p>
+
+---
+
+## 🔬 Research Gap Analysis
+
+This project addresses **5 major gaps** in existing crop recommendation systems:
+
+| Gap | Existing Systems | Our Solution |
+|-----|-----------------|--------------|
+| ❌ No Explainability | Black-box predictions | ✅ SHAP-based XAI with feature contributions |
+| ❌ No Economic Analysis | Only agronomic factors | ✅ ROI, profit margins, market price integration |
+| ❌ No Rotation Planning | Single crop focus | ✅ Multi-season sustainable rotation |
+| ❌ Static Datasets | Outdated information | ✅ Live market data integration |
+| ❌ No Regional Context | Generic recommendations | ✅ India-specific with MSP and seasonal data |
+
+---
 
 # **AI-Powered Crop Recommendation System with Explainable AI and Economic Analysis**
 
