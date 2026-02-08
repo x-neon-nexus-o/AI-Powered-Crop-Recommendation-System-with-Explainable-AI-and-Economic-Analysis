@@ -54,9 +54,16 @@
                         </div>
 
                         <!-- Climate Parameters -->
-                        <h5 class="fw-bold mb-3 text-success">
-                            <i class="bi bi-thermometer-half me-2"></i>Climate Parameters
-                        </h5>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 text-success">
+                                <i class="bi bi-thermometer-half me-2"></i>Climate Parameters
+                            </h5>
+                            <button type="button" class="btn btn-outline-success btn-sm weather-fetch-btn" id="weatherBtn" onclick="fetchWeather()">
+                                <i class="bi bi-geo-alt-fill me-1"></i>Use My Location
+                            </button>
+                        </div>
+                        <!-- Weather status badge -->
+                        <div id="weatherStatus" class="mb-3" style="display:none;"></div>
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-medium">Temperature (°C)</label>
@@ -160,6 +167,105 @@
 
 {% block scripts %}
 <script>
+    function fetchWeather() {
+        var btn = document.getElementById('weatherBtn');
+        var statusDiv = document.getElementById('weatherStatus');
+
+        if (!navigator.geolocation) {
+            showWeatherStatus('error', 'Geolocation is not supported by your browser.');
+            return;
+        }
+
+        // Show loading state
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Locating...';
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Fetching weather...';
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+
+                fetch('/api/weather?lat=' + lat + '&lon=' + lon)
+                    .then(function(resp) { return resp.json(); })
+                    .then(function(data) {
+                        if (data.error) {
+                            showWeatherStatus('error', data.error);
+                            resetWeatherBtn();
+                            return;
+                        }
+
+                        // Auto-fill fields with animation
+                        var filled = [];
+                        if (data.temperature !== null) {
+                            animateFill('temperature', data.temperature);
+                            filled.push(data.temperature + '°C');
+                        }
+                        if (data.humidity !== null) {
+                            animateFill('humidity', data.humidity);
+                            filled.push(data.humidity + '% humidity');
+                        }
+                        if (data.rainfall !== null) {
+                            animateFill('rainfall', data.rainfall);
+                            filled.push(data.rainfall + 'mm rain');
+                        }
+
+                        var icon = data.icon ? 'https://openweathermap.org/img/wn/' + data.icon + '.png' : '';
+                        var iconHtml = icon ? '<img src="' + icon + '" alt="" width="28" height="28" style="vertical-align:middle;margin-top:-4px;"> ' : '';
+
+                        var msg = iconHtml + '<strong>' + data.location + '</strong> — ' + data.description;
+                        if (filled.length > 0) {
+                            msg += '<br><small class="text-muted">Auto-filled: ' + filled.join(', ') + '</small>';
+                        }
+                        if (data.rainfall === null) {
+                            msg += '<br><small class="text-muted">No current rainfall data — enter your seasonal average manually.</small>';
+                        }
+                        showWeatherStatus('success', msg);
+
+                        // Update button to show success
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>' + data.location;
+                        btn.classList.remove('btn-outline-success');
+                        btn.classList.add('btn-success', 'text-white');
+                    })
+                    .catch(function(err) {
+                        showWeatherStatus('error', 'Failed to fetch weather data. Please enter values manually.');
+                        resetWeatherBtn();
+                    });
+            },
+            function(error) {
+                var msg = 'Location access denied. Please enter climate values manually.';
+                if (error.code === 2) msg = 'Location unavailable. Please enter climate values manually.';
+                if (error.code === 3) msg = 'Location request timed out. Please try again.';
+                showWeatherStatus('error', msg);
+                resetWeatherBtn();
+            },
+            { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+        );
+    }
+
+    function animateFill(fieldName, value) {
+        var input = document.querySelector('[name="' + fieldName + '"]');
+        input.value = value;
+        input.classList.add('weather-filled');
+        setTimeout(function() { input.classList.remove('weather-filled'); }, 1500);
+    }
+
+    function showWeatherStatus(type, message) {
+        var statusDiv = document.getElementById('weatherStatus');
+        var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        var icon = type === 'success' ? 'bi-cloud-sun-fill' : 'bi-exclamation-triangle-fill';
+        statusDiv.innerHTML = '<div class="alert ' + alertClass + ' py-2 px-3 mb-0 small">' +
+            '<i class="bi ' + icon + ' me-2"></i>' + message + '</div>';
+        statusDiv.style.display = 'block';
+    }
+
+    function resetWeatherBtn() {
+        var btn = document.getElementById('weatherBtn');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-geo-alt-fill me-1"></i>Use My Location';
+    }
+
     document.getElementById('predictionForm').addEventListener('submit', function (e) {
         var inputs = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall'];
         var ranges = {

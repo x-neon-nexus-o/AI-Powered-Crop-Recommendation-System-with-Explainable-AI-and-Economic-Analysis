@@ -402,6 +402,41 @@ footer a:hover {
 }
 
 /* ======================== */
+/* WEATHER AUTO-FILL        */
+/* ======================== */
+
+.weather-fetch-btn {
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 20px;
+    padding: 0.3rem 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.weather-fetch-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(74, 124, 35, 0.25);
+}
+
+.weather-filled {
+    animation: fieldHighlight 1.5s ease;
+}
+
+@keyframes fieldHighlight {
+    0% { background-color: rgba(74, 124, 35, 0.15); box-shadow: 0 0 0 3px rgba(74, 124, 35, 0.2); }
+    100% { background-color: transparent; box-shadow: none; }
+}
+
+[data-theme="dark"] .weather-filled {
+    animation: fieldHighlightDark 1.5s ease;
+}
+
+@keyframes fieldHighlightDark {
+    0% { background-color: rgba(107, 163, 46, 0.2); box-shadow: 0 0 0 3px rgba(107, 163, 46, 0.15); }
+    100% { background-color: #1e293b; box-shadow: none; }
+}
+
+/* ======================== */
 /* DARK MODE                */
 /* ======================== */
 

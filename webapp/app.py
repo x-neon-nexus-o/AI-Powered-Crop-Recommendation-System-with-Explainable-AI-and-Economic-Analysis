@@ -7,7 +7,12 @@ from flask import Flask, render_template, request, jsonify, flash, redirect, url
 import numpy as np
 import os
 import uuid
+import requests as http_requests
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load .env file from project root
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '.env'))
 
 # Import modules
 from utils import (
@@ -595,6 +600,60 @@ def export_pdf():
 
 
 # ==================== API ENDPOINTS ====================
+
+@app.route('/api/weather')
+def api_weather():
+    """Proxy endpoint for OpenWeatherMap — keeps API key server-side."""
+    api_key = os.environ.get('OPENWEATHERMAP_API_KEY', '')
+    if not api_key:
+        return jsonify({'error': 'Weather API key not configured. Set OPENWEATHERMAP_API_KEY environment variable.'}), 503
+
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
+    if not lat or not lon:
+        return jsonify({'error': 'Latitude and longitude are required.'}), 400
+
+    try:
+        lat_f, lon_f = float(lat), float(lon)
+    except ValueError:
+        return jsonify({'error': 'Invalid latitude or longitude values.'}), 400
+
+    try:
+        resp = http_requests.get(
+            'https://api.openweathermap.org/data/2.5/weather',
+            params={'lat': lat_f, 'lon': lon_f, 'appid': api_key, 'units': 'metric'},
+            timeout=10
+        )
+
+        if resp.status_code == 401:
+            return jsonify({'error': 'Weather API key is not yet active. New keys take ~10 minutes to activate. Please try again shortly.'}), 502
+        resp.raise_for_status()
+        data = resp.json()
+
+        temperature = data.get('main', {}).get('temp', None)
+        humidity = data.get('main', {}).get('humidity', None)
+        # Rain in last 1h (mm), only present if raining
+        rainfall = data.get('rain', {}).get('1h', None)
+        location_name = data.get('name', 'Unknown')
+        country = data.get('sys', {}).get('country', '')
+        description = data.get('weather', [{}])[0].get('description', '')
+        icon = data.get('weather', [{}])[0].get('icon', '')
+
+        result = {
+            'temperature': round(temperature, 1) if temperature is not None else None,
+            'humidity': round(humidity, 1) if humidity is not None else None,
+            'rainfall': round(rainfall, 1) if rainfall is not None else None,
+            'location': f"{location_name}, {country}" if country else location_name,
+            'description': description,
+            'icon': icon
+        }
+        return jsonify(result)
+
+    except http_requests.exceptions.Timeout:
+        return jsonify({'error': 'Weather service timed out. Please try again.'}), 504
+    except http_requests.exceptions.RequestException as e:
+        return jsonify({'error': f'Weather service unavailable: {str(e)}'}), 502
+
 
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
