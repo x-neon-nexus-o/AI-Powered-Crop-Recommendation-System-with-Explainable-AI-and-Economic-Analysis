@@ -157,6 +157,34 @@
         </div>
     </div>
 
+    {% if economic %}
+    <!-- Revenue vs Cost Chart -->
+    <div class="row g-4 mt-4">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-bar-chart-fill me-2"></i>Revenue vs Cost
+                    </h5>
+                    <canvas id="revenueCostChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profitability Ranking -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-trophy me-2"></i>Profitability Ranking
+                    </h5>
+                    <canvas id="rankingChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Actions -->
     <div class="text-center mt-5">
         <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg me-2">
@@ -189,57 +217,140 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // ROI Gauge Chart
-        var roiValue = {{ economic.roi }
-    };
-    new Chart(document.getElementById('roiChart').getContext('2d'), {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [roiValue, Math.max(0, 100 - roiValue)],
-                backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(200, 200, 200, 0.3)'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            cutout: '70%',
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false }
-            }
-        }
-    });
+        var roiValue = {{ economic.roi }};
 
-    // Cost Breakdown Pie Chart
-    new Chart(document.getElementById('costChart').getContext('2d'), {
-        type: 'pie',
-        data: {
-            labels: ['Labor', 'Fertilizer', 'Seeds', 'Irrigation', 'Misc'],
-            datasets: [{
-                data: [40, 25, 15, 12, 8],
-                backgroundColor: [
-                    'rgba(0, 123, 255, 0.8)',
-                    'rgba(40, 167, 69, 0.8)',
-                    'rgba(255, 193, 7, 0.8)',
-                    'rgba(23, 162, 184, 0.8)',
-                    'rgba(108, 117, 125, 0.8)'
-                ],
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                    labels: { boxWidth: 10, font: { size: 10 } }
+        new Chart(document.getElementById('roiChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [roiValue, Math.max(0, 100 - roiValue)],
+                    backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(200, 200, 200, 0.3)'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
                 }
             }
-        }
+        });
+
+        // Cost Breakdown Pie Chart
+        new Chart(document.getElementById('costChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Seed', 'Fertilizer', 'Labor', 'Misc'],
+                datasets: [{
+                    data: [{{ economic.cost_breakdown.seed }}, {{ economic.cost_breakdown.fertilizer }}, {{ economic.cost_breakdown.labor }}, {{ economic.cost_breakdown.misc }}],
+                    backgroundColor: [
+                        'rgba(255, 193, 7, 0.8)',
+                        'rgba(40, 167, 69, 0.8)',
+                        'rgba(0, 123, 255, 0.8)',
+                        'rgba(108, 117, 125, 0.8)'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: { boxWidth: 10, font: { size: 10 } }
+                    }
+                }
+            }
+        });
+
+        // Revenue vs Cost Bar Chart
+        new Chart(document.getElementById('revenueCostChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['{{ crop_name }}'],
+                datasets: [
+                    {
+                        label: 'Revenue (₹)',
+                        data: [{{ economic.revenue }}],
+                        backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                        borderRadius: 8
+                    },
+                    {
+                        label: 'Total Cost (₹)',
+                        data: [{{ economic.total_cost }}],
+                        backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                        borderRadius: 8
+                    },
+                    {
+                        label: 'Profit (₹)',
+                        data: [{{ economic.profit }}],
+                        backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                        borderRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) { return ctx.dataset.label + ': ₹' + ctx.raw.toLocaleString('en-IN'); }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: function(v) { return '₹' + (v / 1000).toFixed(0) + 'k'; } }
+                    }
+                }
+            }
+        });
+
+        // Profitability Ranking Chart
+        {% if ranking %}
+        var rankingData = {{ ranking | tojson | safe }};
+        var rankNames = rankingData.map(function(r) { return r.crop; });
+        var rankROIs = rankingData.map(function(r) { return r.roi; });
+        var rankColors = rankNames.map(function(name) {
+            return name.toLowerCase() === '{{ crop_name }}'.toLowerCase()
+                ? 'rgba(40, 167, 69, 0.9)'
+                : 'rgba(13, 110, 253, 0.5)';
+        });
+
+        new Chart(document.getElementById('rankingChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: rankNames,
+                datasets: [{
+                    label: 'ROI (%)',
+                    data: rankROIs,
+                    backgroundColor: rankColors,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'ROI Comparison with Major Crops' }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { callback: function(v) { return v + '%'; } }
+                    }
+                }
+            }
+        });
+        {% endif %}
     });
-});
 </script>
 {% endif %}
 {% endblock %}

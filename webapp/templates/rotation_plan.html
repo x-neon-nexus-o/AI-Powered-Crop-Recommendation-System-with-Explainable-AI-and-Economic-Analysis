@@ -105,36 +105,48 @@
                     </h6>
                 </div>
                 <div class="card-body">
+                    {% set n_val = rotation.soil_impact.N %}
+                    {% set p_val = rotation.soil_impact.P %}
+                    {% set k_val = rotation.soil_impact.K %}
                     <div class="mb-3">
                         <div class="d-flex justify-content-between small mb-1">
                             <span>Nitrogen</span>
-                            <span class="text-success">+15 kg/ha</span>
+                            <span class="{% if n_val > 0 %}text-success{% elif n_val < 0 %}text-danger{% else %}text-secondary{% endif %}">
+                                {% if n_val > 0 %}+{% endif %}{{ n_val }} kg/ha
+                            </span>
                         </div>
                         <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-success" style="width: 70%"></div>
+                            <div class="progress-bar {% if n_val > 0 %}bg-success{% elif n_val < 0 %}bg-danger{% else %}bg-secondary{% endif %}"
+                                style="width: {{ [((n_val|abs / 30) * 100)|int, 100]|min }}%"></div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between small mb-1">
                             <span>Phosphorus</span>
-                            <span class="text-secondary">Stable</span>
+                            <span class="{% if p_val > 0 %}text-success{% elif p_val < 0 %}text-danger{% else %}text-secondary{% endif %}">
+                                {% if p_val > 0 %}+{% endif %}{{ p_val }} kg/ha
+                            </span>
                         </div>
                         <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-secondary" style="width: 50%"></div>
+                            <div class="progress-bar {% if p_val > 0 %}bg-success{% elif p_val < 0 %}bg-danger{% else %}bg-secondary{% endif %}"
+                                style="width: {{ [((p_val|abs / 15) * 100)|int, 100]|min }}%"></div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between small mb-1">
                             <span>Potassium</span>
-                            <span class="text-primary">+5 kg/ha</span>
+                            <span class="{% if k_val > 0 %}text-success{% elif k_val < 0 %}text-danger{% else %}text-secondary{% endif %}">
+                                {% if k_val > 0 %}+{% endif %}{{ k_val }} kg/ha
+                            </span>
                         </div>
                         <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-primary" style="width: 60%"></div>
+                            <div class="progress-bar {% if k_val > 0 %}bg-success{% elif k_val < 0 %}bg-danger{% else %}bg-secondary{% endif %}"
+                                style="width: {{ [((k_val|abs / 20) * 100)|int, 100]|min }}%"></div>
                         </div>
                     </div>
                     <small class="text-muted">
                         <i class="bi bi-info-circle me-1"></i>
-                        Impact after completing the 3-season rotation
+                        Net impact after completing the 3-season rotation
                     </small>
                 </div>
             </div>
@@ -202,59 +214,80 @@
 
 {% block scripts %}
 <script>
-    // Sustainability Gauge
-    const gaugeCtx = document.getElementById('sustainabilityGauge').getContext('2d');
-    new Chart(gaugeCtx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [{{ rotation.sustainability_score }}, {{ 100 - rotation.sustainability_score }}],
-        backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(200, 200, 200, 0.2)'],
-        borderWidth: 0
-    }]
-    },
-        options: {
-        cutout: '75%',
-        plugins: { legend: { display: false }, tooltip: { enabled: false } },
-        rotation: -90,
-        circumference: 180
-    }
-});
-
-    // Benefits Chart
-    const benefitsCtx = document.getElementById('benefitsChart').getContext('2d');
-    new Chart(benefitsCtx, {
-        type: 'line',
-        data: {
-            labels: ['Season 1', 'Season 2', 'Season 3'],
-            datasets: [
-                {
-                    label: 'Nitrogen (kg/ha)',
-                    data: [-20, -5, 15],
-                    borderColor: 'rgb(40, 167, 69)',
-                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                    tension: 0.3,
-                    fill: true
-                },
-                {
-                    label: 'Soil Health Score',
-                    data: [60, 70, 85],
-                    borderColor: 'rgb(13, 110, 253)',
-                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                    tension: 0.3,
-                    fill: true
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom' }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Sustainability Gauge
+        var gaugeCtx = document.getElementById('sustainabilityGauge').getContext('2d');
+        new Chart(gaugeCtx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [{{ rotation.sustainability_score }}, {{ 100 - rotation.sustainability_score }}],
+                    backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(200, 200, 200, 0.2)'],
+                    borderWidth: 0
+                }]
             },
-            scales: {
-                y: { beginAtZero: false }
+            options: {
+                cutout: '75%',
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                rotation: -90,
+                circumference: 180
             }
-        }
+        });
+
+        // Benefits Chart - using real soil impact data from backend
+        var seasonLabels = [
+            {% for step in rotation.plan %}'{{ step.season }} ({{ step.crop }})'{% if not loop.last %}, {% endif %}{% endfor %}
+        ];
+        var nitrogenData = [{% for s in rotation.season_soil %}{{ s.N }}{% if not loop.last %}, {% endif %}{% endfor %}];
+        var phosphorusData = [{% for s in rotation.season_soil %}{{ s.P }}{% if not loop.last %}, {% endif %}{% endfor %}];
+        var potassiumData = [{% for s in rotation.season_soil %}{{ s.K }}{% if not loop.last %}, {% endif %}{% endfor %}];
+
+        var benefitsCtx = document.getElementById('benefitsChart').getContext('2d');
+        new Chart(benefitsCtx, {
+            type: 'line',
+            data: {
+                labels: seasonLabels,
+                datasets: [
+                    {
+                        label: 'Nitrogen (kg/ha)',
+                        data: nitrogenData,
+                        borderColor: 'rgb(40, 167, 69)',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Phosphorus (kg/ha)',
+                        data: phosphorusData,
+                        borderColor: 'rgb(255, 193, 7)',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Potassium (kg/ha)',
+                        data: potassiumData,
+                        borderColor: 'rgb(13, 110, 253)',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Cumulative Soil Nutrient Change Across Rotation' }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Change (kg/ha)' },
+                        grid: { color: function(ctx) { return ctx.tick.value === 0 ? '#666' : 'rgba(0,0,0,0.05)'; } }
+                    }
+                }
+            }
+        });
     });
 </script>
 {% endblock %}

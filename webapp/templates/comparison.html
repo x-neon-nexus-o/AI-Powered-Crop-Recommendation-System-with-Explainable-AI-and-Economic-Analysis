@@ -205,6 +205,7 @@
             var profitValues = crops.map(function (c) { return Math.round(c.economic.profit); });
             var riskScores = crops.map(function (c) { return c.risk.risk_score; });
             var profitMargins = crops.map(function (c) { return Math.round(c.economic.profit_margin * 10) / 10; });
+            var sustainScores = crops.map(function (c) { return c.rotation.sustainability_score; });
 
             var colors = ['rgba(40, 167, 69, 0.7)', 'rgba(13, 110, 253, 0.7)', 'rgba(255, 193, 7, 0.7)',
                 'rgba(220, 53, 69, 0.7)', 'rgba(111, 66, 193, 0.7)'];
@@ -233,7 +234,7 @@
             new Chart(document.getElementById('radarChart').getContext('2d'), {
                 type: 'radar',
                 data: {
-                    labels: ['ROI', 'Profit Margin', 'Risk Score', 'Revenue', 'Sustainability'],
+                    labels: ['ROI', 'Profit Margin', 'Safety Score', 'Revenue', 'Sustainability'],
                     datasets: cropNames.map(function (name, i) {
                         return {
                             label: name,
@@ -242,7 +243,7 @@
                                 profitMargins[i],
                                 riskScores[i],
                                 (profitValues[i] / maxProfit) * 100,
-                                70 + Math.random() * 20
+                                sustainScores[i]
                             ],
                             backgroundColor: colors[i].replace('0.7', '0.2'),
                             borderColor: colors[i],
@@ -264,7 +265,7 @@
                     datasets: cropNames.map(function (name, i) {
                         return {
                             label: name,
-                            data: [{ x: riskScores[i], y: profitValues[i] }],
+                            data: [{ x: 100 - riskScores[i], y: profitValues[i] }],
                             backgroundColor: colors[i],
                             pointRadius: 12,
                             pointHoverRadius: 15
@@ -275,7 +276,7 @@
                     responsive: true,
                     plugins: { legend: { position: 'bottom' } },
                     scales: {
-                        x: { title: { display: true, text: 'Risk Score (Higher = Riskier)' } },
+                        x: { title: { display: true, text: 'Risk Level (Higher = Riskier)' }, min: 0, max: 100 },
                         y: { title: { display: true, text: 'Profit (₹)' }, beginAtZero: true }
                     }
                 }

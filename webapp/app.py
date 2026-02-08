@@ -87,19 +87,19 @@ def models():
     try:
         with open(metrics_path, 'r') as f:
             metrics_data = json.load(f)
-    except:
+    except Exception:
         pass
-    
+
     try:
         with open(feature_path, 'r') as f:
             features_data = json.load(f)
-    except:
+    except Exception:
         pass
-    
+
     try:
         with open(deploy_path, 'r') as f:
             deploy_data = json.load(f)
-    except:
+    except Exception:
         pass
     
     # Parse metrics from JSON format
@@ -388,18 +388,18 @@ def economic(crop_name=None):
         economic_data = get_economic_summary(crop_name)
         risk_data = risk_assessment(crop_name)
         rotation = get_rotation_suggestion(crop_name)
-        
+
         # Get comparison with other crops
         all_crops = ['rice', 'wheat', 'maize', 'chickpea', 'cotton']
         profitability_ranking = rank_by_profitability(all_crops)
-        
+
         if request.is_json:
             return format_response({
                 'economic': economic_data,
                 'risk': risk_data,
                 'ranking': profitability_ranking
             })
-        
+
         return render_template('economic_dashboard.html',
                                crop_name=crop_name,
                                economic=economic_data,

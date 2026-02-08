@@ -297,13 +297,17 @@
         });
 
         // Comparison bar chart
+        var accuracies = models.map(function (m) { return parseFloat(m.accuracy); });
+        var minAcc = Math.min.apply(null, accuracies);
+        var yMin = Math.max(0, Math.floor(minAcc / 5) * 5 - 5);
+
         new Chart(document.getElementById('comparisonChart').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: models.map(function (m) { return m.name; }),
                 datasets: [{
                     label: 'Accuracy (%)',
-                    data: models.map(function (m) { return parseFloat(m.accuracy); }),
+                    data: accuracies,
                     backgroundColor: ['#28a745', '#17a2b8', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14', '#20c997', '#0d6efd'],
                     borderRadius: 8
                 }]
@@ -312,7 +316,7 @@
                 responsive: true,
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { beginAtZero: false, min: 90, max: 100, ticks: { callback: function (v) { return v + '%'; } } }
+                    y: { beginAtZero: false, min: yMin, max: 100, ticks: { callback: function (v) { return v + '%'; } } }
                 }
             }
         });

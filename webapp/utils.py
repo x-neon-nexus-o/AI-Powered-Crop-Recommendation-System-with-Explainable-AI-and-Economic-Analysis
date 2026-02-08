@@ -5,15 +5,11 @@ Handles feature engineering, input validation, and model loading.
 
 import pickle
 import numpy as np
-import pandas as pd
 import os
 
 # Paths
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_PATH = os.path.join(BASE_PATH, "models")
-DATA_PATH = os.path.join(BASE_PATH, "data")
-RESULTS_PATH = os.path.join(DATA_PATH, "results")
-ML_READY_PATH = os.path.join(DATA_PATH, "processed", "ml_ready")
 
 # Feature names (39 engineered features)
 FEATURE_NAMES = [
@@ -34,13 +30,12 @@ FEATURE_NAMES = [
 _model = None
 _scaler = None
 _label_encoder = None
-_economic_df = None
 
 
 def load_models():
     """Load all required models on application startup."""
-    global _model, _scaler, _label_encoder, _economic_df
-    
+    global _model, _scaler, _label_encoder
+
     # Load stacking ensemble model
     try:
         with open(os.path.join(MODELS_PATH, "ensemble", "stacking_ensemble.pkl"), 'rb') as f:
@@ -50,25 +45,17 @@ def load_models():
         with open(os.path.join(MODELS_PATH, "random_forest_model.pkl"), 'rb') as f:
             _model = pickle.load(f)
         print("✅ Random Forest loaded (fallback)")
-    
+
     # Load scaler
     with open(os.path.join(MODELS_PATH, "scaler_standard.pkl"), 'rb') as f:
         _scaler = pickle.load(f)
     print("✅ Scaler loaded")
-    
+
     # Load label encoder
     with open(os.path.join(MODELS_PATH, "label_encoder.pkl"), 'rb') as f:
         _label_encoder = pickle.load(f)
     print("✅ Label Encoder loaded")
-    
-    # Load economic data
-    try:
-        _economic_df = pd.read_csv(os.path.join(RESULTS_PATH, "economic_analysis.csv"))
-        print("✅ Economic data loaded")
-    except FileNotFoundError:
-        print("⚠️ Economic data not found")
-        _economic_df = None
-    
+
     return _model, _scaler, _label_encoder
 
 
@@ -85,11 +72,6 @@ def get_scaler():
 def get_label_encoder():
     """Get the loaded label encoder."""
     return _label_encoder
-
-
-def get_economic_data():
-    """Get the economic data DataFrame."""
-    return _economic_df
 
 
 def validate_inputs(N, P, K, temperature, humidity, ph, rainfall):
@@ -199,28 +181,6 @@ def engineer_features(N, P, K, temperature, humidity, ph, rainfall):
     return feature_array
 
 
-def get_economic_viability(crop_name):
-    """Get economic viability data for a crop."""
-    if _economic_df is None:
-        return None
-    
-    try:
-        crop_data = _economic_df[_economic_df['crop'].str.lower() == crop_name.lower()]
-        if not crop_data.empty:
-            row = crop_data.iloc[0]
-            return {
-                'crop': crop_name,
-                'roi': float(row.get('roi', row.get('ROI', 0))),
-                'profit': float(row.get('profit', row.get('net_profit', 0))),
-                'profit_margin': float(row.get('profit_margin', 0)),
-                'risk_category': str(row.get('risk_category', row.get('risk_level', 'Unknown'))),
-                'volatility': float(row.get('volatility', row.get('price_cv', 0)))
-            }
-        return None
-    except Exception:
-        return None
-
-
 def get_rotation_suggestion(crop_name, current_season='Kharif'):
     """Get crop rotation suggestion based on rules."""
     crop_categories = {
@@ -233,7 +193,7 @@ def get_rotation_suggestion(crop_name, current_season='Kharif'):
         'muskmelon': 'Fruit', 'orange': 'Fruit', 'papaya': 'Fruit',
         'apple': 'Fruit', 'coconut': 'Oilseed'
     }
-    
+
     rotation_rules = {
         'Cereal': {'next': ['Legume', 'Oilseed'], 'benefit': 'Nitrogen fixation from legumes'},
         'Legume': {'next': ['Cereal', 'Fiber'], 'benefit': 'Soil nutrient enrichment'},
@@ -242,28 +202,71 @@ def get_rotation_suggestion(crop_name, current_season='Kharif'):
         'Fruit': {'next': ['Legume'], 'benefit': 'Perennial management'},
         'Beverage': {'next': ['Legume'], 'benefit': 'Soil restoration'}
     }
-    
+
+    # Soil impact per category (N, P, K changes in kg/ha)
+    soil_impact_by_category = {
+        'Cereal':   {'N': -20, 'P': -5, 'K': -10},
+        'Legume':   {'N': 25, 'P': 5, 'K': 0},
+        'Fiber':    {'N': -15, 'P': -8, 'K': -5},
+        'Oilseed':  {'N': -5, 'P': -3, 'K': -8},
+        'Fruit':    {'N': -10, 'P': -5, 'K': -12},
+        'Beverage': {'N': -8, 'P': -4, 'K': -6},
+        'Recovery': {'N': 15, 'P': 5, 'K': 5},
+        'Unknown':  {'N': 0, 'P': 0, 'K': 0}
+    }
+
     current_category = crop_categories.get(crop_name.lower(), 'Unknown')
     rule = rotation_rules.get(current_category, {'next': ['Legume'], 'benefit': 'General rotation'})
-    
+
     next_crops = []
     for crop, cat in crop_categories.items():
         if cat in rule['next'] and crop != crop_name.lower():
             next_crops.append(crop.title())
-    
+
     seasons = ['Kharif', 'Rabi', 'Zaid']
     current_idx = seasons.index(current_season) if current_season in seasons else 0
-    
+
     plan = [
         {'season': current_season, 'crop': crop_name.title(), 'category': current_category},
         {'season': seasons[(current_idx + 1) % 3], 'crop': next_crops[0] if next_crops else 'Rest', 'category': rule['next'][0] if rule['next'] else 'Recovery'},
         {'season': seasons[(current_idx + 2) % 3], 'crop': next_crops[1] if len(next_crops) > 1 else 'Green Manure', 'category': 'Recovery'}
     ]
-    
+
+    # Calculate cumulative soil impact across seasons
+    soil_n, soil_p, soil_k = 0, 0, 0
+    season_soil = []
+    for step in plan:
+        cat = step['category']
+        impact = soil_impact_by_category.get(cat, soil_impact_by_category['Unknown'])
+        soil_n += impact['N']
+        soil_p += impact['P']
+        soil_k += impact['K']
+        season_soil.append({'N': soil_n, 'P': soil_p, 'K': soil_k})
+
+    # Calculate sustainability from category diversity and soil balance
+    categories_in_plan = set(step['category'] for step in plan)
+    diversity_score = min(len(categories_in_plan) * 30, 60)
+    balance_score = 40 if soil_n >= 0 else max(0, 40 + soil_n)
+    sustainability_score = int(min(diversity_score + balance_score, 100))
+
+    if sustainability_score >= 80:
+        rating = 'Excellent'
+    elif sustainability_score >= 60:
+        rating = 'Good'
+    elif sustainability_score >= 40:
+        rating = 'Fair'
+    else:
+        rating = 'Poor'
+
+    # Final soil impact after full rotation
+    final_impact = season_soil[-1] if season_soil else {'N': 0, 'P': 0, 'K': 0}
+
     return {
         'plan': plan,
         'current_category': current_category,
         'benefit': rule['benefit'],
-        'sustainability_score': 75,
-        'rating': 'Good'
+        'sustainability_score': sustainability_score,
+        'rating': rating,
+        'soil_impact': final_impact,
+        'season_soil': season_soil
     }

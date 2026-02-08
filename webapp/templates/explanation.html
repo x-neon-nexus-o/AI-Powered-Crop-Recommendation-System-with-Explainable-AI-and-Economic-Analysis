@@ -9,101 +9,101 @@
         <h2 class="fw-bold">
             <i class="bi bi-lightbulb text-warning me-2"></i>Why {{ crop_name }}?
         </h2>
-        <p class="text-muted">Understanding the AI's recommendation using Explainable AI</p>
+        <p class="text-muted">Understanding the AI's recommendation in simple terms</p>
         {% if shap_available %}
-        <span class="badge bg-success">SHAP Analysis</span>
+        <span class="badge bg-success">SHAP Analysis (Explainable AI)</span>
         {% else %}
         <span class="badge bg-secondary">Feature Analysis</span>
         {% endif %}
     </div>
 
-    <div class="row g-4">
-        <!-- Explanation Text -->
-        <div class="col-lg-6">
-            <div class="card h-100">
-                <div class="card-header bg-warning text-dark">
+    <!-- Your Input Values (compact summary) -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
                     <h5 class="mb-0">
-                        <i class="bi bi-chat-quote me-2"></i>Plain English Explanation
+                        <i class="bi bi-sliders me-2"></i>Your Soil & Climate Inputs
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="explanation-text">
-                        {{ explanation_text|safe }}
-                    </div>
-
-                    <hr class="my-4">
-
-                    <h6 class="fw-bold mb-3"><i class="bi bi-sliders me-2"></i>Your Input Values:</h6>
                     <div class="row g-3">
-                        <div class="col-6 col-md-4">
-                            <div class="d-flex align-items-center p-2 bg-light rounded">
-                                <i class="bi bi-radioactive text-success fs-4 me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Nitrogen (N)</small>
-                                    <strong>{{ inputs.N }} kg/ha</strong>
-                                </div>
+                        <div class="col-6 col-md-3 col-lg">
+                            <div class="text-center p-2 bg-light rounded">
+                                <i class="bi bi-radioactive text-success fs-4"></i>
+                                <small class="text-muted d-block">Nitrogen</small>
+                                <strong>{{ inputs.N }} kg/ha</strong>
                             </div>
                         </div>
-                        <div class="col-6 col-md-4">
-                            <div class="d-flex align-items-center p-2 bg-light rounded">
-                                <i class="bi bi-flower2 text-warning fs-4 me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Phosphorus (P)</small>
-                                    <strong>{{ inputs.P }} kg/ha</strong>
-                                </div>
+                        <div class="col-6 col-md-3 col-lg">
+                            <div class="text-center p-2 bg-light rounded">
+                                <i class="bi bi-flower2 text-warning fs-4"></i>
+                                <small class="text-muted d-block">Phosphorus</small>
+                                <strong>{{ inputs.P }} kg/ha</strong>
                             </div>
                         </div>
-                        <div class="col-6 col-md-4">
-                            <div class="d-flex align-items-center p-2 bg-light rounded">
-                                <i class="bi bi-gem text-info fs-4 me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Potassium (K)</small>
-                                    <strong>{{ inputs.K }} kg/ha</strong>
-                                </div>
+                        <div class="col-6 col-md-3 col-lg">
+                            <div class="text-center p-2 bg-light rounded">
+                                <i class="bi bi-gem text-info fs-4"></i>
+                                <small class="text-muted d-block">Potassium</small>
+                                <strong>{{ inputs.K }} kg/ha</strong>
                             </div>
                         </div>
-                        <div class="col-6 col-md-4">
-                            <div class="d-flex align-items-center p-2 bg-light rounded">
-                                <i class="bi bi-thermometer-sun text-danger fs-4 me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Temperature</small>
-                                    <strong>{{ inputs.temperature }}°C</strong>
-                                </div>
+                        <div class="col-6 col-md-3 col-lg">
+                            <div class="text-center p-2 bg-light rounded">
+                                <i class="bi bi-thermometer-sun text-danger fs-4"></i>
+                                <small class="text-muted d-block">Temperature</small>
+                                <strong>{{ inputs.temperature }}°C</strong>
                             </div>
                         </div>
-                        <div class="col-6 col-md-4">
-                            <div class="d-flex align-items-center p-2 bg-light rounded">
-                                <i class="bi bi-droplet-half text-primary fs-4 me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Humidity</small>
-                                    <strong>{{ inputs.humidity }}%</strong>
-                                </div>
+                        <div class="col-6 col-md-3 col-lg">
+                            <div class="text-center p-2 bg-light rounded">
+                                <i class="bi bi-droplet-half text-primary fs-4"></i>
+                                <small class="text-muted d-block">Humidity</small>
+                                <strong>{{ inputs.humidity }}%</strong>
                             </div>
                         </div>
-                        <div class="col-6 col-md-4">
-                            <div class="d-flex align-items-center p-2 bg-light rounded">
-                                <i class="bi bi-moisture text-secondary fs-4 me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Soil pH</small>
-                                    <strong>{{ inputs.ph }}</strong>
-                                </div>
+                        <div class="col-6 col-md-3 col-lg">
+                            <div class="text-center p-2 bg-light rounded">
+                                <i class="bi bi-moisture text-secondary fs-4"></i>
+                                <small class="text-muted d-block">Soil pH</small>
+                                <strong>{{ inputs.ph }}</strong>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="d-flex align-items-center p-2 bg-primary bg-opacity-10 rounded">
-                                <i class="bi bi-cloud-rain text-primary fs-4 me-2"></i>
-                                <div>
-                                    <small class="text-muted d-block">Rainfall</small>
-                                    <strong>{{ inputs.rainfall }} mm</strong>
-                                </div>
+                        <div class="col-6 col-md-3 col-lg">
+                            <div class="text-center p-2 bg-light rounded">
+                                <i class="bi bi-cloud-rain text-primary fs-4"></i>
+                                <small class="text-muted d-block">Rainfall</small>
+                                <strong>{{ inputs.rainfall }} mm</strong>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Feature Contributions -->
+    <!-- Detailed Farmer-Friendly Explanation (full width) -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="bi bi-chat-quote me-2"></i>Detailed Explanation for Farmers
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="explanation-text">
+                        {{ explanation_text|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Contributions (technical chart + progress bars) -->
+    <div class="row g-4">
+        <!-- Feature Contribution Bars -->
         <div class="col-lg-6">
             <div class="card h-100">
                 <div class="card-header bg-primary text-white">
@@ -114,8 +114,15 @@
                 <div class="card-body">
                     {% if explanation and explanation.top_features %}
                     <p class="text-muted small mb-4">
-                        Features that influenced the {{ crop_name }} recommendation:
+                        How much each factor pushed the AI towards or away from {{ crop_name }}:
                     </p>
+
+                    {% set ns = namespace(max_abs=0.001) %}
+                    {% for feat in explanation.top_features %}
+                        {% if feat.shap_value|abs > ns.max_abs %}
+                            {% set ns.max_abs = feat.shap_value|abs %}
+                        {% endif %}
+                    {% endfor %}
 
                     {% for feat in explanation.top_features %}
                     <div class="mb-3">
@@ -126,12 +133,11 @@
                             </span>
                         </div>
                         <div class="progress" style="height: 20px;">
-                            {% set abs_val = feat.shap_value|abs %}
-                            {% set width = (abs_val * 100)|int %}
-                            {% if width > 100 %}{% set width = 100 %}{% endif %}
+                            {% set width = ((feat.shap_value|abs / ns.max_abs) * 100)|int %}
+                            {% if width < 5 %}{% set width = 5 %}{% endif %}
                             <div class="progress-bar {% if feat.shap_value > 0 %}bg-success{% else %}bg-danger{% endif %}"
                                 style="width: {{ width }}%">
-                                {% if feat.shap_value > 0 %}+{% endif %}{{ "%.2f"|format(feat.shap_value) }}
+                                {% if feat.shap_value > 0 %}+{% endif %}{{ "%.3f"|format(feat.shap_value) }}
                             </div>
                         </div>
                     </div>
@@ -139,12 +145,24 @@
 
                     <div class="alert alert-info mt-4 small">
                         <i class="bi bi-info-circle me-2"></i>
-                        <strong>How to read:</strong> Positive values (green) push toward {{ crop_name }},
-                        negative values (red) push away from it.
+                        <strong>How to read:</strong> Green bars mean that factor helps recommend {{ crop_name }}.
+                        Red bars mean that factor slightly goes against it. Longer bars mean stronger effect.
                     </div>
                     {% else %}
                     <p class="text-muted">Feature contribution data not available.</p>
                     {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Impact Chart -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-bar-chart-steps me-2"></i>Feature Impact Chart
+                    </h5>
+                    <canvas id="featureChart" height="300"></canvas>
                 </div>
             </div>
         </div>
@@ -164,27 +182,15 @@
                     <img src="{{ url_for('static', filename=plots.waterfall) }}" alt="SHAP Waterfall Plot"
                         class="img-fluid rounded shadow">
                     <p class="text-muted mt-3 small">
-                        This plot shows how each feature contributes to pushing the prediction towards {{ crop_name }}.
+                        This chart is generated by SHAP (SHapley Additive exPlanations), a method from game theory
+                        that fairly distributes the "credit" for the prediction among all input features.
+                        Green bars push the prediction towards {{ crop_name }}, red bars push away from it.
                     </p>
                 </div>
             </div>
         </div>
     </div>
     {% endif %}
-
-    <!-- Feature Importance Chart -->
-    <div class="row mt-4">
-        <div class="col-lg-8 mx-auto">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="fw-bold mb-4">
-                        <i class="bi bi-bar-chart-steps me-2"></i>Feature Impact Visualization
-                    </h5>
-                    <canvas id="featureChart" height="300"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Actions -->
     <div class="text-center mt-5">

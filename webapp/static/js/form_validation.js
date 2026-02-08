@@ -5,13 +5,13 @@
 
 // Validation ranges
 const VALIDATION_RANGES = {
-    N: { min: 0, max: 150, label: 'Nitrogen' },
-    P: { min: 0, max: 150, label: 'Phosphorus' },
-    K: { min: 0, max: 200, label: 'Potassium' },
+    N: { min: 0, max: 200, label: 'Nitrogen' },
+    P: { min: 0, max: 200, label: 'Phosphorus' },
+    K: { min: 0, max: 300, label: 'Potassium' },
     temperature: { min: 0, max: 50, label: 'Temperature' },
     humidity: { min: 0, max: 100, label: 'Humidity' },
-    ph: { min: 3.5, max: 9.0, label: 'pH' },
-    rainfall: { min: 0, max: 300, label: 'Rainfall' }
+    ph: { min: 3, max: 10, label: 'pH' },
+    rainfall: { min: 0, max: 500, label: 'Rainfall' }
 };
 
 /**
