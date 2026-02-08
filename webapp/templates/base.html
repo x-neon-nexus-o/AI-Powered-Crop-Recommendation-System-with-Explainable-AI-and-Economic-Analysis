@@ -17,6 +17,14 @@
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
+    <!-- Apply saved theme immediately to prevent flash -->
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
+
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #2d5016 0%, #4a7c23 50%, #6ba32e 100%);
@@ -168,6 +176,20 @@
         footer .text-muted {
             color: #bbb !important;
         }
+
+        /* Dark mode overrides for inline styles */
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        [data-theme="dark"] .stat-card {
+            background: #1e293b;
+        }
+
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select {
+            border-color: #475569;
+        }
     </style>
 </head>
 
@@ -209,6 +231,9 @@
                         </a>
                     </li>
                 </ul>
+                <button class="dark-mode-toggle ms-3" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+                    <i class="bi bi-moon-fill" id="themeIcon"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -289,6 +314,29 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     <script src="{{ url_for('static', filename='js/form_validation.js') }}"></script>
+    <!-- Dark mode toggle -->
+    <script>
+        (function() {
+            var toggle = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function updateIcon() {
+                var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+            }
+            updateIcon();
+            toggle.addEventListener('click', function() {
+                var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                if (isDark) {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+                updateIcon();
+            });
+        })();
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 
