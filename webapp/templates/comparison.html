@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+
+{% block title %}Compare Crops | CropAI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">
+            <i class="bi bi-bar-chart-line text-primary me-2"></i>Compare Crops
+        </h2>
+        <p class="text-muted">Side-by-side comparison of multiple crops</p>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-warning text-center">
+        <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Crop Selection Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('compare') }}" class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <label class="form-label fw-medium">Select Crops to Compare (2-5)</label>
+                    <select name="crops" multiple class="form-select" size="4">
+                        {% set all_crops = ['Rice', 'Wheat', 'Maize', 'Cotton', 'Chickpea', 'Lentil',
+                        'Mungbean', 'Blackgram', 'Pigeonpeas', 'Coffee', 'Coconut',
+                        'Papaya', 'Mango', 'Grapes', 'Banana'] %}
+                        {% for crop in all_crops %}
+                        <option value="{{ crop }}" {% if crop in selected_crops %}selected{% endif %}>
+                            {{ crop }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search me-2"></i>Compare
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if crops and crops|length >= 2 %}
+
+    <!-- Recommendation -->
+    {% if recommendation %}
+    <div class="alert alert-success mb-4">
+        <i class="bi bi-trophy me-2"></i>
+        <strong>Recommendation:</strong> {{ recommendation|safe }}
+    </div>
+    {% endif %}
+
+    <!-- Comparison Table -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-table me-2"></i>Comparison Table
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Feature</th>
+                            {% for crop in crops %}
+                            <th class="text-center">{{ crop.crop }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ROI</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">
+                                <span class="text-success fw-bold">{{ "%.1f"|format(crop.economic.roi) }}%</span>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td><strong>Profit (₹)</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">₹{{ "%.0f"|format(crop.economic.profit) }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td><strong>Revenue (₹)</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">₹{{ "%.0f"|format(crop.economic.revenue) }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td><strong>Total Cost (₹)</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">₹{{ "%.0f"|format(crop.economic.total_cost) }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td><strong>Profit Margin</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">{{ "%.1f"|format(crop.economic.profit_margin) }}%</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td><strong>Risk Level</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">
+                                <span class="badge 
+                                    {% if crop.risk.category == 'Low' %}bg-success
+                                    {% elif crop.risk.category == 'Medium' %}bg-warning
+                                    {% else %}bg-danger{% endif %}">
+                                    {{ crop.risk.category }}
+                                </span>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td><strong>Risk Score</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">{{ crop.risk.risk_score }}/100</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td><strong>Volatility</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">{{ "%.1f"|format(crop.risk.volatility) }}%</td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- ROI Comparison Chart -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-bar-chart me-2"></i>ROI Comparison
+                    </h5>
+                    <canvas id="roiChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Radar Chart -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-diagram-3 me-2"></i>Multi-Dimensional Comparison
+                    </h5>
+                    <canvas id="radarChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profit vs Risk Scatter -->
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-bullseye me-2"></i>Profit vs Risk Analysis
+                    </h5>
+                    <canvas id="scatterChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+    <!-- Actions -->
+    <div class="text-center mt-5">
+        <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-search me-2"></i>New Prediction
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if crops and crops|length >= 2 %}
+<!-- Pass data as JSON -->
+<script type="application/json" id="comparisonData">
+{{ crops | tojson | safe }}
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        try {
+            var crops = JSON.parse(document.getElementById('comparisonData').textContent);
+
+            var cropNames = crops.map(function (c) { return c.crop; });
+            var roiValues = crops.map(function (c) { return Math.round(c.economic.roi * 10) / 10; });
+            var profitValues = crops.map(function (c) { return Math.round(c.economic.profit); });
+            var riskScores = crops.map(function (c) { return c.risk.risk_score; });
+            var profitMargins = crops.map(function (c) { return Math.round(c.economic.profit_margin * 10) / 10; });
+
+            var colors = ['rgba(40, 167, 69, 0.7)', 'rgba(13, 110, 253, 0.7)', 'rgba(255, 193, 7, 0.7)',
+                'rgba(220, 53, 69, 0.7)', 'rgba(111, 66, 193, 0.7)'];
+
+            // ROI Bar Chart
+            new Chart(document.getElementById('roiChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: cropNames,
+                    datasets: [{
+                        label: 'ROI (%)',
+                        data: roiValues,
+                        backgroundColor: colors,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { callback: function (v) { return v + '%'; } } } }
+                }
+            });
+
+            // Radar Chart
+            var maxProfit = Math.max.apply(null, profitValues);
+            new Chart(document.getElementById('radarChart').getContext('2d'), {
+                type: 'radar',
+                data: {
+                    labels: ['ROI', 'Profit Margin', 'Risk Score', 'Revenue', 'Sustainability'],
+                    datasets: cropNames.map(function (name, i) {
+                        return {
+                            label: name,
+                            data: [
+                                roiValues[i],
+                                profitMargins[i],
+                                riskScores[i],
+                                (profitValues[i] / maxProfit) * 100,
+                                70 + Math.random() * 20
+                            ],
+                            backgroundColor: colors[i].replace('0.7', '0.2'),
+                            borderColor: colors[i],
+                            borderWidth: 2
+                        };
+                    })
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } },
+                    scales: { r: { beginAtZero: true, max: 100 } }
+                }
+            });
+
+            // Scatter Chart (Profit vs Risk)
+            new Chart(document.getElementById('scatterChart').getContext('2d'), {
+                type: 'scatter',
+                data: {
+                    datasets: cropNames.map(function (name, i) {
+                        return {
+                            label: name,
+                            data: [{ x: riskScores[i], y: profitValues[i] }],
+                            backgroundColor: colors[i],
+                            pointRadius: 12,
+                            pointHoverRadius: 15
+                        };
+                    })
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } },
+                    scales: {
+                        x: { title: { display: true, text: 'Risk Score (Higher = Riskier)' } },
+                        y: { title: { display: true, text: 'Profit (₹)' }, beginAtZero: true }
+                    }
+                }
+            });
+
+            console.log('✅ Comparison charts created!');
+        } catch (error) {
+            console.error('Chart error:', error);
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}

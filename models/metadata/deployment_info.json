@@ -1,0 +1,60 @@
+{
+  "model_name": "Stacking Ensemble Classifier",
+  "version": "1.0.0",
+  "created_date": "2026-02-07T15:55:20.388034",
+  "python_version": "3.10+",
+  "components": {
+    "model": "ensemble/stacking_ensemble.pkl",
+    "scaler": "scaler_standard.pkl",
+    "label_encoder": "label_encoder.pkl",
+    "feature_names": "processed/ml_ready/feature_names.pkl"
+  },
+  "input_validation": {
+    "N": {
+      "min": 0,
+      "max": 200,
+      "unit": "kg/ha"
+    },
+    "P": {
+      "min": 0,
+      "max": 200,
+      "unit": "kg/ha"
+    },
+    "K": {
+      "min": 0,
+      "max": 300,
+      "unit": "kg/ha"
+    },
+    "temperature": {
+      "min": 0,
+      "max": 50,
+      "unit": "Celsius"
+    },
+    "humidity": {
+      "min": 0,
+      "max": 100,
+      "unit": "percent"
+    },
+    "ph": {
+      "min": 3,
+      "max": 10,
+      "unit": "pH"
+    },
+    "rainfall": {
+      "min": 0,
+      "max": 500,
+      "unit": "mm"
+    }
+  },
+  "capabilities": {
+    "prediction": true,
+    "explanation": true,
+    "economics": true,
+    "rotation": true
+  },
+  "feature_engineering": {
+    "required": true,
+    "raw_input_count": 7,
+    "engineered_feature_count": 39
+  }
+}

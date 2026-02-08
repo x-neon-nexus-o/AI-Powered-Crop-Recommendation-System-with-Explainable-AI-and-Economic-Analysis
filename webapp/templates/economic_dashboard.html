@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}{{ crop_name }} - Economic Analysis | CropAI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">
+            <i class="bi bi-graph-up text-success me-2"></i>{{ crop_name }}
+        </h2>
+        <p class="text-muted">Economic Analysis & Rotation Planning</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Economic Analysis Card -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-currency-rupee me-2"></i>Economic Viability
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if economic %}
+                    <div class="row g-4 text-center mb-4">
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded">
+                                <h3 class="text-success mb-1">{{ "%.1f"|format(economic.roi) }}%</h3>
+                                <small class="text-muted">ROI</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded">
+                                <h3 class="text-primary mb-1">₹{{ "%.0f"|format(economic.profit) }}</h3>
+                                <small class="text-muted">Profit/acre</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <tr>
+                            <td>Profit Margin</td>
+                            <td class="text-end fw-bold">{{ "%.1f"|format(economic.profit_margin) }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Price Volatility</td>
+                            <td class="text-end fw-bold">{{ "%.1f"|format(economic.volatility) }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Risk Category</td>
+                            <td class="text-end">
+                                <span class="badge 
+                                    {% if economic.risk_category == 'Low' %}bg-success
+                                    {% elif economic.risk_category == 'Medium' %}bg-warning text-dark
+                                    {% else %}bg-danger{% endif %}">
+                                    {{ economic.risk_category }}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- ROI Chart -->
+                    <div class="mt-4">
+                        <canvas id="roiChart" height="200"></canvas>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-exclamation-circle text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-3">Economic data not available for this crop.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Rotation Plan Card -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-arrow-repeat me-2"></i>Rotation Plan
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if rotation %}
+                    <div class="mb-4">
+                        <span class="badge bg-light text-dark me-2">Category: {{ rotation.current_category }}</span>
+                        <span class="badge bg-success">Score: {{ rotation.sustainability_score }}/100</span>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="rotation-timeline">
+                        {% for item in rotation.plan %}
+                        <div class="d-flex align-items-start mb-4">
+                            <div class="rotation-step me-3">
+                                <div class="rounded-circle 
+                                    {% if loop.index == 1 %}bg-success{% elif loop.index == 2 %}bg-primary{% else %}bg-secondary{% endif %} 
+                                    text-white d-flex align-items-center justify-content-center"
+                                    style="width: 50px; height: 50px; font-weight: bold;">
+                                    {{ loop.index }}
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="card">
+                                    <div class="card-body py-2 px-3">
+                                        <strong>{{ item.season }}</strong>
+                                        <span class="d-block">{{ item.crop }}</span>
+                                        <small class="text-muted">{{ item.category }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Benefits -->
+                    <div class="alert alert-success mt-4">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <strong>Benefit:</strong> {{ rotation.benefit }}
+                    </div>
+
+                    <!-- Sustainability Chart -->
+                    <div class="mt-4">
+                        <h6 class="fw-bold mb-3">Sustainability Rating</h6>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar bg-success" style="width: {{ rotation.sustainability_score }}%">
+                                {{ rotation.rating }} ({{ rotation.sustainability_score }}%)
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-exclamation-circle text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-3">Rotation plan not available.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="text-center mt-5">
+        <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg me-2">
+            <i class="bi bi-search me-2"></i>New Prediction
+        </a>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg">
+            <i class="bi bi-house me-2"></i>Home
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if economic %}
+<script>
+    // ROI Gauge Chart
+    const ctx = document.getElementById('roiChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['ROI', 'Remaining'],
+            datasets: [{
+                data: [{{ economic.roi }}, {{ 100 - economic.roi if economic.roi < 100 else 0 }}],
+        backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(200, 200, 200, 0.3)'],
+        borderWidth: 0
+    }]
+    },
+        options: {
+        responsive: true,
+        cutout: '70%',
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+        }
+    },
+        plugins: [{
+            id: 'centerText',
+            afterDraw: function (chart) {
+                const ctx = chart.ctx;
+                const width = chart.width;
+                const height = chart.height;
+                ctx.restore();
+                ctx.font = 'bold 24px Inter';
+                ctx.textBaseline = 'middle';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#28a745';
+                ctx.fillText('{{ "%.1f"|format(economic.roi) }}%', width / 2, height / 2);
+                ctx.font = '14px Inter';
+                ctx.fillStyle = '#666';
+                ctx.fillText('ROI', width / 2, height / 2 + 25);
+                ctx.save();
+            }
+        }]
+});
+</script>
+{% endif %}
+{% endblock %}

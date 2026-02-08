@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Predict Crop - CropAI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white py-4">
+                    <h3 class="mb-0 text-center">
+                        <i class="bi bi-flower2 me-2"></i>Crop Recommendation
+                    </h3>
+                    <p class="text-center mb-0 opacity-75">
+                        Enter soil and climate parameters to get personalized recommendations
+                    </p>
+                </div>
+                <div class="card-body p-4">
+                    {% if errors %}
+                    <div class="alert alert-danger">
+                        <h6 class="fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>Validation Errors</h6>
+                        <ul class="mb-0">
+                            {% for error in errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" action="{{ url_for('predict') }}" id="predictionForm">
+                        <!-- Soil Nutrients -->
+                        <h5 class="fw-bold mb-3 text-success">
+                            <i class="bi bi-moisture me-2"></i>Soil Nutrients (kg/ha)
+                        </h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label fw-medium">Nitrogen (N)</label>
+                                <input type="number" name="N" class="form-control" min="0" max="200" step="1" required
+                                    value="{{ form_data.N if form_data else 50 }}" placeholder="0-200">
+                                <small class="text-muted">Range: 0-200 kg/ha</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-medium">Phosphorus (P)</label>
+                                <input type="number" name="P" class="form-control" min="0" max="200" step="1" required
+                                    value="{{ form_data.P if form_data else 40 }}" placeholder="0-200">
+                                <small class="text-muted">Range: 0-200 kg/ha</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-medium">Potassium (K)</label>
+                                <input type="number" name="K" class="form-control" min="0" max="300" step="1" required
+                                    value="{{ form_data.K if form_data else 40 }}" placeholder="0-300">
+                                <small class="text-muted">Range: 0-300 kg/ha</small>
+                            </div>
+                        </div>
+
+                        <!-- Climate Parameters -->
+                        <h5 class="fw-bold mb-3 text-success">
+                            <i class="bi bi-thermometer-half me-2"></i>Climate Parameters
+                        </h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Temperature (°C)</label>
+                                <input type="number" name="temperature" class="form-control" min="0" max="50" step="0.1"
+                                    required value="{{ form_data.temperature if form_data else 25 }}"
+                                    placeholder="0-50">
+                                <small class="text-muted">Range: 0-50°C</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Humidity (%)</label>
+                                <input type="number" name="humidity" class="form-control" min="0" max="100" step="0.1"
+                                    required value="{{ form_data.humidity if form_data else 70 }}" placeholder="0-100">
+                                <small class="text-muted">Range: 0-100%</small>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">pH Level</label>
+                                <input type="number" name="ph" class="form-control" min="3" max="10" step="0.1" required
+                                    value="{{ form_data.ph if form_data else 6.5 }}" placeholder="3-10">
+                                <small class="text-muted">Range: 3-10 (6-7 is neutral)</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Rainfall (mm)</label>
+                                <input type="number" name="rainfall" class="form-control" min="0" max="500" step="1"
+                                    required value="{{ form_data.rainfall if form_data else 100 }}" placeholder="0-500">
+                                <small class="text-muted">Range: 0-500mm</small>
+                            </div>
+                        </div>
+
+                        <!-- Season Selection -->
+                        <h5 class="fw-bold mb-3 text-success">
+                            <i class="bi bi-calendar-event me-2"></i>Season
+                        </h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Current Season</label>
+                                <select name="season" class="form-select">
+                                    <option value="Kharif" {% if form_data and form_data.season=='Kharif' %}selected{%
+                                        endif %}>
+                                        Kharif (June-October)
+                                    </option>
+                                    <option value="Rabi" {% if form_data and form_data.season=='Rabi' %}selected{% endif
+                                        %}>
+                                        Rabi (November-March)
+                                    </option>
+                                    <option value="Zaid" {% if form_data and form_data.season=='Zaid' %}selected{% endif
+                                        %}>
+                                        Zaid (March-June)
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-search me-2"></i>Get Recommendations
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-counterclockwise me-2"></i>Reset Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quick Tips -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h6 class="fw-bold"><i class="bi bi-lightbulb text-warning me-2"></i>Tips</h6>
+                    <ul class="mb-0 small text-muted">
+                        <li>Get soil test results from your local agricultural office</li>
+                        <li>Use average monthly temperature and rainfall data</li>
+                        <li>pH values between 6-7 are optimal for most crops</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Client-side validation
+    document.getElementById('predictionForm').addEventListener('submit', function (e) {
+        const inputs = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall'];
+        const ranges = {
+            'N': [0, 200], 'P': [0, 200], 'K': [0, 300],
+            'temperature': [0, 50], 'humidity': [0, 100],
+            'ph': [3, 10], 'rainfall': [0, 500]
+        };
+
+        let valid = true;
+        inputs.forEach(input => {
+            const value = parseFloat(document.querySelector(`[name="${input}"]`).value);
+            const [min, max] = ranges[input];
+            if (isNaN(value) || value < min || value > max) {
+                valid = false;
+            }
+        });
+
+        if (!valid) {
+            e.preventDefault();
+            alert('Please check all input values are within valid ranges.');
+        }
+    });
+</script>
+{% endblock %}

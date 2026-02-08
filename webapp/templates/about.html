@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}About - CropAI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="fw-bold text-center mb-5">
+                <i class="bi bi-info-circle text-success me-2"></i>About CropAI
+            </h1>
+
+            <!-- Project Overview -->
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Project Overview</h4>
+                    <p>
+                        CropAI is an AI-powered crop recommendation system that combines machine learning,
+                        explainable AI (XAI), and economic viability analysis to help farmers make
+                        informed decisions about crop selection.
+                    </p>
+                    <p class="mb-0">
+                        The system analyzes soil nutrients (N, P, K), climate conditions (temperature,
+                        humidity, rainfall), and soil pH to recommend the most suitable crops with
+                        confidence scores and detailed explanations.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Technology Stack -->
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Technology Stack</h4>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <h6 class="fw-bold text-success">Machine Learning</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle me-2"></i>Stacking Ensemble</li>
+                                <li><i class="bi bi-check-circle me-2"></i>Random Forest</li>
+                                <li><i class="bi bi-check-circle me-2"></i>XGBoost</li>
+                                <li><i class="bi bi-check-circle me-2"></i>LightGBM</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="fw-bold text-success">Explainable AI</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle me-2"></i>SHAP Values</li>
+                                <li><i class="bi bi-check-circle me-2"></i>Feature Importance</li>
+                                <li><i class="bi bi-check-circle me-2"></i>Waterfall Plots</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="fw-bold text-success">Web Framework</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle me-2"></i>Flask</li>
+                                <li><i class="bi bi-check-circle me-2"></i>Bootstrap 5</li>
+                                <li><i class="bi bi-check-circle me-2"></i>Chart.js</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Key Features</h4>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="feature-icon me-3" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">ML Prediction</h6>
+                                    <p class="text-muted small mb-0">
+                                        99% accuracy with stacking ensemble model combining multiple algorithms
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="feature-icon me-3" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                                    <i class="bi bi-lightbulb"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Explainable AI</h6>
+                                    <p class="text-muted small mb-0">
+                                        SHAP-based explanations for transparent predictions
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="feature-icon me-3" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                                    <i class="bi bi-currency-rupee"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Economic Analysis</h6>
+                                    <p class="text-muted small mb-0">
+                                        ROI calculation, risk assessment, and profitability ranking
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="feature-icon me-3" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Rotation Planning</h6>
+                                    <p class="text-muted small mb-0">
+                                        Multi-season crop rotation for sustainable agriculture
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Info -->
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Model Information</h4>
+                    <table class="table table-borderless">
+                        <tr>
+                            <td><strong>Model Type</strong></td>
+                            <td>Stacking Ensemble Classifier</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Input Features</strong></td>
+                            <td>7 raw → 39 engineered features</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Output Classes</strong></td>
+                            <td>22 crop types</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Accuracy</strong></td>
+                            <td>~99% (Stacking Ensemble)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dataset</strong></td>
+                            <td>2,200 samples across 22 crops</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="text-center">
+                <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-search me-2"></i>Try Crop Prediction
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

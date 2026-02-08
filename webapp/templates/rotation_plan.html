@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}Rotation Plan - {{ crop_name }} | CropAI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">
+            <i class="bi bi-arrow-repeat text-primary me-2"></i>Rotation Plan
+        </h2>
+        <p class="text-muted">Multi-season crop rotation strategy for {{ crop_name }}</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- 3-Season Timeline -->
+        <div class="col-lg-8">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-calendar3 me-2"></i>3-Season Rotation Timeline
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if rotation and rotation.plan %}
+                    <div class="timeline-container">
+                        {% for item in rotation.plan %}
+                        <div class="row align-items-center mb-4">
+                            <div class="col-md-3 text-center">
+                                <div class="rounded-circle 
+                                    {% if loop.index == 1 %}bg-success{% elif loop.index == 2 %}bg-primary{% else %}bg-secondary{% endif %} 
+                                    text-white d-flex align-items-center justify-content-center mx-auto shadow"
+                                    style="width: 80px; height: 80px;">
+                                    <div>
+                                        <strong class="d-block">S{{ loop.index }}</strong>
+                                        <small>{{ item.season }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card {% if loop.index == 1 %}border-success{% endif %}">
+                                    <div class="card-body py-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-1">{{ item.crop }}</h5>
+                                                <span class="badge bg-light text-dark">{{ item.category }}</span>
+                                            </div>
+                                            {% if loop.index == 1 %}
+                                            <span class="badge bg-success">Current</span>
+                                            {% elif loop.index == 2 %}
+                                            <span class="badge bg-primary">Next</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">Recovery</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if not loop.last %}
+                        <div class="text-center mb-3">
+                            <i class="bi bi-arrow-down text-muted" style="font-size: 1.5rem;"></i>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Rotation Benefit -->
+                    <div class="alert alert-success mt-4">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <strong>Rotation Benefit:</strong> {{ rotation.benefit }}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Rotation plan data not available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sustainability Score & Soil Health -->
+        <div class="col-lg-4">
+            <!-- Sustainability Score -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-award me-2"></i>Sustainability Score
+                    </h6>
+                </div>
+                <div class="card-body text-center">
+                    <div class="position-relative d-inline-block">
+                        <canvas id="sustainabilityGauge" width="150" height="150"></canvas>
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <h3 class="mb-0 text-success">{{ rotation.sustainability_score }}/100</h3>
+                            <small class="text-muted">{{ rotation.rating }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soil Health Tracker -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">
+                        <i class="bi bi-moisture me-2"></i>Soil Health Impact
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>Nitrogen</span>
+                            <span class="text-success">+15 kg/ha</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-success" style="width: 70%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>Phosphorus</span>
+                            <span class="text-secondary">Stable</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-secondary" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>Potassium</span>
+                            <span class="text-primary">+5 kg/ha</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-primary" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Impact after completing the 3-season rotation
+                    </small>
+                </div>
+            </div>
+
+            <!-- Quick Economic Summary -->
+            {% if economic %}
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">
+                        <i class="bi bi-currency-rupee me-2"></i>Economic Summary
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>ROI</span>
+                        <strong class="text-success">{{ "%.1f"|format(economic.roi) }}%</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Profit</span>
+                        <strong>₹{{ "%.0f"|format(economic.profit) }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Risk</span>
+                        <span class="badge 
+                            {% if economic.risk_category == 'Low' %}bg-success
+                            {% elif economic.risk_category == 'Medium' %}bg-warning
+                            {% else %}bg-danger{% endif %}">
+                            {{ economic.risk_category }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Rotation Benefits Chart -->
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-graph-up me-2"></i>Rotation Benefits Over Seasons
+                    </h5>
+                    <canvas id="benefitsChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="text-center mt-5">
+        <a href="{{ url_for('economic', crop_name=crop_name) }}" class="btn btn-success btn-lg me-2">
+            <i class="bi bi-currency-rupee me-2"></i>Economic Analysis
+        </a>
+        <a href="{{ url_for('explain') }}" class="btn btn-warning btn-lg me-2">
+            <i class="bi bi-lightbulb me-2"></i>View Explanation
+        </a>
+        <a href="{{ url_for('predict') }}" class="btn btn-outline-secondary btn-lg">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>New Prediction
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Sustainability Gauge
+    const gaugeCtx = document.getElementById('sustainabilityGauge').getContext('2d');
+    new Chart(gaugeCtx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [{{ rotation.sustainability_score }}, {{ 100 - rotation.sustainability_score }}],
+        backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(200, 200, 200, 0.2)'],
+        borderWidth: 0
+    }]
+    },
+        options: {
+        cutout: '75%',
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        rotation: -90,
+        circumference: 180
+    }
+});
+
+    // Benefits Chart
+    const benefitsCtx = document.getElementById('benefitsChart').getContext('2d');
+    new Chart(benefitsCtx, {
+        type: 'line',
+        data: {
+            labels: ['Season 1', 'Season 2', 'Season 3'],
+            datasets: [
+                {
+                    label: 'Nitrogen (kg/ha)',
+                    data: [-20, -5, 15],
+                    borderColor: 'rgb(40, 167, 69)',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Soil Health Score',
+                    data: [60, 70, 85],
+                    borderColor: 'rgb(13, 110, 253)',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            },
+            scales: {
+                y: { beginAtZero: false }
+            }
+        }
+    });
+</script>
+{% endblock %}

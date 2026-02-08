@@ -1,0 +1,456 @@
+"""
+Flask Web Application for Crop Recommendation System
+With Explainable AI and Economic Analysis
+"""
+
+from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session
+import numpy as np
+import os
+import uuid
+from datetime import datetime
+
+# Import modules
+from utils import (
+    load_models, validate_inputs, engineer_features,
+    get_model, get_scaler, get_label_encoder,
+    get_rotation_suggestion, FEATURE_NAMES
+)
+from prediction import predict_crop, categorize_recommendation, get_category_class
+from explainability import (
+    load_shap_explainer, generate_shap_explanation, 
+    feature_contribution_text, create_shap_plots, is_shap_available
+)
+from economic import (
+    load_economic_data, calculate_roi, get_economic_summary,
+    cost_benefit_analysis, rank_by_profitability, risk_assessment
+)
+
+app = Flask(__name__)
+app.secret_key = 'crop-recommendation-secret-key-2024'
+
+# Load all models on startup
+print("🚀 Loading ML models...")
+load_models()
+load_shap_explainer()
+load_economic_data()
+print("✅ Application ready!")
+
+
+# ==================== UTILITY FUNCTIONS ====================
+
+def format_response(data, success=True):
+    """Format JSON response."""
+    return jsonify({
+        'success': success,
+        'timestamp': datetime.now().isoformat(),
+        **data
+    })
+
+
+def validate_request(data):
+    """Validate request data."""
+    required = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
+    for field in required:
+        if field not in data:
+            return False, f"Missing required field: {field}"
+    return True, None
+
+
+# ==================== ROUTES ====================
+
+@app.route('/')
+def index():
+    """Home page - Landing page with project overview."""
+    return render_template('index.html')
+
+
+@app.route('/predict', methods=['GET', 'POST'])
+def predict():
+    """Prediction page - Handle form submission and display results."""
+    if request.method == 'GET':
+        return render_template('input_form.html')
+    
+    try:
+        # Get form data
+        N = float(request.form.get('N', 0))
+        P = float(request.form.get('P', 0))
+        K = float(request.form.get('K', 0))
+        temperature = float(request.form.get('temperature', 0))
+        humidity = float(request.form.get('humidity', 0))
+        ph = float(request.form.get('ph', 0))
+        rainfall = float(request.form.get('rainfall', 0))
+        season = request.form.get('season', 'Kharif')
+        
+        # Validate inputs
+        is_valid, errors = validate_inputs(N, P, K, temperature, humidity, ph, rainfall)
+        if not is_valid:
+            return render_template('input_form.html', errors=errors, form_data=request.form)
+        
+        # Generate session ID for SHAP plots
+        session_id = str(uuid.uuid4())[:8]
+        
+        # Engineer and scale features
+        features = engineer_features(N, P, K, temperature, humidity, ph, rainfall)
+        scaler = get_scaler()
+        features_scaled = scaler.transform(features)
+        
+        # Predict
+        model = get_model()
+        label_encoder = get_label_encoder()
+        probabilities = model.predict_proba(features_scaled)[0]
+        top_3_indices = np.argsort(probabilities)[-3:][::-1]
+        
+        predictions = []
+        for idx in top_3_indices:
+            crop_name = label_encoder.inverse_transform([idx])[0]
+            prob = probabilities[idx]
+            
+            # Economic data
+            economic = get_economic_summary(crop_name)
+            
+            # Rotation suggestion
+            rotation = get_rotation_suggestion(crop_name, season)
+            
+            predictions.append({
+                'crop': crop_name,
+                'probability': float(prob),  # Convert numpy to Python float
+                'confidence': f"{prob * 100:.1f}%",
+                'category': categorize_recommendation(prob),
+                'category_class': get_category_class(prob),
+                'economic': economic,
+                'rotation': rotation
+            })
+        
+        # Store in session for explanation page
+        session['last_prediction'] = {
+            'inputs': {'N': N, 'P': P, 'K': K, 'temperature': temperature, 
+                      'humidity': humidity, 'ph': ph, 'rainfall': rainfall, 'season': season},
+            'predictions': [{'crop': p['crop'], 'probability': float(p['probability']), 
+                           'confidence': p['confidence']} for p in predictions],
+            'session_id': session_id,
+            'top_crop_idx': int(top_3_indices[0])
+        }
+        
+        inputs = {'N': N, 'P': P, 'K': K, 'temperature': temperature,
+                  'humidity': humidity, 'ph': ph, 'rainfall': rainfall, 'season': season}
+        
+        return render_template('results.html', 
+                               predictions=predictions,
+                               inputs=inputs,
+                               session_id=session_id,
+                               timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
+    
+    except Exception as e:
+        flash(f'An error occurred: {str(e)}', 'danger')
+        return render_template('input_form.html', form_data=request.form)
+
+
+@app.route('/explain', methods=['GET', 'POST'])
+def explain():
+    """SHAP explanation page."""
+    if request.method == 'POST':
+        data = request.get_json() or request.form
+        
+        try:
+            N = float(data.get('N', 0))
+            P = float(data.get('P', 0))
+            K = float(data.get('K', 0))
+            temperature = float(data.get('temperature', 0))
+            humidity = float(data.get('humidity', 0))
+            ph = float(data.get('ph', 0))
+            rainfall = float(data.get('rainfall', 0))
+            crop_name = data.get('crop', 'Unknown')
+            crop_idx = int(data.get('crop_idx', 0))
+            session_id = data.get('session_id', str(uuid.uuid4())[:8])
+            
+            # Engineer and scale
+            features = engineer_features(N, P, K, temperature, humidity, ph, rainfall)
+            features_scaled = get_scaler().transform(features)
+            
+            # Generate explanation
+            explanation = generate_shap_explanation(features_scaled, crop_idx, FEATURE_NAMES)
+            
+            # Generate plots
+            plots = create_shap_plots(features_scaled, crop_idx, crop_name, session_id)
+            
+            # Generate text explanation
+            inputs = {'N': N, 'P': P, 'K': K, 'temperature': temperature,
+                      'humidity': humidity, 'ph': ph, 'rainfall': rainfall}
+            explanation_text = feature_contribution_text(crop_name, explanation.get('top_features', []), inputs)
+            
+            if request.is_json:
+                return format_response({
+                    'explanation': explanation,
+                    'plots': plots,
+                    'text': explanation_text
+                })
+            
+            return render_template('explanation.html',
+                                   crop_name=crop_name,
+                                   explanation=explanation,
+                                   plots=plots,
+                                   explanation_text=explanation_text,
+                                   inputs=inputs,
+                                   shap_available=is_shap_available())
+        
+        except Exception as e:
+            if request.is_json:
+                return format_response({'error': str(e)}, success=False), 500
+            flash(f'Error generating explanation: {str(e)}', 'danger')
+            return redirect(url_for('predict'))
+    
+    # GET - use session data
+    last_pred = session.get('last_prediction')
+    if not last_pred:
+        flash('Please make a prediction first', 'warning')
+        return redirect(url_for('predict'))
+    
+    inputs = last_pred['inputs']
+    crop_name = last_pred['predictions'][0]['crop']
+    crop_idx = last_pred['top_crop_idx']
+    session_id = last_pred['session_id']
+    
+    # Generate explanation
+    features = engineer_features(**{k: inputs[k] for k in ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']})
+    features_scaled = get_scaler().transform(features)
+    
+    explanation = generate_shap_explanation(features_scaled, crop_idx, FEATURE_NAMES)
+    plots = create_shap_plots(features_scaled, crop_idx, crop_name, session_id)
+    explanation_text = feature_contribution_text(crop_name, explanation.get('top_features', []), inputs)
+    
+    return render_template('explanation.html',
+                           crop_name=crop_name,
+                           explanation=explanation,
+                           plots=plots,
+                           explanation_text=explanation_text,
+                           inputs=inputs,
+                           shap_available=is_shap_available())
+
+
+@app.route('/economic', methods=['GET', 'POST'])
+@app.route('/economic/<crop_name>')
+def economic(crop_name=None):
+    """Economic analysis page."""
+    if request.method == 'POST':
+        data = request.get_json() or request.form
+        crop_name = data.get('crop', crop_name)
+    
+    if not crop_name:
+        last_pred = session.get('last_prediction')
+        if last_pred:
+            crop_name = last_pred['predictions'][0]['crop']
+        else:
+            flash('Please specify a crop or make a prediction first', 'warning')
+            return redirect(url_for('predict'))
+    
+    try:
+        # Get comprehensive economic data
+        economic_data = get_economic_summary(crop_name)
+        risk_data = risk_assessment(crop_name)
+        rotation = get_rotation_suggestion(crop_name)
+        
+        # Get comparison with other crops
+        all_crops = ['rice', 'wheat', 'maize', 'chickpea', 'cotton']
+        profitability_ranking = rank_by_profitability(all_crops)
+        
+        if request.is_json:
+            return format_response({
+                'economic': economic_data,
+                'risk': risk_data,
+                'ranking': profitability_ranking
+            })
+        
+        return render_template('economic_dashboard.html',
+                               crop_name=crop_name,
+                               economic=economic_data,
+                               risk=risk_data,
+                               rotation=rotation,
+                               ranking=profitability_ranking)
+    
+    except Exception as e:
+        if request.is_json:
+            return format_response({'error': str(e)}, success=False), 500
+        flash(f'Error in economic analysis: {str(e)}', 'danger')
+        return redirect(url_for('predict'))
+
+
+@app.route('/rotation', methods=['GET', 'POST'])
+@app.route('/rotation/<crop_name>')
+def rotation(crop_name=None):
+    """Crop rotation planning page."""
+    if request.method == 'POST':
+        data = request.get_json() or request.form
+        crop_name = data.get('crop', crop_name)
+        season = data.get('season', 'Kharif')
+    else:
+        season = request.args.get('season', 'Kharif')
+    
+    if not crop_name:
+        last_pred = session.get('last_prediction')
+        if last_pred:
+            crop_name = last_pred['predictions'][0]['crop']
+            season = last_pred['inputs'].get('season', 'Kharif')
+        else:
+            flash('Please specify a crop or make a prediction first', 'warning')
+            return redirect(url_for('predict'))
+    
+    try:
+        rotation_data = get_rotation_suggestion(crop_name, season)
+        economic_data = get_economic_summary(crop_name)
+        
+        if request.is_json:
+            return format_response({
+                'rotation': rotation_data,
+                'economic': economic_data
+            })
+        
+        return render_template('rotation_plan.html',
+                               crop_name=crop_name,
+                               rotation=rotation_data,
+                               economic=economic_data,
+                               season=season)
+    
+    except Exception as e:
+        if request.is_json:
+            return format_response({'error': str(e)}, success=False), 500
+        flash(f'Error in rotation planning: {str(e)}', 'danger')
+        return redirect(url_for('predict'))
+
+
+@app.route('/compare', methods=['GET', 'POST'])
+def compare():
+    """Compare multiple crops side-by-side."""
+    if request.method == 'POST':
+        data = request.get_json() or request.form
+        crops = data.getlist('crops') if hasattr(data, 'getlist') else data.get('crops', [])
+        
+        if isinstance(crops, str):
+            crops = [c.strip() for c in crops.split(',')]
+    else:
+        crops = request.args.getlist('crops')
+        if not crops:
+            # Use last prediction if available
+            last_pred = session.get('last_prediction')
+            if last_pred:
+                crops = [p['crop'] for p in last_pred['predictions']]
+    
+    if not crops or len(crops) < 2:
+        if request.is_json:
+            return format_response({'error': 'Please select at least 2 crops to compare'}, success=False), 400
+        return render_template('comparison.html', crops=[], error="Please select at least 2 crops to compare")
+    
+    try:
+        comparison_data = []
+        for crop in crops[:5]:  # Limit to 5 crops
+            economic = get_economic_summary(crop)
+            risk = risk_assessment(crop)
+            rotation = get_rotation_suggestion(crop)
+            
+            comparison_data.append({
+                'crop': crop,
+                'economic': economic,
+                'risk': risk,
+                'rotation': rotation
+            })
+        
+        # Find recommendation
+        best_roi = max(comparison_data, key=lambda x: x['economic']['roi'])
+        lowest_risk = min(comparison_data, key=lambda x: x['risk']['risk_score'])
+        
+        recommendation = f"Choose **{best_roi['crop']}** for highest ROI ({best_roi['economic']['roi']:.1f}%)"
+        if best_roi['crop'] != lowest_risk['crop']:
+            recommendation += f" or **{lowest_risk['crop']}** for lowest risk"
+        
+        if request.is_json:
+            return format_response({
+                'comparison': comparison_data,
+                'recommendation': recommendation
+            })
+        
+        return render_template('comparison.html',
+                               crops=comparison_data,
+                               recommendation=recommendation,
+                               selected_crops=crops)
+    
+    except Exception as e:
+        if request.is_json:
+            return format_response({'error': str(e)}, success=False), 500
+        flash(f'Error in comparison: {str(e)}', 'danger')
+        return redirect(url_for('predict'))
+
+
+@app.route('/about')
+def about():
+    """About page - Project information."""
+    return render_template('about.html')
+
+
+# ==================== API ENDPOINTS ====================
+
+@app.route('/api/predict', methods=['POST'])
+def api_predict():
+    """API endpoint for predictions - returns JSON."""
+    try:
+        data = request.get_json()
+        
+        is_valid, error = validate_request(data)
+        if not is_valid:
+            return format_response({'error': error}, success=False), 400
+        
+        N = float(data['N'])
+        P = float(data['P'])
+        K = float(data['K'])
+        temperature = float(data['temperature'])
+        humidity = float(data['humidity'])
+        ph = float(data['ph'])
+        rainfall = float(data['rainfall'])
+        season = data.get('season', 'Kharif')
+        
+        # Validate
+        is_valid, errors = validate_inputs(N, P, K, temperature, humidity, ph, rainfall)
+        if not is_valid:
+            return format_response({'errors': errors}, success=False), 400
+        
+        # Predict
+        features = engineer_features(N, P, K, temperature, humidity, ph, rainfall)
+        features_scaled = get_scaler().transform(features)
+        
+        probabilities = get_model().predict_proba(features_scaled)[0]
+        top_3_indices = np.argsort(probabilities)[-3:][::-1]
+        
+        predictions = []
+        for idx in top_3_indices:
+            crop_name = get_label_encoder().inverse_transform([idx])[0]
+            predictions.append({
+                'crop': crop_name,
+                'probability': float(probabilities[idx]),
+                'confidence': f"{probabilities[idx] * 100:.1f}%",
+                'economic': get_economic_summary(crop_name),
+                'rotation': get_rotation_suggestion(crop_name, season)
+            })
+        
+        return format_response({
+            'predictions': predictions,
+            'recommended_crop': predictions[0]['crop']
+        })
+    
+    except Exception as e:
+        return format_response({'error': str(e)}, success=False), 500
+
+
+# ==================== ERROR HANDLERS ====================
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('error.html', error_code=404, error_message="Page not found"), 404
+
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('error.html', error_code=500, error_message="Internal server error"), 500
+
+
+# ==================== MAIN ====================
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

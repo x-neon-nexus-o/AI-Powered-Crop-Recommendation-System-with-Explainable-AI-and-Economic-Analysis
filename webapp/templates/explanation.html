@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block title %}Explanation - {{ crop_name }} | CropAI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">
+            <i class="bi bi-lightbulb text-warning me-2"></i>Why {{ crop_name }}?
+        </h2>
+        <p class="text-muted">Understanding the AI's recommendation using Explainable AI</p>
+        {% if shap_available %}
+        <span class="badge bg-success">SHAP Analysis</span>
+        {% else %}
+        <span class="badge bg-secondary">Feature Analysis</span>
+        {% endif %}
+    </div>
+
+    <div class="row g-4">
+        <!-- Explanation Text -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="bi bi-chat-quote me-2"></i>Plain English Explanation
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="explanation-text">
+                        {{ explanation_text|safe }}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h6 class="fw-bold mb-3">Your Input Values:</h6>
+                    <div class="row g-2 small">
+                        <div class="col-6">
+                            <span class="text-muted">Nitrogen:</span>
+                            <strong>{{ inputs.N }} kg/ha</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">Phosphorus:</span>
+                            <strong>{{ inputs.P }} kg/ha</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">Potassium:</span>
+                            <strong>{{ inputs.K }} kg/ha</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">Temperature:</span>
+                            <strong>{{ inputs.temperature }}°C</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">Humidity:</span>
+                            <strong>{{ inputs.humidity }}%</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">pH:</span>
+                            <strong>{{ inputs.ph }}</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted">Rainfall:</span>
+                            <strong>{{ inputs.rainfall }} mm</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Contributions -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart me-2"></i>Feature Contributions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if explanation and explanation.top_features %}
+                    <p class="text-muted small mb-4">
+                        Features that influenced the {{ crop_name }} recommendation:
+                    </p>
+
+                    {% for feat in explanation.top_features %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-medium">{{ feat.feature }}</span>
+                            <span class="{% if feat.shap_value > 0 %}text-success{% else %}text-danger{% endif %}">
+                                {{ feat.contribution }}
+                            </span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            {% set abs_val = feat.shap_value|abs %}
+                            {% set width = (abs_val * 100)|int %}
+                            {% if width > 100 %}{% set width = 100 %}{% endif %}
+                            <div class="progress-bar {% if feat.shap_value > 0 %}bg-success{% else %}bg-danger{% endif %}"
+                                style="width: {{ width }}%">
+                                {% if feat.shap_value > 0 %}+{% endif %}{{ "%.2f"|format(feat.shap_value) }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="alert alert-info mt-4 small">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>How to read:</strong> Positive values (green) push toward {{ crop_name }},
+                        negative values (red) push away from it.
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Feature contribution data not available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHAP Visualization -->
+    {% if plots and plots.waterfall %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-graph-up me-2"></i>SHAP Waterfall Plot
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename=plots.waterfall) }}" alt="SHAP Waterfall Plot"
+                        class="img-fluid rounded shadow">
+                    <p class="text-muted mt-3 small">
+                        This plot shows how each feature contributes to pushing the prediction towards {{ crop_name }}.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Feature Importance Chart -->
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-bar-chart-steps me-2"></i>Feature Impact Visualization
+                    </h5>
+                    <canvas id="featureChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="text-center mt-5">
+        <a href="{{ url_for('economic', crop_name=crop_name) }}" class="btn btn-success btn-lg me-2">
+            <i class="bi bi-currency-rupee me-2"></i>Economic Analysis
+        </a>
+        <a href="{{ url_for('rotation', crop_name=crop_name) }}" class="btn btn-primary btn-lg me-2">
+            <i class="bi bi-arrow-repeat me-2"></i>Rotation Plan
+        </a>
+        <a href="{{ url_for('predict') }}" class="btn btn-outline-secondary btn-lg">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>New Prediction
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Pass data as JSON -->
+<script type="application/json" id="explanationData">
+{{ explanation.top_features | tojson | safe if explanation and explanation.top_features else '[]' }}
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        try {
+            var featureData = JSON.parse(document.getElementById('explanationData').textContent);
+
+            if (featureData && featureData.length > 0) {
+                var labels = featureData.map(function (d) { return d.feature; });
+                var values = featureData.map(function (d) { return d.shap_value; });
+                var bgColors = values.map(function (v) { return v > 0 ? 'rgba(40, 167, 69, 0.7)' : 'rgba(220, 53, 69, 0.7)'; });
+                var borderColors = values.map(function (v) { return v > 0 ? 'rgb(40, 167, 69)' : 'rgb(220, 53, 69)'; });
+
+                var ctx = document.getElementById('featureChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Contribution',
+                            data: values,
+                            backgroundColor: bgColors,
+                            borderColor: borderColors,
+                            borderWidth: 2,
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Feature Contributions to Prediction'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            }
+                        }
+                    }
+                });
+                console.log('✅ Feature chart created!');
+            }
+        } catch (error) {
+            console.error('Chart error:', error);
+        }
+    });
+</script>
+{% endblock %}

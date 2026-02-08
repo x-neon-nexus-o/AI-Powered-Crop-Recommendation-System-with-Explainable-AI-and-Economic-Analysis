@@ -1,0 +1,53 @@
+{
+  "models": [
+    {
+      "Metric": "Test Accuracy",
+      "Logistic_Regression": "97.73%",
+      "Decision_Tree": "95.68%",
+      "Random_Forest": "99.32%",
+      "SVM": "97.95%"
+    },
+    {
+      "Metric": "Test Precision",
+      "Logistic_Regression": "97.93%",
+      "Decision_Tree": "95.92%",
+      "Random_Forest": "99.35%",
+      "SVM": "98.09%"
+    },
+    {
+      "Metric": "Test Recall",
+      "Logistic_Regression": "97.73%",
+      "Decision_Tree": "95.68%",
+      "Random_Forest": "99.32%",
+      "SVM": "97.95%"
+    },
+    {
+      "Metric": "Test F1-Score",
+      "Logistic_Regression": "97.71%",
+      "Decision_Tree": "95.70%",
+      "Random_Forest": "99.32%",
+      "SVM": "97.94%"
+    },
+    {
+      "Metric": "Training Time (sec)",
+      "Logistic_Regression": "0.2027",
+      "Decision_Tree": "0.0194",
+      "Random_Forest": "0.3761",
+      "SVM": "52.5342"
+    },
+    {
+      "Metric": "Prediction Time (ms)",
+      "Logistic_Regression": "0.0028",
+      "Decision_Tree": "0.0042",
+      "Random_Forest": "0.2568",
+      "SVM": "0.1942"
+    },
+    {
+      "Metric": "Overfitting Gap",
+      "Logistic_Regression": "1.14%",
+      "Decision_Tree": "1.88%",
+      "Random_Forest": "0.57%",
+      "SVM": "1.48%"
+    }
+  ]
+}

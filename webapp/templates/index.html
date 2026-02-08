@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}CropAI - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">
+            <i class="bi bi-flower1 me-3"></i>Smart Crop Recommendations
+        </h1>
+        <p class="lead mb-4 mx-auto" style="max-width: 700px;">
+            AI-powered crop recommendation system with explainable AI, 
+            economic viability analysis, and multi-season rotation planning.
+        </p>
+        <a href="{{ url_for('predict') }}" class="btn btn-light btn-lg px-5 py-3">
+            <i class="bi bi-search me-2"></i>Get Crop Recommendations
+        </a>
+    </div>
+</section>
+
+<!-- Statistics -->
+<section class="py-5" style="margin-top: -60px;">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">22</div>
+                    <p class="text-muted mb-0">Crop Types</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">99%</div>
+                    <p class="text-muted mb-0">Accuracy</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">39</div>
+                    <p class="text-muted mb-0">Features Analyzed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Key Features</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 p-4 text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+                    <h5 class="fw-bold">ML Prediction</h5>
+                    <p class="text-muted">
+                        Stacking ensemble model combining Random Forest, XGBoost, and LightGBM
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 p-4 text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+                    <h5 class="fw-bold">Explainable AI</h5>
+                    <p class="text-muted">
+                        SHAP-based explanations for transparent and trustworthy predictions
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 p-4 text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-currency-rupee"></i>
+                    </div>
+                    <h5 class="fw-bold">Economic Analysis</h5>
+                    <p class="text-muted">
+                        ROI calculation, risk assessment, and profitability ranking
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 p-4 text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+                    <h5 class="fw-bold">Rotation Planning</h5>
+                    <p class="text-muted">
+                        Multi-season crop rotation for sustainable agriculture
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">How It Works</h2>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="p-4">
+                    <div class="d-flex mb-4">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" 
+                             style="width: 50px; height: 50px; font-weight: bold;">1</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Enter Soil & Climate Data</h5>
+                            <p class="text-muted mb-0">Provide N, P, K, temperature, humidity, pH, and rainfall</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" 
+                             style="width: 50px; height: 50px; font-weight: bold;">2</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">AI Analyzes 39 Features</h5>
+                            <p class="text-muted mb-0">Raw inputs are transformed into engineered features</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" 
+                             style="width: 50px; height: 50px; font-weight: bold;">3</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Get Recommendations</h5>
+                            <p class="text-muted mb-0">Top 3 crops with confidence scores and explanations</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" 
+                             style="width: 50px; height: 50px; font-weight: bold;">4</div>
+                        <div>
+                            <h5 class="fw-bold mb-1">View Economic & Rotation Plans</h5>
+                            <p class="text-muted mb-0">ROI analysis and multi-season rotation suggestions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="card p-4">
+                    <h4 class="mb-4">Ready to Get Started?</h4>
+                    <p class="text-muted mb-4">
+                        Enter your soil and climate parameters to receive personalized crop recommendations
+                    </p>
+                    <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-search me-2"></i>Start Prediction
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Crops Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Supported Crops</h2>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            {% set crops = ['Rice', 'Wheat', 'Maize', 'Cotton', 'Chickpea', 'Lentil', 'Mungbean', 
+                           'Blackgram', 'Pigeonpeas', 'Kidneybeans', 'Mothbeans', 'Jute', 
+                           'Coffee', 'Coconut', 'Papaya', 'Orange', 'Apple', 'Mango', 
+                           'Grapes', 'Watermelon', 'Muskmelon', 'Banana'] %}
+            {% for crop in crops %}
+            <span class="badge bg-light text-dark px-3 py-2 fs-6">
+                <i class="bi bi-flower2 me-1 text-success"></i>{{ crop }}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
