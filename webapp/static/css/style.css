@@ -283,6 +283,125 @@ footer a:hover {
 }
 
 /* ======================== */
+/* LOADING OVERLAY          */
+/* ======================== */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    text-align: center;
+}
+
+[data-theme="dark"] .loading-overlay {
+    background: rgba(15, 23, 42, 0.92);
+}
+
+.loading-content {
+    max-width: 340px;
+    padding: 2rem;
+}
+
+.loading-spinner {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    position: relative;
+    animation: spinnerRotate 2.5s linear infinite;
+}
+
+.spinner-leaf {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50% 0 50% 0;
+    background: var(--primary-green);
+    opacity: 0.9;
+}
+
+.spinner-leaf:nth-child(1) {
+    top: 0; left: 25px;
+    animation: leafPulse 1.2s ease-in-out 0s infinite;
+}
+.spinner-leaf:nth-child(2) {
+    top: 25px; right: 0;
+    animation: leafPulse 1.2s ease-in-out 0.3s infinite;
+    background: var(--primary-light);
+}
+.spinner-leaf:nth-child(3) {
+    bottom: 0; left: 25px;
+    animation: leafPulse 1.2s ease-in-out 0.6s infinite;
+    background: var(--accent-gold);
+}
+.spinner-leaf:nth-child(4) {
+    top: 25px; left: 0;
+    animation: leafPulse 1.2s ease-in-out 0.9s infinite;
+    background: #66bb6a;
+}
+
+@keyframes spinnerRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes leafPulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.3); opacity: 1; }
+}
+
+.loading-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+[data-theme="dark"] .loading-title {
+    color: #a7d88e;
+}
+
+.loading-message {
+    font-size: 0.9rem;
+    min-height: 1.5em;
+    transition: opacity 0.3s ease;
+}
+
+.loading-progress {
+    width: 100%;
+    height: 5px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .loading-progress {
+    background: #334155;
+}
+
+.loading-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary-green), var(--primary-light), var(--accent-gold));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    background-size: 200% 100%;
+    animation: progressShimmer 1.5s linear infinite;
+}
+
+@keyframes progressShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ======================== */
 /* DARK MODE                */
 /* ======================== */
 

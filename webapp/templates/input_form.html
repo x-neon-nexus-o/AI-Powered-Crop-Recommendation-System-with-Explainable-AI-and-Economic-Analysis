@@ -114,7 +114,7 @@
 
                         <!-- Submit Button -->
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
                                 <i class="bi bi-search me-2"></i>Get Recommendations
                             </button>
                             <button type="reset" class="btn btn-outline-secondary">
@@ -122,6 +122,23 @@
                             </button>
                         </div>
                     </form>
+
+                    <!-- Loading Overlay -->
+                    <div id="loadingOverlay" class="loading-overlay" style="display:none;">
+                        <div class="loading-content">
+                            <div class="loading-spinner">
+                                <div class="spinner-leaf"></div>
+                                <div class="spinner-leaf"></div>
+                                <div class="spinner-leaf"></div>
+                                <div class="spinner-leaf"></div>
+                            </div>
+                            <h4 class="loading-title mt-4">Analyzing Your Soil & Climate Data</h4>
+                            <p class="loading-message text-muted" id="loadingMessage">Running AI models...</p>
+                            <div class="loading-progress">
+                                <div class="loading-progress-bar" id="loadingBar"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -143,19 +160,18 @@
 
 {% block scripts %}
 <script>
-    // Client-side validation
     document.getElementById('predictionForm').addEventListener('submit', function (e) {
-        const inputs = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall'];
-        const ranges = {
+        var inputs = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall'];
+        var ranges = {
             'N': [0, 200], 'P': [0, 200], 'K': [0, 300],
             'temperature': [0, 50], 'humidity': [0, 100],
             'ph': [3, 10], 'rainfall': [0, 500]
         };
 
-        let valid = true;
-        inputs.forEach(input => {
-            const value = parseFloat(document.querySelector(`[name="${input}"]`).value);
-            const [min, max] = ranges[input];
+        var valid = true;
+        inputs.forEach(function(input) {
+            var value = parseFloat(document.querySelector('[name="' + input + '"]').value);
+            var min = ranges[input][0], max = ranges[input][1];
             if (isNaN(value) || value < min || value > max) {
                 valid = false;
             }
@@ -164,7 +180,50 @@
         if (!valid) {
             e.preventDefault();
             alert('Please check all input values are within valid ranges.');
+            return;
         }
+
+        // Show loading overlay
+        var overlay = document.getElementById('loadingOverlay');
+        var submitBtn = document.getElementById('submitBtn');
+        var msgEl = document.getElementById('loadingMessage');
+        var bar = document.getElementById('loadingBar');
+
+        overlay.style.display = 'flex';
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+
+        var messages = [
+            'Running AI models...',
+            'Analyzing soil nutrient balance...',
+            'Evaluating climate compatibility...',
+            'Comparing across 22 crop varieties...',
+            'Calculating economic projections...',
+            'Generating SHAP explanations...',
+            'Preparing your recommendations...'
+        ];
+
+        var msgIndex = 0;
+        var progress = 0;
+
+        var msgInterval = setInterval(function() {
+            msgIndex++;
+            if (msgIndex < messages.length) {
+                msgEl.textContent = messages[msgIndex];
+            }
+        }, 1500);
+
+        var barInterval = setInterval(function() {
+            progress += Math.random() * 12 + 3;
+            if (progress > 90) progress = 90;
+            bar.style.width = progress + '%';
+        }, 400);
+
+        // Cleanup after 30s (safety net)
+        setTimeout(function() {
+            clearInterval(msgInterval);
+            clearInterval(barInterval);
+        }, 30000);
     });
 </script>
 {% endblock %}
