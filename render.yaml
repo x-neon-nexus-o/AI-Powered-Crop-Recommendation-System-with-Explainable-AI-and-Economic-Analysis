@@ -2,7 +2,7 @@ services:
   - type: web
     name: cropai-recommendation
     runtime: python
-    buildCommand: pip install -r requirements-prod.txt
+    buildCommand: pip install --upgrade pip && pip install -r requirements-prod.txt
     startCommand: cd webapp && gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 --preload
     envVars:
       - key: PYTHON_VERSION
@@ -11,3 +11,5 @@ services:
         value: production
       - key: SECRET_KEY
         generateValue: true
+      - key: PIP_DISABLE_PIP_VERSION_CHECK
+        value: "1"

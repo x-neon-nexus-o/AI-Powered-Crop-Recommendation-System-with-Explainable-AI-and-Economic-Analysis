@@ -1,28 +1,29 @@
-# Production dependencies for Render/cloud deployment
-# (excludes Jupyter, notebook, and dev-only packages)
+# Production dependencies for Render deployment
+# Using versions with pre-built wheels to avoid compilation issues
 
 # Core
-flask==3.0.0
-gunicorn==21.2.0
+flask>=3.0.0
+gunicorn>=21.2.0
+Werkzeug>=3.0.0
 
-# Data Science
-pandas==2.1.0
-numpy==1.24.3
+# Data Science - pinned to versions with wheels
+pandas>=2.0.0,<3.0.0
+numpy>=1.24.0,<2.0.0
 
-# Visualization (needed for SHAP plot generation)
-matplotlib==3.7.2
+# Visualization
+matplotlib>=3.7.0
 
-# Machine Learning
-scikit-learn==1.3.0
-xgboost==1.7.6
-lightgbm==4.0.0
-scipy==1.11.2
+# Machine Learning - use stable scikit-learn (includes joblib)
+scikit-learn>=1.3.0,<1.6.0
+scipy>=1.11.0,<2.0.0
 
-# Explainability
-shap==0.42.1
+# Note: shap requires numba which may fail on Render free tier
+# The app has fallback explanations if SHAP is unavailable
+# Uncomment below if you want to try SHAP (may increase build time):
+# shap>=0.42.0
 
 # PDF Export
-fpdf2==2.7.6
+fpdf2>=2.7.0
 
 # Utilities
-joblib==1.3.2
+joblib>=1.3.0
