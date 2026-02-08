@@ -33,35 +33,70 @@
 
                     <hr class="my-4">
 
-                    <h6 class="fw-bold mb-3">Your Input Values:</h6>
-                    <div class="row g-2 small">
-                        <div class="col-6">
-                            <span class="text-muted">Nitrogen:</span>
-                            <strong>{{ inputs.N }} kg/ha</strong>
+                    <h6 class="fw-bold mb-3"><i class="bi bi-sliders me-2"></i>Your Input Values:</h6>
+                    <div class="row g-3">
+                        <div class="col-6 col-md-4">
+                            <div class="d-flex align-items-center p-2 bg-light rounded">
+                                <i class="bi bi-radioactive text-success fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Nitrogen (N)</small>
+                                    <strong>{{ inputs.N }} kg/ha</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <span class="text-muted">Phosphorus:</span>
-                            <strong>{{ inputs.P }} kg/ha</strong>
+                        <div class="col-6 col-md-4">
+                            <div class="d-flex align-items-center p-2 bg-light rounded">
+                                <i class="bi bi-flower2 text-warning fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Phosphorus (P)</small>
+                                    <strong>{{ inputs.P }} kg/ha</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <span class="text-muted">Potassium:</span>
-                            <strong>{{ inputs.K }} kg/ha</strong>
+                        <div class="col-6 col-md-4">
+                            <div class="d-flex align-items-center p-2 bg-light rounded">
+                                <i class="bi bi-gem text-info fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Potassium (K)</small>
+                                    <strong>{{ inputs.K }} kg/ha</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <span class="text-muted">Temperature:</span>
-                            <strong>{{ inputs.temperature }}°C</strong>
+                        <div class="col-6 col-md-4">
+                            <div class="d-flex align-items-center p-2 bg-light rounded">
+                                <i class="bi bi-thermometer-sun text-danger fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Temperature</small>
+                                    <strong>{{ inputs.temperature }}°C</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <span class="text-muted">Humidity:</span>
-                            <strong>{{ inputs.humidity }}%</strong>
+                        <div class="col-6 col-md-4">
+                            <div class="d-flex align-items-center p-2 bg-light rounded">
+                                <i class="bi bi-droplet-half text-primary fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Humidity</small>
+                                    <strong>{{ inputs.humidity }}%</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <span class="text-muted">pH:</span>
-                            <strong>{{ inputs.ph }}</strong>
+                        <div class="col-6 col-md-4">
+                            <div class="d-flex align-items-center p-2 bg-light rounded">
+                                <i class="bi bi-moisture text-secondary fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Soil pH</small>
+                                    <strong>{{ inputs.ph }}</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <span class="text-muted">Rainfall:</span>
-                            <strong>{{ inputs.rainfall }} mm</strong>
+                        <div class="col-12">
+                            <div class="d-flex align-items-center p-2 bg-primary bg-opacity-10 rounded">
+                                <i class="bi bi-cloud-rain text-primary fs-4 me-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Rainfall</small>
+                                    <strong>{{ inputs.rainfall }} mm</strong>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

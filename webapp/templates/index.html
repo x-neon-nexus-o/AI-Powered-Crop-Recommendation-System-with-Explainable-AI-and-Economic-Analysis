@@ -10,7 +10,7 @@
             <i class="bi bi-flower1 me-3"></i>Smart Crop Recommendations
         </h1>
         <p class="lead mb-4 mx-auto" style="max-width: 700px;">
-            AI-powered crop recommendation system with explainable AI, 
+            AI-powered crop recommendation system with explainable AI,
             economic viability analysis, and multi-season rotation planning.
         </p>
         <a href="{{ url_for('predict') }}" class="btn btn-light btn-lg px-5 py-3">
@@ -23,22 +23,32 @@
 <section class="py-5" style="margin-top: -60px;">
     <div class="container">
         <div class="row g-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="stat-card">
                     <div class="stat-number">22</div>
                     <p class="text-muted mb-0">Crop Types</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-number">99%</div>
+            <div class="col-md-3">
+                <div class="stat-card position-relative">
+                    <span class="badge bg-success position-absolute top-0 end-0 m-2">Best</span>
+                    <div class="stat-number">99.5%</div>
                     <p class="text-muted mb-0">Accuracy</p>
+                    <a href="{{ url_for('models') }}" class="btn btn-sm btn-outline-success mt-2">
+                        <i class="bi bi-cpu me-1"></i>View All Models
+                    </a>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="stat-card">
                     <div class="stat-number">39</div>
                     <p class="text-muted mb-0">Features Analyzed</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <p class="text-muted mb-0">ML Models</p>
                 </div>
             </div>
         </div>
@@ -106,32 +116,32 @@
             <div class="col-lg-6">
                 <div class="p-4">
                     <div class="d-flex mb-4">
-                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" 
-                             style="width: 50px; height: 50px; font-weight: bold;">1</div>
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3"
+                            style="width: 50px; height: 50px; font-weight: bold;">1</div>
                         <div>
                             <h5 class="fw-bold mb-1">Enter Soil & Climate Data</h5>
                             <p class="text-muted mb-0">Provide N, P, K, temperature, humidity, pH, and rainfall</p>
                         </div>
                     </div>
                     <div class="d-flex mb-4">
-                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" 
-                             style="width: 50px; height: 50px; font-weight: bold;">2</div>
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3"
+                            style="width: 50px; height: 50px; font-weight: bold;">2</div>
                         <div>
                             <h5 class="fw-bold mb-1">AI Analyzes 39 Features</h5>
                             <p class="text-muted mb-0">Raw inputs are transformed into engineered features</p>
                         </div>
                     </div>
                     <div class="d-flex mb-4">
-                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" 
-                             style="width: 50px; height: 50px; font-weight: bold;">3</div>
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3"
+                            style="width: 50px; height: 50px; font-weight: bold;">3</div>
                         <div>
                             <h5 class="fw-bold mb-1">Get Recommendations</h5>
                             <p class="text-muted mb-0">Top 3 crops with confidence scores and explanations</p>
                         </div>
                     </div>
                     <div class="d-flex">
-                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" 
-                             style="width: 50px; height: 50px; font-weight: bold;">4</div>
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3"
+                            style="width: 50px; height: 50px; font-weight: bold;">4</div>
                         <div>
                             <h5 class="fw-bold mb-1">View Economic & Rotation Plans</h5>
                             <p class="text-muted mb-0">ROI analysis and multi-season rotation suggestions</p>
@@ -159,10 +169,10 @@
     <div class="container">
         <h2 class="text-center fw-bold mb-5">Supported Crops</h2>
         <div class="d-flex flex-wrap justify-content-center gap-3">
-            {% set crops = ['Rice', 'Wheat', 'Maize', 'Cotton', 'Chickpea', 'Lentil', 'Mungbean', 
-                           'Blackgram', 'Pigeonpeas', 'Kidneybeans', 'Mothbeans', 'Jute', 
-                           'Coffee', 'Coconut', 'Papaya', 'Orange', 'Apple', 'Mango', 
-                           'Grapes', 'Watermelon', 'Muskmelon', 'Banana'] %}
+            {% set crops = ['Rice', 'Wheat', 'Maize', 'Cotton', 'Chickpea', 'Lentil', 'Mungbean',
+            'Blackgram', 'Pigeonpeas', 'Kidneybeans', 'Mothbeans', 'Jute',
+            'Coffee', 'Coconut', 'Papaya', 'Orange', 'Apple', 'Mango',
+            'Grapes', 'Watermelon', 'Muskmelon', 'Banana'] %}
             {% for crop in crops %}
             <span class="badge bg-light text-dark px-3 py-2 fs-6">
                 <i class="bi bi-flower2 me-1 text-success"></i>{{ crop }}

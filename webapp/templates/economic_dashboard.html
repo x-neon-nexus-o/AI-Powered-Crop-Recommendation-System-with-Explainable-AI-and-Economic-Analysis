@@ -47,22 +47,39 @@
                             <td>Price Volatility</td>
                             <td class="text-end fw-bold">{{ "%.1f"|format(economic.volatility) }}%</td>
                         </tr>
-                        <tr>
-                            <td>Risk Category</td>
-                            <td class="text-end">
-                                <span class="badge 
-                                    {% if economic.risk_category == 'Low' %}bg-success
-                                    {% elif economic.risk_category == 'Medium' %}bg-warning text-dark
-                                    {% else %}bg-danger{% endif %}">
-                                    {{ economic.risk_category }}
-                                </span>
-                            </td>
-                        </tr>
                     </table>
 
-                    <!-- ROI Chart -->
-                    <div class="mt-4">
-                        <canvas id="roiChart" height="200"></canvas>
+                    <!-- Traffic Light Risk Indicator -->
+                    <div class="text-center my-4">
+                        <p class="text-muted small mb-2">Risk Level</p>
+                        <div class="d-inline-flex align-items-center gap-2 p-3 bg-dark rounded-pill">
+                            <div class="rounded-circle {% if economic.risk_category == 'High' %}bg-danger shadow-lg{% else %}bg-secondary opacity-25{% endif %}"
+                                style="width: 30px; height: 30px; {% if economic.risk_category == 'High' %}animation: pulse 1s infinite{% endif %}">
+                            </div>
+                            <div class="rounded-circle {% if economic.risk_category == 'Medium' %}bg-warning shadow-lg{% else %}bg-secondary opacity-25{% endif %}"
+                                style="width: 30px; height: 30px; {% if economic.risk_category == 'Medium' %}animation: pulse 1s infinite{% endif %}">
+                            </div>
+                            <div class="rounded-circle {% if economic.risk_category == 'Low' %}bg-success shadow-lg{% else %}bg-secondary opacity-25{% endif %}"
+                                style="width: 30px; height: 30px; {% if economic.risk_category == 'Low' %}animation: pulse 1s infinite{% endif %}">
+                            </div>
+                        </div>
+                        <p
+                            class="fw-bold mt-2 {% if economic.risk_category == 'Low' %}text-success{% elif economic.risk_category == 'Medium' %}text-warning{% else %}text-danger{% endif %}">
+                            {{ economic.risk_category }} Risk
+                        </p>
+                    </div>
+
+                    <div class="row g-3">
+                        <!-- ROI Gauge -->
+                        <div class="col-6">
+                            <p class="text-muted small text-center mb-1">ROI</p>
+                            <canvas id="roiChart" height="150"></canvas>
+                        </div>
+                        <!-- Cost Breakdown -->
+                        <div class="col-6">
+                            <p class="text-muted small text-center mb-1">Cost Breakdown</p>
+                            <canvas id="costChart" height="150"></canvas>
+                        </div>
                     </div>
                     {% else %}
                     <div class="text-center py-5">
@@ -153,46 +170,75 @@
 {% endblock %}
 
 {% block scripts %}
+<style>
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+        }
+    }
+</style>
 {% if economic %}
 <script>
-    // ROI Gauge Chart
-    const ctx = document.getElementById('roiChart').getContext('2d');
-    new Chart(ctx, {
+    document.addEventListener('DOMContentLoaded', function () {
+        // ROI Gauge Chart
+        var roiValue = {{ economic.roi }
+    };
+    new Chart(document.getElementById('roiChart').getContext('2d'), {
         type: 'doughnut',
         data: {
-            labels: ['ROI', 'Remaining'],
             datasets: [{
-                data: [{{ economic.roi }}, {{ 100 - economic.roi if economic.roi < 100 else 0 }}],
-        backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(200, 200, 200, 0.3)'],
-        borderWidth: 0
-    }]
-    },
+                data: [roiValue, Math.max(0, 100 - roiValue)],
+                backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(200, 200, 200, 0.3)'],
+                borderWidth: 0
+            }]
+        },
         options: {
-        responsive: true,
-        cutout: '70%',
-        plugins: {
-            legend: { display: false },
-            tooltip: { enabled: false }
-        }
-    },
-        plugins: [{
-            id: 'centerText',
-            afterDraw: function (chart) {
-                const ctx = chart.ctx;
-                const width = chart.width;
-                const height = chart.height;
-                ctx.restore();
-                ctx.font = 'bold 24px Inter';
-                ctx.textBaseline = 'middle';
-                ctx.textAlign = 'center';
-                ctx.fillStyle = '#28a745';
-                ctx.fillText('{{ "%.1f"|format(economic.roi) }}%', width / 2, height / 2);
-                ctx.font = '14px Inter';
-                ctx.fillStyle = '#666';
-                ctx.fillText('ROI', width / 2, height / 2 + 25);
-                ctx.save();
+            responsive: true,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
             }
-        }]
+        }
+    });
+
+    // Cost Breakdown Pie Chart
+    new Chart(document.getElementById('costChart').getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: ['Labor', 'Fertilizer', 'Seeds', 'Irrigation', 'Misc'],
+            datasets: [{
+                data: [40, 25, 15, 12, 8],
+                backgroundColor: [
+                    'rgba(0, 123, 255, 0.8)',
+                    'rgba(40, 167, 69, 0.8)',
+                    'rgba(255, 193, 7, 0.8)',
+                    'rgba(23, 162, 184, 0.8)',
+                    'rgba(108, 117, 125, 0.8)'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: { boxWidth: 10, font: { size: 10 } }
+                }
+            }
+        }
+    });
 });
 </script>
 {% endif %}
