@@ -21,6 +21,7 @@
   <a href="https://xgboost.readthedocs.io/"><img src="https://img.shields.io/badge/XGBoost-2.0+-blue?style=flat-square" alt="XGBoost"/></a>
   <a href="https://shap.readthedocs.io/"><img src="https://img.shields.io/badge/SHAP-Explainable%20AI-purple?style=flat-square" alt="SHAP"/></a>
   <a href="https://render.com/"><img src="https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat-square&logo=render" alt="Render"/></a>
+  <a href="https://openweathermap.org/"><img src="https://img.shields.io/badge/Weather-OpenWeatherMap-orange?style=flat-square&logo=openweathermap" alt="OpenWeatherMap"/></a>
 </p>
 
 ---
@@ -88,7 +89,7 @@ This project addresses **5 major gaps** in existing crop recommendation systems:
 | ❌ No Explainability | Black-box predictions | ✅ SHAP-based XAI with feature contributions |
 | ❌ No Economic Analysis | Only agronomic factors | ✅ ROI, profit margins, market price integration |
 | ❌ No Rotation Planning | Single crop focus | ✅ Multi-season sustainable rotation |
-| ❌ Static Datasets | Outdated information | ✅ Live market data integration |
+| ❌ Static Datasets | Outdated information | ✅ Live weather data via OpenWeatherMap API |
 | ❌ No Regional Context | Generic recommendations | ✅ India-specific with MSP and seasonal data |
 
 ---
@@ -139,6 +140,9 @@ This semester project develops an advanced crop recommendation system that goes 
 ### **Deployment**
 - **Pickle** - Model serialization
 - **Gunicorn** - WSGI server
+
+### **External APIs**
+- **OpenWeatherMap** - Real-time weather data (temperature, humidity, rainfall) via free tier API
 
 ***
 
@@ -328,6 +332,7 @@ Size: 50-100 rotation combinations
 | Crop Recommendation | Kaggle | Download directly | **MUST HAVE** |
 | Market Prices | Agmarknet | Manual compilation | **SHOULD HAVE** |
 | Rotation Rules | Self-created | Create from research | **SHOULD HAVE** |
+| Weather Data | OpenWeatherMap API | Auto-fetched via API | **INTEGRATED** |
 
 ***
 
@@ -798,4 +803,5 @@ python app.py
 4. ✅ **Multi-Season Planning** - Sustainability focus
 5. ✅ **Stacking Ensemble** - Advanced ML beyond papers
 6. ✅ **Clean Separation** - Notebooks (.ipynb) for ML, Python (.py) for web only
+7. ✅ **Live Weather Integration** - OpenWeatherMap API for real-time climate auto-fill
 
