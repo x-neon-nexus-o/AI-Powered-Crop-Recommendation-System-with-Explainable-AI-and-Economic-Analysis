@@ -1,29 +1,28 @@
 # Production dependencies for Render deployment
-# Models were trained with sklearn 1.8.0, need compatible versions
+# Models were trained with numpy 2.x and sklearn 1.8.0
 
 # Core
 flask>=3.0.0
 gunicorn>=21.2.0
 Werkzeug>=3.0.0
 
-# Data Science
-pandas>=2.0.0,<3.0.0
-numpy>=1.24.0,<2.0.0
+# Data Science - MUST use numpy 2.x (models trained with numpy._core)
+numpy>=2.0.0
+pandas>=2.0.0
 
 # Visualization
-matplotlib>=3.7.0
+matplotlib>=3.9.0
 
-# Machine Learning - MUST match training versions
-# Models trained with sklearn 1.8.0, using latest compatible
+# Machine Learning - latest versions compatible with numpy 2.x
 scikit-learn>=1.5.0
-scipy>=1.11.0,<2.0.0
+scipy>=1.13.0
 
-# XGBoost & LightGBM - REQUIRED for unpickling trained models
-xgboost>=1.7.0
-lightgbm>=4.0.0
+# XGBoost & LightGBM - for stacking ensemble model
+xgboost>=2.0.0
+lightgbm>=4.3.0
 
 # PDF Export
 fpdf2>=2.7.0
 
 # Utilities
-joblib>=1.3.0
+joblib>=1.4.0
