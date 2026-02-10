@@ -283,7 +283,13 @@
                 scales: {
                     y: {
                         title: { display: true, text: 'Change (kg/ha)' },
-                        grid: { color: function(ctx) { return ctx.tick.value === 0 ? '#666' : 'rgba(0,0,0,0.05)'; } }
+                        grid: {
+                            color: function(ctx) {
+                                var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+                                if (ctx.tick.value === 0) return dark ? '#8aaa76' : '#666';
+                                return dark ? 'rgba(200, 219, 184, 0.15)' : 'rgba(0,0,0,0.05)';
+                            }
+                        }
                     }
                 }
             }

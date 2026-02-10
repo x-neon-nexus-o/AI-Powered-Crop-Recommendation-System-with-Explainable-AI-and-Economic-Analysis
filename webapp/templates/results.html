@@ -301,6 +301,9 @@
     document.addEventListener('DOMContentLoaded', function () {
         try {
             var predictions = JSON.parse(document.getElementById('chartData').textContent);
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            var needleColor = isDark ? '#c8dbb8' : '#333';
+            var tickColor = isDark ? '#5a7a4a' : '#ccc';
 
             // Color based on score
             function getGaugeColor(value) {
@@ -357,7 +360,7 @@
                                     ctx.beginPath();
                                     ctx.moveTo(x1, y1);
                                     ctx.lineTo(x2, y2);
-                                    ctx.strokeStyle = '#ccc';
+                                    ctx.strokeStyle = tickColor;
                                     ctx.lineWidth = i % 5 === 0 ? 2 : 1;
                                     ctx.stroke();
                                 }
@@ -376,14 +379,14 @@
                             ctx.beginPath();
                             ctx.moveTo(0, 0);
                             ctx.lineTo(needleLength, 0);
-                            ctx.strokeStyle = '#333';
+                            ctx.strokeStyle = needleColor;
                             ctx.lineWidth = size === 'large' ? 3 : 2;
                             ctx.stroke();
 
                             // Needle center circle
                             ctx.beginPath();
                             ctx.arc(0, 0, size === 'large' ? 8 : 4, 0, Math.PI * 2);
-                            ctx.fillStyle = '#333';
+                            ctx.fillStyle = needleColor;
                             ctx.fill();
 
                             ctx.restore();

@@ -22,6 +22,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function() {
+            var isDark = localStorage.getItem('theme') === 'dark';
+            Chart.defaults.color = isDark ? '#c8dbb8' : '#666';
+            Chart.defaults.borderColor = isDark ? 'rgba(200, 219, 184, 0.15)' : 'rgba(0, 0, 0, 0.1)';
+        })();
+    </script>
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
@@ -335,6 +342,34 @@
                 var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
                 icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
             }
+            function updateCharts() {
+                if (typeof Chart === 'undefined') return;
+                var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                var tc = isDark ? '#c8dbb8' : '#666';
+                var gc = isDark ? 'rgba(200, 219, 184, 0.15)' : 'rgba(0, 0, 0, 0.1)';
+                Chart.defaults.color = tc;
+                Chart.defaults.borderColor = gc;
+                Object.keys(Chart.instances).forEach(function(key) {
+                    var chart = Chart.instances[key];
+                    if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend !== false) {
+                        chart.options.plugins.legend.labels = chart.options.plugins.legend.labels || {};
+                        chart.options.plugins.legend.labels.color = tc;
+                    }
+                    if (chart.options.plugins && chart.options.plugins.title) {
+                        chart.options.plugins.title.color = tc;
+                    }
+                    Object.keys(chart.options.scales || {}).forEach(function(scaleId) {
+                        var scale = chart.options.scales[scaleId];
+                        scale.ticks = scale.ticks || {};
+                        scale.ticks.color = tc;
+                        scale.grid = scale.grid || {};
+                        scale.grid.color = gc;
+                        if (scale.title) scale.title.color = tc;
+                        if (scale.pointLabels) scale.pointLabels.color = tc;
+                    });
+                    chart.update('none');
+                });
+            }
             updateIcon();
             toggle.addEventListener('click', function() {
                 var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -346,6 +381,7 @@
                     localStorage.setItem('theme', 'dark');
                 }
                 updateIcon();
+                updateCharts();
             });
         })();
     </script>
