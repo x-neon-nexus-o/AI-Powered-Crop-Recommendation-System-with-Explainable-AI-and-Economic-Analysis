@@ -18,7 +18,7 @@ def load_rotation_planner():
             planner = pickle.load(f)
         return planner
     except FileNotFoundError:
-        print("⚠️ Rotation planner not found. Please run Notebook 15 first.")
+        print("[!] Rotation planner not found. Please run Notebook 15 first.")
         return None
 
 # Global planner instance

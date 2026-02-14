@@ -50,10 +50,10 @@ def load_economic_data():
     
     try:
         _economic_df = pd.read_csv(os.path.join(RESULTS_PATH, "economic_analysis.csv"))
-        print("✅ Economic data loaded")
+        print("[+] Economic data loaded")
         return _economic_df
     except FileNotFoundError:
-        print("⚠️ Economic CSV not found, using defaults")
+        print("[!] Economic CSV not found, using defaults")
         return None
 
 

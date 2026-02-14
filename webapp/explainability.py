@@ -35,14 +35,14 @@ def load_shap_explainer():
         with open(explainer_path, 'rb') as f:
             _shap_explainer = pickle.load(f)
         SHAP_AVAILABLE = True
-        print("✅ SHAP Explainer loaded")
+        print("[+] SHAP Explainer loaded")
         return _shap_explainer
     except FileNotFoundError:
-        print("⚠️ SHAP Explainer not found")
+        print("[!] SHAP Explainer not found")
         SHAP_AVAILABLE = False
         return None
     except Exception as e:
-        print(f"⚠️ Error loading SHAP Explainer: {e}")
+        print(f"[!] Error loading SHAP Explainer: {e}")
         SHAP_AVAILABLE = False
         return None
 

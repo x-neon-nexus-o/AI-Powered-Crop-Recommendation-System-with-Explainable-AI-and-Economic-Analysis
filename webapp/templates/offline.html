@@ -16,7 +16,7 @@
                     Crop predictions require a live connection to our AI models.
                 </p>
 
-                <button class="btn btn-primary btn-lg mb-4" onclick="tryReconnect()">
+                <button class="btn btn-primary btn-lg mb-4" onclick="tryReconnect(this)">
                     <i class="bi bi-arrow-clockwise me-2"></i>Try Again
                 </button>
 
@@ -47,11 +47,10 @@
 
 {% block scripts %}
 <script>
-    function tryReconnect() {
+    function tryReconnect(btn) {
         if (navigator.onLine) {
             window.location.reload();
         } else {
-            var btn = event.target.closest('button');
             btn.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>Still Offline';
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-secondary');

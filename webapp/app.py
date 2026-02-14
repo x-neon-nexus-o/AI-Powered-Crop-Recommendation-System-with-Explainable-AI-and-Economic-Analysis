@@ -35,11 +35,11 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'crop-recommendation-secret-key-2024')
 
 # Load all models on startup
-print("🚀 Loading ML models...")
+print("[*] Loading ML models...")
 load_models()
 load_shap_explainer()
 load_economic_data()
-print("✅ Application ready!")
+print("[+] Application ready!")
 
 
 # ==================== UTILITY FUNCTIONS ====================
@@ -74,7 +74,6 @@ def index():
 def models():
     """Model Dashboard - Show all trained models and their metrics."""
     import json
-    import os
     
     models_base = os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),

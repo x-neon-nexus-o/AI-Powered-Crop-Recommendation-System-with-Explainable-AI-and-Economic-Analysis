@@ -40,27 +40,27 @@ def load_models():
     try:
         with open(os.path.join(MODELS_PATH, "ensemble", "stacking_ensemble.pkl"), 'rb') as f:
             _model = pickle.load(f)
-        print("✅ Stacking Ensemble loaded")
+        print("[+] Stacking Ensemble loaded")
     except FileNotFoundError:
-        print("⚠️ Stacking Ensemble not found, trying Random Forest...")
+        print("[!] Stacking Ensemble not found, trying Random Forest...")
         with open(os.path.join(MODELS_PATH, "random_forest_model.pkl"), 'rb') as f:
             _model = pickle.load(f)
-        print("✅ Random Forest loaded (fallback)")
+        print("[+] Random Forest loaded (fallback)")
     except Exception as e:
-        print(f"⚠️ Stacking Ensemble failed ({e}), using Random Forest...")
+        print(f"[!] Stacking Ensemble failed ({e}), using Random Forest...")
         with open(os.path.join(MODELS_PATH, "random_forest_model.pkl"), 'rb') as f:
             _model = pickle.load(f)
-        print("✅ Random Forest loaded (fallback)")
+        print("[+] Random Forest loaded (fallback)")
 
     # Load scaler
     with open(os.path.join(MODELS_PATH, "scaler_standard.pkl"), 'rb') as f:
         _scaler = pickle.load(f)
-    print("✅ Scaler loaded")
+    print("[+] Scaler loaded")
 
     # Load label encoder
     with open(os.path.join(MODELS_PATH, "label_encoder.pkl"), 'rb') as f:
         _label_encoder = pickle.load(f)
-    print("✅ Label Encoder loaded")
+    print("[+] Label Encoder loaded")
 
     return _model, _scaler, _label_encoder
 
