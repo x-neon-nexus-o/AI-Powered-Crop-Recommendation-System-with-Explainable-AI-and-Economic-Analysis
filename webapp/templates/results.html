@@ -147,6 +147,11 @@
                         </div>
                     </div>
                     <div class="mt-3 text-end">
+                        {% if pred.fertilizer and pred.fertilizer.link %}
+                        <a href="{{ pred.fertilizer.link }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-info me-1">
+                            <i class="bi bi-play-circle me-1"></i>Tutorial
+                        </a>
+                        {% endif %}
                         <a href="{{ url_for('economic', crop_name=pred.crop) }}" class="btn btn-sm btn-outline-success">
                             <i class="bi bi-arrow-right"></i> Details
                         </a>
