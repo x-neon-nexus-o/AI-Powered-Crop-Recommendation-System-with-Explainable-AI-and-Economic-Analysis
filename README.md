@@ -5,11 +5,11 @@
 <h1 align="center">🌾 AI-Powered Crop Recommendation System</h1>
 
 <p align="center">
-  <strong>Explainable AI • Economic Analysis • Smart Crop Rotation</strong>
+  <strong>Explainable AI • Economic Analysis • Smart Crop Rotation • Fertilizer Recommendation</strong>
 </p>
 
 <p align="center">
-  <a href="#features"><img src="https://img.shields.io/badge/Features-5%20Innovations-success?style=for-the-badge" alt="Features"/></a>
+  <a href="#features"><img src="https://img.shields.io/badge/Features-10%20Innovations-success?style=for-the-badge" alt="Features"/></a>
   <a href="#tech-stack"><img src="https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python"/></a>
   <a href="#accuracy"><img src="https://img.shields.io/badge/Accuracy-98.5%25-brightgreen?style=for-the-badge" alt="Accuracy"/></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License"/></a>
@@ -23,6 +23,8 @@
   <a href="https://render.com/"><img src="https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat-square&logo=render" alt="Render"/></a>
   <a href="https://openweathermap.org/"><img src="https://img.shields.io/badge/Weather-OpenWeatherMap-orange?style=flat-square&logo=openweathermap" alt="OpenWeatherMap"/></a>
   <img src="https://img.shields.io/badge/PWA-Installable-5A0FC8?style=flat-square&logo=pwa" alt="PWA"/>
+  <img src="https://img.shields.io/badge/Fertilizers-19-teal?style=flat-square" alt="Fertilizers"/>
+  <img src="https://img.shields.io/badge/Dark%20Mode-Supported-1a1a2e?style=flat-square" alt="Dark Mode"/>
 </p>
 
 ---
@@ -66,6 +68,24 @@ Combines **Random Forest + XGBoost + LightGBM** with a meta-learner for industry
 
 </td>
 </tr>
+<tr>
+<td width="50%">
+
+### 🧪 Fertilizer Recommendation
+**KNN-based smart matching** from a 4,500+ row dataset with 19 fertilizers. Includes **YouTube tutorial links** for each fertilizer.
+
+> *"Recommended: Urea | Alternatives: DAP, 10:26:26 NPK | Watch Tutorial"*
+
+</td>
+<td width="50%">
+
+### 📱 WhatsApp Sharing & PWA
+Share crop results via **WhatsApp** or clipboard. **Progressive Web App** — installable on mobile/desktop with offline support.
+
+> *"Share your CropAI recommendations instantly with fellow farmers"*
+
+</td>
+</tr>
 </table>
 
 ---
@@ -77,19 +97,21 @@ Combines **Random Forest + XGBoost + LightGBM** with a meta-learner for industry
   <img src="https://img.shields.io/badge/ML%20Models-9-blue?style=for-the-badge" alt="Models"/>
   <img src="https://img.shields.io/badge/Accuracy-98.5%25-brightgreen?style=for-the-badge" alt="Accuracy"/>
   <img src="https://img.shields.io/badge/Engineered%20Features-39-orange?style=for-the-badge" alt="Features"/>
+  <img src="https://img.shields.io/badge/Fertilizers-19-teal?style=for-the-badge" alt="Fertilizers"/>
 </p>
 
 ---
 
 ## 🔬 Research Gap Analysis
 
-This project addresses **5 major gaps** in existing crop recommendation systems:
+This project addresses **6 major gaps** in existing crop recommendation systems:
 
 | Gap | Existing Systems | Our Solution |
 |-----|-----------------|--------------|
 | ❌ No Explainability | Black-box predictions | ✅ SHAP-based XAI with feature contributions |
 | ❌ No Economic Analysis | Only agronomic factors | ✅ ROI, profit margins, market price integration |
 | ❌ No Rotation Planning | Single crop focus | ✅ Multi-season sustainable rotation |
+| ❌ No Fertilizer Guidance | Manual fertilizer selection | ✅ KNN-based fertilizer matching with YouTube tutorials |
 | ❌ Static Datasets | Outdated information | ✅ Live weather data via OpenWeatherMap API |
 | ❌ No Regional Context | Generic recommendations | ✅ India-specific with MSP and seasonal data |
 
@@ -109,8 +131,10 @@ This semester project develops an advanced crop recommendation system that goes 
 3. **Multi-Season Crop Rotation Planning** - Sustainable agriculture recommendations
 4. **Ensemble ML Models** - Stacking Random Forest, XGBoost, and LightGBM
 5. **Interactive Web Dashboard** - Flask-based application with visualizations
+6. **Fertilizer Recommendation** - KNN-based smart matching with YouTube tutorials
+7. **Progressive Web App (PWA)** - Installable on mobile/desktop with offline support
 
-**Alignment with Research Gaps:** Addresses 5 major gaps identified in existing literature - no XAI implementation, no economic analysis, no crop rotation planning, static datasets, and lack of regional customization.
+**Alignment with Research Gaps:** Addresses 6 major gaps identified in existing literature - no XAI implementation, no economic analysis, no crop rotation planning, no fertilizer guidance, static datasets, and lack of regional customization.
 
 ***
 
@@ -230,6 +254,7 @@ AI-Powered Crop Recommendation System/
 │   ├── explainability.py                  # SHAP explanations
 │   ├── economic.py                        # Economic analysis
 │   ├── rotation.py                        # Crop rotation planning
+│   ├── fertilizer.py                      # Fertilizer recommendation (KNN)
 │   ├── pdf_report.py                      # PDF export
 │   │
 │   ├── templates/                         # HTML Templates (Jinja2)
@@ -309,7 +334,19 @@ File: data/raw/crop_prices.csv
 Expected Size: 500-1000 rows (monthly data for 1-2 years)
 ```
 
-### **3. Crop Rotation Knowledge Base**
+### **3. Crop and Fertilizer Dataset**
+**Source:** Kaggle - Crop and Fertilizer Dataset
+```
+File: data/raw/Crop and fertilizer dataset.csv
+Features: District_Name, Soil_color, Nitrogen, Phosphorus, Potassium, pH, Rainfall, Temperature, Crop, Fertilizer, Link
+Crops: 16 (Rice, Wheat, Maize, Cotton, Sugarcane, etc.)
+Fertilizers: 19 (Urea, DAP, 10:26:26 NPK, etc.)
+Size: 4,513 rows × 11 columns
+Format: CSV
+Includes: YouTube tutorial links for each fertilizer
+```
+
+### **4. Crop Rotation Knowledge Base**
 **Source:** Create manually from agricultural research
 ```
 Reference: Indian Council of Agricultural Research (ICAR)
@@ -336,6 +373,7 @@ Size: 50-100 rotation combinations
 |---------|--------|--------|----------|
 | Crop Recommendation | Kaggle | Download directly | **MUST HAVE** |
 | Market Prices | Agmarknet | Manual compilation | **SHOULD HAVE** |
+| Crop & Fertilizer | Kaggle | Download directly | **SHOULD HAVE** |
 | Rotation Rules | Self-created | Create from research | **SHOULD HAVE** |
 | Weather Data | OpenWeatherMap API | Auto-fetched via API | **INTEGRATED** |
 
@@ -610,6 +648,7 @@ from prediction import predict_crop
 from explainability import generate_shap_explanation
 from economic import calculate_roi
 from rotation import get_rotation_suggestions
+from fertilizer import load_fertilizer_data, recommend_fertilizer
 
 app = Flask(__name__)
 
@@ -672,6 +711,17 @@ Crop Rotation Module
 - plan_multiseason(): 3-season planning
 - calculate_soil_impact(): Nutrient tracking
 - sustainability_score(): Environmental rating
+"""
+```
+
+### **fertilizer.py** (Fertilizer Recommendation)
+```python
+"""
+Fertilizer Recommendation Module
+- load_fertilizer_data(): Load CSV dataset, precompute normalization stats
+- recommend_fertilizer(): KNN matching (K=5) on normalized soil/climate features
+  → Filters by crop, computes euclidean distance, majority vote
+  → Returns: {name, link (YouTube), alternatives}
 """
 ```
 
@@ -787,17 +837,20 @@ python app.py
 6. ✅ Model comparison report
 
 ### **Web Application Deliverables (Flask .py files)**
-7. ✅ Flask web application (6 Python files)
+7. ✅ Flask web application (7 Python files)
 8. ✅ Interactive dashboards (5 HTML templates)
-9. ✅ Responsive UI (Bootstrap 5)
+9. ✅ Responsive UI (Bootstrap 5) with dark mode support
 10. ✅ API endpoints for all features
 11. ✅ Progressive Web App (offline access, installable)
+12. ✅ Fertilizer recommendation with YouTube tutorials
+13. ✅ WhatsApp sharing and clipboard copy
+14. ✅ PDF report export
 
 ### **Documentation**
-12. ✅ Comprehensive README
-13. ✅ Project report (30-40 pages)
-14. ✅ Presentation (15-20 slides)
-15. ✅ Demo video (5-7 minutes)
+15. ✅ Comprehensive README
+16. ✅ Project report (30-40 pages)
+17. ✅ Presentation (15-20 slides)
+18. ✅ Demo video (5-7 minutes)
 
 ***
 
@@ -811,4 +864,8 @@ python app.py
 6. ✅ **Clean Separation** - Notebooks (.ipynb) for ML, Python (.py) for web only
 7. ✅ **Live Weather Integration** - OpenWeatherMap API for real-time climate auto-fill
 8. ✅ **Progressive Web App (PWA)** - Installable on mobile/desktop with offline support for areas with poor connectivity
+9. ✅ **Fertilizer Recommendation** - KNN-based matching from 4,500+ row dataset with 19 fertilizers and YouTube tutorial links
+10. ✅ **Social Sharing** - WhatsApp share and clipboard copy for crop recommendations
+11. ✅ **Dark Mode** - Full dark theme with live Chart.js theming and CSS overrides
+12. ✅ **Multilingual Support** - Google Translate widget for 10 Indian languages
 
