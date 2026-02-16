@@ -30,6 +30,7 @@ from economic import (
     cost_benefit_analysis, rank_by_profitability, risk_assessment
 )
 from pdf_report import generate_crop_report
+from fertilizer import load_fertilizer_data, recommend_fertilizer
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'crop-recommendation-secret-key-2024')
@@ -39,6 +40,7 @@ print("[*] Loading ML models...")
 load_models()
 load_shap_explainer()
 load_economic_data()
+load_fertilizer_data()
 print("[+] Application ready!")
 
 
@@ -255,7 +257,12 @@ def predict():
             
             # Rotation suggestion
             rotation = get_rotation_suggestion(crop_name, season)
-            
+
+            # Fertilizer recommendation
+            fertilizer = recommend_fertilizer(
+                crop_name, N, P, K, ph, rainfall, temperature
+            )
+
             predictions.append({
                 'crop': crop_name,
                 'probability': float(prob),  # Convert numpy to Python float
@@ -263,7 +270,8 @@ def predict():
                 'category': categorize_recommendation(prob),
                 'category_class': get_category_class(prob),
                 'economic': economic,
-                'rotation': rotation
+                'rotation': rotation,
+                'fertilizer': fertilizer
             })
         
         # Store in session for explanation page

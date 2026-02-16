@@ -70,25 +70,36 @@
 
                     <!-- Quick Stats -->
                     <div class="row g-3 mt-3">
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="p-2 bg-light rounded">
                                 <i class="bi bi-graph-up-arrow text-success fs-4"></i>
                                 <div class="fw-bold">{{ "%.0f"|format(top.economic.roi) }}%</div>
                                 <small class="text-muted">ROI</small>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="p-2 bg-light rounded">
                                 <i class="bi bi-currency-rupee text-primary fs-4"></i>
                                 <div class="fw-bold">₹{{ "%.0f"|format(top.economic.profit) }}</div>
                                 <small class="text-muted">Profit</small>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="p-2 bg-light rounded">
                                 <i class="bi bi-shield-check text-warning fs-4"></i>
                                 <div class="fw-bold">{{ top.economic.risk_category }}</div>
                                 <small class="text-muted">Risk</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 bg-light rounded">
+                                <i class="bi bi-droplet-half text-info fs-4"></i>
+                                {% if top.fertilizer %}
+                                <div class="fw-bold small">{{ top.fertilizer.name }}</div>
+                                {% else %}
+                                <div class="fw-bold small">N/A</div>
+                                {% endif %}
+                                <small class="text-muted">Fertilizer</small>
                             </div>
                         </div>
                     </div>
@@ -130,6 +141,9 @@
                         <div class="text-end">
                             <div class="text-success fw-bold">{{ "%.0f"|format(pred.economic.roi) }}% ROI</div>
                             <small class="text-muted">{{ pred.economic.risk_category }} Risk</small>
+                            {% if pred.fertilizer %}
+                            <div class="mt-1"><span class="badge bg-info small"><i class="bi bi-droplet-half me-1"></i>{{ pred.fertilizer.name }}</span></div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="mt-3 text-end">
@@ -253,6 +267,46 @@
             </div>
         </div>
     </div>
+
+    <!-- Fertilizer Recommendation -->
+    {% if top.fertilizer %}
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-info">
+                <div class="card-header bg-info bg-opacity-10">
+                    <h5 class="mb-0">
+                        <i class="bi bi-droplet-half text-info me-2"></i>Recommended Fertilizer: {{ top.crop }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle bg-info bg-opacity-10 d-flex align-items-center justify-content-center me-3"
+                            style="width: 60px; height: 60px; min-width: 60px;">
+                            <i class="bi bi-droplet-fill text-info fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0 fw-bold">{{ top.fertilizer.name }}</h3>
+                            <small class="text-muted">Best match for your soil conditions</small>
+                        </div>
+                    </div>
+                    {% if top.fertilizer.alternatives %}
+                    <div class="mb-3">
+                        <strong class="small">Alternatives:</strong>
+                        {% for alt in top.fertilizer.alternatives %}
+                        <span class="badge bg-secondary ms-1">{{ alt }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if top.fertilizer.link %}
+                    <a href="{{ top.fertilizer.link }}" target="_blank" rel="noopener" class="btn btn-outline-info">
+                        <i class="bi bi-play-circle me-2"></i>Watch Tutorial
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Share Results -->
     <div class="text-center mt-5 mb-3">
@@ -460,6 +514,7 @@
             'ROI: ' + Math.round(top.economic.roi) + '%',
             'Profit: Rs.' + Math.round(top.economic.profit) + '/acre',
             'Risk: ' + top.economic.risk_category,
+            'Fertilizer: ' + (top.fertilizer ? top.fertilizer.name : 'N/A'),
             '',
             'Soil: N=' + inputs.N + ', P=' + inputs.P + ', K=' + inputs.K,
             'Weather: ' + inputs.temperature + 'C, ' + inputs.humidity + '% humidity',
