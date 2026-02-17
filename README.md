@@ -628,6 +628,163 @@ Size: 50-100 rotation combinations
 
 ***
 
+## **📈 Model Performance & Accuracy**
+
+### **Overall Model Comparison**
+
+| Rank | Model | Accuracy | Precision | Recall | F1-Score | Prediction Time (ms) | Model Size (MB) |
+|------|-------|----------|-----------|--------|----------|----------------------|-----------------|
+| 1 | **Random Forest** | **99.32%** | 99.35% | 99.32% | 99.32% | 93.32 | 2.92 |
+| 2 | **Stacking Ensemble** ⭐ | **99.32%** | 99.37% | 99.32% | 99.32% | 136.50 | 13.37 |
+| 3 | XGBoost | 98.64% | 98.68% | 98.64% | 98.63% | 91.78 | 3.58 |
+| 4 | LightGBM | 98.41% | 98.48% | 98.41% | 98.41% | 58.19 | 3.00 |
+| 5 | SVM (RBF) | 97.95% | 98.09% | 97.95% | 97.94% | 43.94 | 0.31 |
+| 6 | Logistic Regression | 97.73% | 97.93% | 97.73% | 97.71% | 0.96 | 0.01 |
+| 7 | Decision Tree | 95.68% | 95.92% | 95.68% | 95.70% | 0.59 | 0.02 |
+
+> ⭐ **Deployed Model:** Stacking Ensemble — chosen for highest precision and lowest overfitting gap (0.68%)
+
+### **Dataset Split**
+- **Training samples:** 1,760 (80%)
+- **Test samples:** 440 (20%)
+- **Engineered features:** 39
+- **Crop classes:** 22
+
+---
+
+### **Individual Model Details**
+
+#### **1. Logistic Regression**
+```
+Hyperparameters:
+  Solver: lbfgs | Max iterations: 1000 | Multi-class: One-vs-Rest (OvR)
+  Random state: 42 | n_jobs: -1
+
+Results:
+  Test Accuracy:  97.73%  |  Train Accuracy: 98.86%
+  Precision:      97.93%  |  Recall: 97.73%  |  F1: 97.71%
+  Overfitting Gap: 1.14%  |  Training Time: 0.203s
+```
+
+#### **2. Decision Tree**
+```
+Hyperparameters:
+  Criterion: gini | Max depth: 15 | Min samples split: 10
+  Min samples leaf: 5 | Max features: sqrt | Random state: 42
+
+Tree Statistics:
+  Depth: 15 | Leaves: 50 | Nodes: 99
+
+Results:
+  Test Accuracy:  95.68%  |  Train Accuracy: 97.56%
+  Precision:      95.92%  |  Recall: 95.68%  |  F1: 95.70%
+  Overfitting Gap: 1.88%  |  Training Time: 0.019s
+```
+
+#### **3. Random Forest**
+```
+Hyperparameters:
+  n_estimators: 100 | Criterion: gini | Max depth: 20
+  Min samples split: 5 | Min samples leaf: 2 | Max features: sqrt
+  Bootstrap: True | OOB score: True | Random state: 42 | n_jobs: -1
+
+Forest Statistics:
+  Avg tree depth: 13.43 | Max depth: 17 | Min depth: 9
+  Avg leaves/tree: 56.9 | OOB Score: 99.38%
+
+Cross-Validation (5-Fold):
+  Mean: 99.32% | Std: 0.58% | Min: 98.30% | Max: 100.00%
+
+Results:
+  Test Accuracy:  99.32%  |  Train Accuracy: 99.89%
+  Precision:      99.35%  |  Recall: 99.32%  |  F1: 99.32%
+  Overfitting Gap: 0.57%  |  Training Time: 0.376s
+```
+
+#### **4. Support Vector Machine (SVM)**
+```
+Best Hyperparameters (GridSearchCV - 20 combinations, 5-fold CV):
+  Kernel: RBF | C: 100 | Gamma: 0.01 | Probability: True
+  Random state: 42
+
+Support Vectors: 646 (36.70% of training data)
+GridSearch Best CV Score: 98.58%
+
+Kernel Comparison:
+  Linear:     97.73% (546 SVs)
+  RBF:        97.73% (897 SVs)
+  Polynomial: 94.32% (763 SVs)
+
+Results:
+  Test Accuracy:  97.95%  |  Train Accuracy: 99.43%
+  Precision:      98.09%  |  Recall: 97.95%  |  F1: 97.94%
+  Overfitting Gap: 1.48%  |  GridSearch Time: 52.53s
+```
+
+#### **5. XGBoost**
+```
+Best Hyperparameters (GridSearchCV - 18 combinations):
+  Learning rate: 0.05 | Max depth: 6 | n_estimators: 200
+  Objective: multi:softprob | Subsample: 0.8
+  Colsample_bytree: 0.8 | Random state: 42
+
+GridSearch Best CV Accuracy: 98.64%
+
+Results:
+  Test Accuracy:  98.64%  |  Train Accuracy: 100.00%
+  Precision:      98.68%  |  Recall: 98.64%  |  F1: 98.63%
+  Overfitting Gap: 1.14%  |  GridSearch Time: 94.76s
+  Base Training Time: 16.14s
+```
+
+#### **6. LightGBM**
+```
+Best Hyperparameters (GridSearchCV - 18 combinations, 3-fold CV):
+  num_leaves: 20 | Learning rate: 0.1 | n_estimators: 100
+  Objective: multiclass | Random state: 42
+
+GridSearch Best CV Accuracy: 98.58%
+
+Results:
+  Test Accuracy:  98.41%  |  Train Accuracy: 100.00%
+  Precision:      98.48%  |  Recall: 98.41%  |  F1: 98.41%
+  Overfitting Gap: 1.14%  |  GridSearch Time: 279.65s
+  Base Training Time: 4.90s
+```
+
+#### **7. Stacking Ensemble** ⭐ (Deployed Model)
+```
+Architecture:
+  Base Estimators (Level 0):
+    - Random Forest:  200 trees, max_depth=20
+    - XGBoost:        300 estimators, learning_rate=0.05, max_depth=6
+    - LightGBM:       100 estimators, num_leaves=20
+
+  Meta-Learner (Level 1):
+    - Logistic Regression: C=1.0, solver=lbfgs, max_iter=1000
+
+  Stack Method: predict_proba | CV Folds: 5
+  Meta Features: 66 (22 classes × 3 base models)
+
+Results:
+  Test Accuracy:  99.32%  |  Train Accuracy: 100.00%
+  Precision:      99.37%  |  Recall: 99.32%  |  F1: 99.32%
+  Overfitting Gap: 0.68%  |  Training Time: 30.43s
+  Model Size: 13.37 MB
+```
+
+### **Top 5 Feature Importance (Random Forest)**
+
+| Rank | Feature | Importance Score |
+|------|---------|-----------------|
+| 1 | Rainfall | 0.0786 |
+| 2 | Humidity | 0.0772 |
+| 3 | K (Potassium) | 0.0649 |
+| 4 | Moisture Index | 0.0553 |
+| 5 | Water Availability | 0.0541 |
+
+***
+
 ## **Flask Web Application Structure (.py files only)**
 
 ### **app.py** (Main Application)
