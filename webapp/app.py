@@ -493,17 +493,34 @@ def compare():
         return render_template('comparison.html', crops=[], error="Please select at least 2 crops to compare")
     
     try:
+        # Use actual soil inputs if available from last prediction
+        last_pred = session.get('last_prediction')
+        if last_pred and last_pred.get('inputs'):
+            inp = last_pred['inputs']
+            fert_N = inp.get('N', 50)
+            fert_P = inp.get('P', 50)
+            fert_K = inp.get('K', 50)
+            fert_ph = inp.get('ph', 6.5)
+            fert_rain = inp.get('rainfall', 150)
+            fert_temp = inp.get('temperature', 25)
+        else:
+            fert_N, fert_P, fert_K, fert_ph, fert_rain, fert_temp = 50, 50, 50, 6.5, 150, 25
+
         comparison_data = []
         for crop in crops[:5]:  # Limit to 5 crops
             economic = get_economic_summary(crop)
             risk = risk_assessment(crop)
             rotation = get_rotation_suggestion(crop)
-            
+
+            # Fertilizer recommendation
+            fertilizer = recommend_fertilizer(crop, fert_N, fert_P, fert_K, fert_ph, fert_rain, fert_temp)
+
             comparison_data.append({
                 'crop': crop,
                 'economic': economic,
                 'risk': risk,
-                'rotation': rotation
+                'rotation': rotation,
+                'fertilizer': fertilizer
             })
         
         # Find recommendation

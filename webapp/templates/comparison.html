@@ -145,6 +145,18 @@
                             </td>
                             {% endfor %}
                         </tr>
+                        <tr>
+                            <td><strong>Fertilizer</strong></td>
+                            {% for crop in crops %}
+                            <td class="text-center">
+                                {% if crop.fertilizer %}
+                                <span class="badge bg-info"><i class="bi bi-droplet-half me-1"></i>{{ crop.fertilizer.name }}</span>
+                                {% else %}
+                                <span class="text-muted small">N/A</span>
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -242,6 +254,49 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Fertilizer Recommendations with Video Tutorials -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-droplet-half text-info me-2"></i>Fertilizer Recommendations & Tutorials
+            </h5>
+        </div>
+        {% for crop in crops %}
+        {% if crop.fertilizer %}
+        <div class="col-md-6">
+            <div class="card h-100 border-info">
+                <div class="card-header bg-info bg-opacity-10">
+                    <h6 class="mb-0">
+                        <i class="bi bi-droplet-fill text-info me-2"></i>{{ crop.crop }} - {{ crop.fertilizer.name }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if crop.fertilizer.alternatives %}
+                    <div class="mb-2">
+                        <small class="text-muted">Alternatives:</small>
+                        {% for alt in crop.fertilizer.alternatives %}
+                        <span class="badge bg-secondary ms-1 small">{{ alt }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if crop.fertilizer.link %}
+                    <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm">
+                        <iframe data-src="https://www.youtube.com/embed/{{ crop.fertilizer.link | replace('https://youtu.be/', '') | replace('https://www.youtube.com/live/', '') | replace('?feature=share', '') }}"
+                            title="Fertilizer Tutorial - {{ crop.fertilizer.name }} for {{ crop.crop }}"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+                    {% else %}
+                    <p class="text-muted small mb-0">No tutorial video available for this fertilizer.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
     </div>
 
     {% endif %}
@@ -561,6 +616,23 @@
             });
 
             console.log('All comparison charts created successfully');
+
+            // Lazy-load YouTube iframes when they scroll into view
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        var iframe = entry.target;
+                        if (iframe.dataset.src && !iframe.src) {
+                            iframe.src = iframe.dataset.src;
+                        }
+                        observer.unobserve(iframe);
+                    }
+                });
+            }, { rootMargin: '200px' });
+
+            document.querySelectorAll('iframe[data-src]').forEach(function(iframe) {
+                observer.observe(iframe);
+            });
         } catch (error) {
             console.error('Chart error:', error);
         }

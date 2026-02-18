@@ -1,0 +1,527 @@
+\documentclass[conference]{IEEEtran}
+
+% -------------------------------------------------------
+% PACKAGES
+% -------------------------------------------------------
+\usepackage[utf8]{inputenc}       % fixes UTF-8 symbols (e.g. ₹)
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}  % hidelinks avoids IEEEtran colour-box conflicts
+
+% -------------------------------------------------------
+% TITLE AND AUTHORS
+% -------------------------------------------------------
+\title{An Integrated Approach to Crop Recommendation using\\
+Stacking Ensemble Learning with Explainable AI\\
+and Multi-Season Planning}
+
+\author{
+    \IEEEauthorblockN{Author One\textsuperscript{1}, Author Two\textsuperscript{1}, Author Three\textsuperscript{1}, Professor Name\textsuperscript{1}}
+    \IEEEauthorblockA{
+        \textsuperscript{1}Department of [Your Department]\\
+        [College/University Name], [City], [Country]\\
+        \{email1, email2, email3, professor\_email\}@institution.edu
+    }
+}
+
+% -------------------------------------------------------
+\begin{document}
+
+\maketitle
+% -------------------------------------------------------
+% ABSTRACT
+% -------------------------------------------------------
+\begin{abstract}
+% [CONTEXT] ~30-40 words
+% Agriculture forms the backbone of the Indian economy, with over 60\% of the 
+% population dependent on it. Farmers face significant challenges in selecting 
+% the right crop due to soil variability, climate uncertainty, and market fluctuations.
+
+% [PROBLEM] ~30-40 words
+% Existing machine learning-based crop recommendation systems lack transparency, 
+% ignore economic feasibility, and fail to support multi-season planning, limiting 
+% their real-world adoption among farmers.
+
+% [PROPOSED SOLUTION] ~50-60 words
+% We propose an integrated crop advisory system combining a stacking ensemble 
+% (Random Forest, XGBoost, and LightGBM) with SHAP-based explainability, an 
+% economic viability module for ROI and profit estimation, a rule-based crop 
+% rotation planner for multi-season sustainability, and a KNN-based fertilizer 
+% recommendation engine.
+
+% [METHOD SUMMARY] ~30-40 words
+% The model is trained on 2,200 samples spanning 22 crops with 39 engineered 
+% features and benchmarked against 9 machine learning models using stratified 
+% 5-fold cross-validation.
+
+% [KEY RESULTS] ~30-40 words
+% The proposed stacking ensemble achieves 98.5\% accuracy, outperforming individual 
+% models by 2--3\%, while SHAP-based explanations provide human-readable, 
+% agronomically consistent justifications alongside ROI-based economic scoring.
+
+% [CONCLUSION] ~20-30 words
+% To the best of our knowledge, this is the first integrated system addressing six 
+% identified research gaps simultaneously, deployed as a Progressive Web App (PWA) 
+% for farmer accessibility.
+
+\textbf{TODO:} Replace the commented blocks above with your written abstract (~200--250 words total).
+\end{abstract}
+
+\begin{IEEEkeywords}
+Crop Recommendation, Stacking Ensemble, Explainable AI, SHAP, Economic Analysis, Precision Agriculture
+\end{IEEEkeywords}
+
+% -------------------------------------------------------
+% SECTION I: INTRODUCTION
+% -------------------------------------------------------
+\section{Introduction}
+
+% --- Paragraph 1: Problem Context (~150 words) ---
+% Write about India's agriculture statistics (60\%+ population dependent),
+% the 15 agro-climatic zones, challenge of crop selection (soil variability,
+% climate uncertainty, market fluctuations), cost of wrong crop selection to
+% farmers, and the need for intelligent decision support systems. Mention that
+% 86\% of Indian farmers are small and marginal.
+\textbf{[Paragraph 1 -- Problem Context: TODO]}
+
+% --- Paragraph 2: Limitations of Existing Systems (~150 words) ---
+% Describe that existing ML-based systems achieve good accuracy but suffer from:
+% (1) black-box nature -- farmers don't trust recommendations,
+% (2) pure agronomic focus -- ignore profitability,
+% (3) single-crop focus -- no sustainability planning.
+% Briefly cite supporting literature and transition with
+% "To address these limitations, we propose..."
+\textbf{[Paragraph 2 -- Limitations of Existing Systems: TODO]}
+
+% --- Paragraph 3: Proposed System Overview (~200 words) ---
+% Introduce the integrated system with five components:
+% (1) Stacking Ensemble (RF + XGBoost + LightGBM) achieving 98.5\% accuracy,
+% (2) SHAP-based XAI for feature-level explanations,
+% (3) Economic Viability module with ROI and profit calculations,
+% (4) Crop Rotation module for multi-season sustainability,
+% (5) KNN-based Fertilizer Recommendation.
+% Mention datasets used, 39 engineered features, and real-time weather integration.
+\textbf{[Paragraph 3 -- Proposed System Overview: TODO]}
+
+% --- Paragraph 4: Contributions (~150 words) ---
+% List the key contributions as C1--C4 and include the paper organization sentence.
+The key contributions of this paper are as follows:
+\begin{itemize}
+    \item \textbf{C1:} A stacking ensemble model achieving 98.5\% accuracy across 22 crop classes. % TODO: update with actual accuracy
+    \item \textbf{C2:} A SHAP-based explainability layer providing human-readable, agronomically consistent justifications for each recommendation.
+    \item \textbf{C3:} An economic viability module incorporating ROI calculations, profit-per-acre estimation, and market risk scoring.
+    \item \textbf{C4:} An integrated multi-season crop rotation planner and KNN-based fertilizer recommendation engine.
+\end{itemize}
+
+The remainder of this paper is organized as follows: Section~\ref{sec:related} reviews related work. Section~\ref{sec:methodology} presents the proposed methodology. Section~\ref{sec:results} reports experimental results and discussion. Section~\ref{sec:conclusion} concludes the paper and outlines future work.
+
+% -------------------------------------------------------
+% SECTION II: RELATED WORK
+% -------------------------------------------------------
+\section{Related Work}
+\label{sec:related}
+
+\subsection{ML-Based Crop Recommendation}
+% (~120 words)
+% Summarize 3-4 key papers using RF, SVM, NB, DT, KNN.
+% Mention accuracy ranges of 88-95\%.
+% End with: "However, these systems treat the model as a black box and provide
+% no justification for recommendations."
+\textbf{[TODO: Write subsection II-A]}
+
+\subsection{Ensemble Methods in Agriculture}
+% (~100 words)
+% Discuss voting ensembles and boosting methods (XGBoost ~94\% accuracy).
+% End with: "No existing work applies stacking with a meta-learner specifically
+% for crop recommendation."
+\textbf{[TODO: Write subsection II-B]}
+
+\subsection{Explainable AI in Agriculture}
+% (~120 words)
+% Discuss XAI need, SHAP and LIME in disease detection and yield prediction.
+% End with: "To the best of our knowledge, no crop recommendation system has
+% integrated SHAP-based explainability."
+\textbf{[TODO: Write subsection II-C]}
+
+\subsection{Economic Analysis and Crop Rotation}
+% (~120 words)
+% Discuss decision support systems with economic components, crop rotation
+% optimization, and fertilizer recommendation systems.
+% End with: "Existing systems address these aspects in isolation; no integrated
+% framework exists."
+\textbf{[TODO: Write subsection II-D]}
+
+% --- Gap Analysis Table (TABLE I) ---
+\begin{table}[htbp]
+\caption{Comparison of Existing Systems vs. Proposed Approach}
+\label{tab:gap_analysis}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Feature} & \textbf{\cite{ref1}} & \textbf{\cite{ref2}} & \textbf{\cite{ref3}} & \textbf{\cite{ref4}} & \textbf{Proposed} \\
+\hline
+ML Recommendation    & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Stacking Ensemble    & --         & --         & --         & --         & \checkmark \\
+XAI / SHAP           & --         & --         & --         & --         & \checkmark \\
+Economic Analysis    & --         & --         & --         & --         & \checkmark \\
+Crop Rotation        & --         & --         & --         & --         & \checkmark \\
+Fertilizer Rec.      & --         & --         & --         & --         & \checkmark \\
+Live Weather         & --         & --         & --         & --         & \checkmark \\
+Regional Context     & --         & --         & --         & --         & \checkmark \\
+Accuracy (\%)        & $\sim$93   & $\sim$94   & $\sim$95   & $\sim$96   & \textbf{98.5} \\
+\hline
+\end{tabular}
+% TODO: Replace \cite{ref1}--\cite{ref4} with actual paper citations
+\end{table}
+
+% -------------------------------------------------------
+% SECTION III: PROPOSED METHODOLOGY
+% -------------------------------------------------------
+\section{Proposed Methodology}
+\label{sec:methodology}
+
+\subsection{System Architecture}
+% (~200 words + Figure 1)
+% Describe data flow:
+% Input → Preprocessing → Feature Engineering → Stacking Model →
+% SHAP Explanation → Economic Analysis → Rotation Plan →
+% Fertilizer Recommendation → Output (Flask PWA)
+\textbf{[TODO: Write subsection III-A]}
+
+\begin{figure}[htbp]
+    \centering
+    % \includegraphics[width=\columnwidth]{figures/system_architecture.png}
+    \fbox{\parbox{0.9\columnwidth}{\centering \textbf{[Figure 1 Placeholder]}\\System Architecture Diagram\\(Data flow from input to all 5 modules to output)}}
+    \caption{Proposed integrated crop advisory system architecture.}
+    \label{fig:architecture}
+\end{figure}
+
+\subsection{Dataset and Feature Engineering}
+% (~200 words + Table II)
+% Primary dataset: Kaggle Crop Recommendation (2200 rows, 22 crops, 7 original features)
+% 39 engineered features:
+%   NPK_ratio = N / (P + K + 1)
+%   Temp_Humidity_Index = Temperature x Humidity / 100
+%   Nutrient_Balance = (N + P + K) / 3
+%   Polynomial and interaction features
+% Fertilizer dataset: 4513 rows, 19 fertilizers
+% Market price data from Agmarknet
+% Standard scaling applied
+\textbf{[TODO: Write subsection III-B]}
+
+\begin{table}[htbp]
+\caption{Dataset Summary}
+\label{tab:datasets}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|l|c|c|l|}
+\hline
+\textbf{Dataset}      & \textbf{Source}  & \textbf{Rows} & \textbf{Features} & \textbf{Purpose} \\
+\hline
+Crop Recommendation   & Kaggle           & 2,200         & 7 $\rightarrow$ 39 & Primary prediction \\
+Fertilizer Data       & Kaggle           & 4,513         & 11                 & Fertilizer matching \\
+Market Prices         & Agmarknet        & $\sim$500     & 6                  & Economic analysis \\
+Rotation Rules        & Self-created     & $\sim$80      & 6                  & Rotation planning \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Stacking Ensemble Model}
+% (~350 words + Figure 2)
+\textbf{[TODO: Write subsection III-C intro paragraph]}
+
+% Mathematical formulation
+Let $B_1$, $B_2$, $B_3$ denote the base learners (Random Forest, XGBoost, LightGBM) respectively. For an input feature vector $\mathbf{x}$, the base learner probability outputs are:
+\begin{equation}
+    P_i = B_i(\mathbf{x}), \quad i \in \{1, 2, 3\}
+    \label{eq:base_predictions}
+\end{equation}
+where $P_i \in \mathbb{R}^{C}$ is a probability vector over $C = 22$ crop classes. The meta-learner input is formed by concatenation:
+\begin{equation}
+    \mathbf{Z} = [P_1 \oplus P_2 \oplus P_3] \in \mathbb{R}^{3C}
+    \label{eq:meta_input}
+\end{equation}
+The final prediction is computed by the Logistic Regression meta-learner:
+\begin{equation}
+    \hat{y} = \text{Meta-Learner}(\mathbf{Z}) = \arg\max_{c} \; \sigma(\mathbf{W}\mathbf{Z} + \mathbf{b})_c
+    \label{eq:final_pred}
+\end{equation}
+where $\mathbf{W}$ and $\mathbf{b}$ are learned weight matrix and bias vector, and $\sigma(\cdot)$ denotes the softmax function.
+
+% TODO: Discuss hyperparameters (RF: n_estimators=200, max_depth=20;
+% XGBoost: lr=0.1, max_depth=6, n_estimators=200;
+% LightGBM: num_leaves=31, lr=0.1)
+% Explain 5-fold cross-validation training procedure for stacking.
+\textbf{[TODO: Complete subsection III-C discussion]}
+
+\begin{figure}[htbp]
+    \centering
+    % \includegraphics[width=\columnwidth]{figures/stacking_architecture.png}
+    \fbox{\parbox{0.9\columnwidth}{\centering \textbf{[Figure 2 Placeholder]}\\Stacking Ensemble Architecture\\(RF + XGBoost + LightGBM → Meta-Learner)}}
+    \caption{Stacking ensemble architecture with 5-fold cross-validation.}
+    \label{fig:stacking}
+\end{figure}
+
+\subsection{SHAP-Based Explainability}
+% (~250 words)
+% Background: SHAP (SHapley Additive exPlanations) based on cooperative game theory.
+% The additive explanation model:
+\textbf{[TODO: Write subsection III-D intro]}
+
+The SHAP explanation for a prediction is defined as:
+\begin{equation}
+    f(\mathbf{x}) = \phi_0 + \sum_{j=1}^{M} \phi_j
+    \label{eq:shap}
+\end{equation}
+where $f(\mathbf{x})$ is the model output, $\phi_0$ is the base value (average model output), $\phi_j$ is the SHAP value of feature $j$, and $M$ is the total number of features.
+
+% TODO: Explain TreeExplainer applied to RF base learner.
+% Describe output format: "Rice recommended because: Rainfall (+35%), Temperature (+28%), pH (+22%)"
+% List SHAP visualizations: waterfall plot, summary/beeswarm plot, force plot.
+\textbf{[TODO: Complete subsection III-D]}
+
+\subsection{Economic Analysis, Crop Rotation, and Fertilizer Recommendation}
+% (~250 words)
+\textbf{[TODO: Write subsection III-E intro]}
+
+The Return on Investment (ROI) for a recommended crop is calculated as:
+\begin{equation}
+    \text{ROI} = \frac{(\text{Expected Yield} \times \text{Market Price}) - \text{Total Input Cost}}{\text{Total Input Cost}} \times 100\%
+    \label{eq:roi}
+\end{equation}
+
+% TODO: Describe risk scoring, profit per acre, crop ranking by economic viability.
+% Describe crop rotation: 3-season rule-based planner (Kharif/Rabi cycle, N-fixer logic).
+% Describe fertilizer module: KNN (K=5), Euclidean distance, 4513-row dataset.
+\textbf{[TODO: Complete subsection III-E]}
+
+% -------------------------------------------------------
+% SECTION IV: RESULTS AND DISCUSSION
+% -------------------------------------------------------
+\section{Results and Discussion}
+\label{sec:results}
+
+\subsection{Experimental Setup}
+% (~100 words)
+% Train-test split: 80:20 stratified
+% Hardware: [your system specs]
+% Software: Python 3.11, scikit-learn, XGBoost, LightGBM, SHAP
+% Metrics: Accuracy, Precision, Recall, F1-Score, AUC-ROC
+% 5-fold cross-validation
+\textbf{[TODO: Write subsection IV-A]}
+
+\subsection{Model Performance Comparison}
+% (~250 words)
+\textbf{[TODO: Write subsection IV-B discussion]}
+
+\begin{table}[htbp]
+\caption{Model Performance Comparison}
+\label{tab:model_comparison}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Acc. (\%)} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1} \\
+\hline
+Logistic Regression  & 93.0 & -- & -- & -- \\
+Decision Tree        & 90.0 & -- & -- & -- \\
+Random Forest        & 96.0 & -- & -- & -- \\
+SVM                  & 94.0 & -- & -- & -- \\
+KNN                  & 92.0 & -- & -- & -- \\
+Naive Bayes          & 91.0 & -- & -- & -- \\
+XGBoost              & 97.0 & -- & -- & -- \\
+LightGBM             & 96.5 & -- & -- & -- \\
+\textbf{Stacking (Ours)} & \textbf{98.5} & \textbf{--} & \textbf{--} & \textbf{--} \\
+\hline
+\end{tabular}
+% TODO: Replace all values with actual results from your notebooks
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    % \includegraphics[width=\columnwidth]{figures/model_comparison.png}
+    \fbox{\parbox{0.9\columnwidth}{\centering \textbf{[Figure 3 Placeholder]}\\Horizontal Bar Chart: Model Accuracy Comparison\\(Stacking highlighted)}}
+    \caption{Accuracy comparison of all evaluated models.}
+    \label{fig:model_comparison}
+\end{figure}
+
+\subsection{SHAP Explainability Analysis}
+% (~250 words)
+% Discuss global feature importance from SHAP summary plot.
+% Top 5 features: likely rainfall, temperature, humidity, K, N.
+% Include a concrete single-prediction explanation example.
+% Discuss agronomic consistency as validation of model correctness.
+\textbf{[TODO: Write subsection IV-C]}
+
+\begin{figure}[htbp]
+    \centering
+    % \includegraphics[width=\columnwidth]{figures/shap_summary.png}
+    \fbox{\parbox{0.9\columnwidth}{\centering \textbf{[Figure 4 Placeholder]}\\SHAP Beeswarm Summary Plot\\(Feature importance across all predictions)}}
+    \caption{SHAP summary plot showing global feature importance. Color indicates feature value (red = high, blue = low).}
+    \label{fig:shap}
+\end{figure}
+
+\subsection{Economic Viability and Rotation Planning Results}
+% (~200 words)
+\textbf{[TODO: Write subsection IV-D discussion]}
+
+\begin{table}[htbp]
+\caption{Economic Viability Analysis (Example Output)}
+\label{tab:economic}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Crop} & \textbf{Conf. (\%)} & \textbf{ROI (\%)} & \textbf{Profit/Acre (Rs.)} & \textbf{Risk} \\
+\hline
+Rice  & 97.2 & 145 & Rs.\,32{,}000 & Low \\
+Maize & 85.1 & 120 & Rs.\,25{,}000 & Medium \\
+Jute  & 72.3 & 95  & Rs.\,18{,}000 & Medium \\
+\hline
+\end{tabular}
+% TODO: Replace with actual outputs from your system
+\end{table}
+
+% Example rotation plan:
+% Season 1 (Kharif): Rice → Season 2 (Rabi): Wheat → Season 3 (Kharif): Mung Bean
+\textbf{[TODO: Add rotation plan example and fertilizer results]}
+
+\subsection{Discussion}
+% (~200 words)
+% - Justify stacking's 2-3\% improvement over individual models
+% - SHAP alignment with agronomic knowledge validates model correctness
+% - Economic analysis reveals cases where most accurate != most profitable
+% - Rotation planning adds sustainability dimension missing from all prior work
+% Limitations:
+%   * Dataset limited to 22 crops
+%   * Economic data requires periodic updating
+%   * Rotation rules are rule-based, not ML-optimized
+% State outperformance of best reported accuracy (95.2\%) by 3.3\%
+\textbf{[TODO: Write subsection IV-E]}
+
+% -------------------------------------------------------
+% SECTION V: CONCLUSION AND FUTURE WORK
+% -------------------------------------------------------
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+
+% --- Conclusion (~150 words) ---
+% Summarize the integrated system and its 4 contributions.
+% Restate: 98.5\% accuracy, SHAP explanations, economic scoring, rotation planning, KNN fertilizer.
+% Emphasize: "first system to address 6 research gaps simultaneously."
+% Mention PWA deployment for farmer accessibility.
+\textbf{[TODO: Write conclusion paragraph]}
+
+% --- Future Work (~150 words) ---
+% - Deep learning (CNN) for soil image analysis
+% - Expand to 50+ crops with region-specific models
+% - IoT sensor integration for real-time soil data
+% - Reinforcement learning for dynamic rotation optimization
+% - Multilingual voice interface for low-literacy farmers
+% - Large-scale farmer field trials
+% - Integration with government agricultural advisory systems
+\textbf{[TODO: Write future work paragraph]}
+
+% -------------------------------------------------------
+% REFERENCES
+% -------------------------------------------------------
+\bibliographystyle{IEEEtran}
+% \bibliography{references}   % <-- uncomment and use a .bib file, OR use manual entries below
+
+\begin{thebibliography}{25}
+
+% --- ML-based Crop Recommendation (refs 1-5) ---
+\bibitem{ref1}
+A. Author \textit{et al.}, ``Title of ML crop recommendation paper,'' \textit{Journal/Conference Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref2}
+B. Author \textit{et al.}, ``Title of ML crop recommendation paper,'' in \textit{Proc. Conference Name}, City, Country, 20XX, pp. 000--000.
+
+\bibitem{ref3}
+C. Author \textit{et al.}, ``Title of ML crop recommendation paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref4}
+D. Author \textit{et al.}, ``Title of ML crop recommendation paper,'' in \textit{Proc. Conference Name}, City, Country, 20XX, pp. 000--000.
+
+\bibitem{ref5}
+E. Author \textit{et al.}, ``Title of crop recommendation survey,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+% --- Ensemble Methods in Agriculture (refs 6-9) ---
+\bibitem{ref6}
+F. Author \textit{et al.}, ``Title of ensemble/XGBoost agriculture paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref7}
+G. Author \textit{et al.}, ``Title of Random Forest agriculture paper,'' in \textit{Proc. Conference Name}, City, Country, 20XX, pp. 000--000.
+
+\bibitem{ref8}
+H. Author \textit{et al.}, ``Title of LightGBM agriculture paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref9}
+I. Author \textit{et al.}, ``Title of stacking ensemble paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+% --- Explainable AI / SHAP (refs 10-13) ---
+\bibitem{ref10}
+S. M. Lundberg and S.-I. Lee, ``A unified approach to interpreting model predictions,'' in \textit{Proc. Adv. Neural Inf. Process. Syst. (NeurIPS)}, 2017, pp. 4765--4774.
+
+\bibitem{ref11}
+J. Author \textit{et al.}, ``Title of SHAP in agriculture paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref12}
+K. Author \textit{et al.}, ``Title of LIME / XAI agriculture paper,'' in \textit{Proc. Conference Name}, City, Country, 20XX, pp. 000--000.
+
+\bibitem{ref13}
+L. Author \textit{et al.}, ``Title of XAI in crop disease detection paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+% --- Economic Analysis / Decision Support (refs 14-17) ---
+\bibitem{ref14}
+M. Author \textit{et al.}, ``Title of agricultural decision support system paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref15}
+N. Author \textit{et al.}, ``Title of ROI / economic viability in agriculture paper,'' in \textit{Proc. Conference Name}, City, Country, 20XX, pp. 000--000.
+
+\bibitem{ref16}
+O. Author \textit{et al.}, ``Title of market price prediction agriculture paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref17}
+P. Author \textit{et al.}, ``Title of precision agriculture economic analysis paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+% --- Crop Rotation / Sustainability (refs 18-20) ---
+\bibitem{ref18}
+Q. Author \textit{et al.}, ``Title of crop rotation optimization paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref19}
+R. Author \textit{et al.}, ``Title of sustainable agriculture planning paper,'' in \textit{Proc. Conference Name}, City, Country, 20XX, pp. 000--000.
+
+\bibitem{ref20}
+S. Author \textit{et al.}, ``Title of soil health and rotation paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+% --- Fertilizer Recommendation (refs 21-22) ---
+\bibitem{ref21}
+T. Author \textit{et al.}, ``Title of fertilizer recommendation system paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref22}
+U. Author \textit{et al.}, ``Title of KNN-based fertilizer recommendation paper,'' in \textit{Proc. Conference Name}, City, Country, 20XX, pp. 000--000.
+
+% --- Datasets / Tools (refs 23-25) ---
+\bibitem{ref23}
+V. Author \textit{et al.}, ``Title of feature engineering in ML paper,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\bibitem{ref24}
+W. Author \textit{et al.}, ``Title of PWA / web deployment agriculture paper,'' in \textit{Proc. Conference Name}, City, Country, 20XX, pp. 000--000.
+
+\bibitem{ref25}
+X. Author \textit{et al.}, ``Title of smart farming / IoT survey,'' \textit{Journal Name}, vol. X, no. Y, pp. 000--000, 20XX.
+
+\end{thebibliography}
+
+\end{document}
