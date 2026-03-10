@@ -1,5 +1,5 @@
 /**
- * Form Validation JavaScript for CropAI
+ * Form Validation JavaScript for GreenGuide
  * Input validation and slider synchronization
  */
 
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Export for global use
-window.CropAIFormValidation = {
+window.GreenGuideFormValidation = {
     validateNumericInput,
     validateAllInputs,
     showErrorMessage,

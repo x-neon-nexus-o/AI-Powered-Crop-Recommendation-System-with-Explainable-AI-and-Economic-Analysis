@@ -4,12 +4,15 @@
 
 // Document ready
 document.addEventListener('DOMContentLoaded', function () {
+/**
+ * Main JavaScript file for GreenGuide Crop Recommendation System
+ */
     console.log('🌾 CropAI initialized');
-
-    // Initialize tooltips
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('\ud83c\udf3e GreenGuide initialized');
     initTooltips();
-
-    // Initialize form validation
+console.log('%c\ud83c\udf3e GreenGuide', 'font-size: 24px; font-weight: bold; color: #4a7c23;');
+console.log('%cGreenGuide: AI-Powered Crop Recommendation System', 'font-size: 12px; color: #666;');
     initFormValidation();
 
     // Add smooth scroll

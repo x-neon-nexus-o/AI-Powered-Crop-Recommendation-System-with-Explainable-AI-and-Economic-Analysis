@@ -36,9 +36,13 @@ function createProbabilityChart(canvasId, labels, data) {
             labels: labels,
             datasets: [{
                 label: 'Probability',
+        /**
+         * Dashboard JavaScript for GreenGuide
+         * Chart configurations and visualizations
+         */
                 data: data,
                 backgroundColor: data.map((v, i) => CHART_COLORS_ARRAY[i % CHART_COLORS_ARRAY.length]),
-                borderColor: data.map((v, i) => CHART_COLORS_ARRAY[i % CHART_COLORS_ARRAY.length].replace('0.8', '1')),
+        window.GreenGuideDashboard = {
                 borderWidth: 2,
                 borderRadius: 8
             }]
@@ -52,7 +56,7 @@ function createProbabilityChart(canvasId, labels, data) {
             },
             scales: {
                 x: {
-                    beginAtZero: true,
+        console.log('📊 GreenGuide Dashboard loaded');
                     max: 100,
                     ticks: { callback: value => value + '%' }
                 }

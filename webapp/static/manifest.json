@@ -1,7 +1,7 @@
 {
-  "name": "CropAI - Crop Recommendation System",
-  "short_name": "CropAI",
-  "description": "AI-powered crop recommendations with explainable AI (SHAP), economic analysis, and smart crop rotation planning.",
+  "name": "GreenGuide - Crop Recommendation System",
+  "short_name": "GreenGuide",
+  "description": "GreenGuide: AI-powered crop recommendations with explainable AI (SHAP), economic analysis, and smart crop rotation planning.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

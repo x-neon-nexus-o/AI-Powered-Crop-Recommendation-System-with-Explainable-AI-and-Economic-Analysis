@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Results - CropAI{% endblock %}
+{% block title %}Results - GreenGuide{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -541,7 +541,7 @@
         var prob = Math.round(top.probability * 100);
 
         var lines = [
-            'CropAI Recommendation',
+            'GreenGuide Recommendation',
             '---------------------',
             'Best Crop: ' + top.crop,
             'Confidence: ' + prob + '%',
@@ -555,7 +555,7 @@
             'pH: ' + inputs.ph + ', Rainfall: ' + inputs.rainfall + 'mm',
             'Season: ' + inputs.season,
             '',
-            'Powered by CropAI'
+            'Powered by GreenGuide'
         ];
         return lines.join('\n');
     }
