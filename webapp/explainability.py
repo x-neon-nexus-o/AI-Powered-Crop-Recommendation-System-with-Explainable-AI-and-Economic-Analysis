@@ -349,7 +349,7 @@ def feature_contribution_text(crop_name, top_features, input_values):
                 Your {desc.lower()} of <strong>{raw_value}{unit_str}</strong> ({level.lower()}) <strong class="{impact_class}">{strength}</strong>
                 the recommendation for {crop_name}.{crop_note}
             </p>
-            {"<p class='mb-0 small fst-italic'><i class=\"bi bi-lightbulb text-warning me-1\"></i><strong>Tip:</strong> " + advice + "</p>" if advice else ""}
+            {('<p class="mb-0 small fst-italic"><i class="bi bi-lightbulb text-warning me-1"></i><strong>Tip:</strong> ' + advice + '</p>') if advice else ""}
         </div>'''
 
     # Overall summary
