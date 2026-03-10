@@ -1,5 +1,5 @@
-// CropAI Service Worker — v1
-var CACHE_NAME = 'cropai-v1';
+// GreenGuide Service Worker — v1
+var CACHE_NAME = 'greenguide-v1';
 var OFFLINE_URL = '/offline';
 
 // App shell: files pre-cached on install
