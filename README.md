@@ -112,7 +112,7 @@ This project addresses **6 major gaps** in existing crop recommendation systems:
 | ❌ No Economic Analysis | Only agronomic factors | ✅ ROI, profit margins, market price integration |
 | ❌ No Rotation Planning | Single crop focus | ✅ Multi-season sustainable rotation |
 | ❌ No Fertilizer Guidance | Manual fertilizer selection | ✅ KNN-based fertilizer matching with YouTube tutorials |
-| ❌ Static Datasets | Outdated information | ✅ Live weather data via OpenWeatherMap API |
+| ❌ Static Datasets | Outdated information | ✅ Live weather data via OpenWeatherMap API (by GPS or city name) |
 | ❌ No Regional Context | Generic recommendations | ✅ India-specific with MSP and seasonal data |
 
 ---
@@ -1019,10 +1019,41 @@ python app.py
 4. ✅ **Multi-Season Planning** - Sustainability focus
 5. ✅ **Stacking Ensemble** - Advanced ML beyond papers
 6. ✅ **Clean Separation** - Notebooks (.ipynb) for ML, Python (.py) for web only
-7. ✅ **Live Weather Integration** - OpenWeatherMap API for real-time climate auto-fill
+7. ✅ **Live Weather Integration** - OpenWeatherMap API for real-time climate auto-fill (GPS geolocation + city/village name search)
 8. ✅ **Progressive Web App (PWA)** - Installable on mobile/desktop with offline support for areas with poor connectivity
 9. ✅ **Fertilizer Recommendation** - KNN-based matching from 4,500+ row dataset with 19 fertilizers and YouTube tutorial links
 10. ✅ **Social Sharing** - WhatsApp share and clipboard copy for crop recommendations
 11. ✅ **Dark Mode** - Full dark theme with live Chart.js theming and CSS overrides
 12. ✅ **Multilingual Support** - Google Translate widget for 10 Indian languages
+13. ✅ **Location-Based Climate Auto-Fill** - Type any city/village name to fetch live temperature, humidity & rainfall from OpenWeatherMap and auto-populate the prediction form
+
+***
+
+## **🆕 Recent Changes**
+
+### **Location-Based Climate Auto-Fill** *(March 2026)*
+Users can now fetch climate parameters by simply typing a location name instead of relying solely on browser geolocation.
+
+**What changed:**
+
+| File | Change |
+|------|--------|
+| `webapp/app.py` | `/api/weather` endpoint now accepts a `city` query parameter in addition to `lat`/`lon`. Uses OpenWeatherMap's `q` parameter for city-based lookup. Returns a `404` with a friendly message if the city is not found. |
+| `webapp/templates/input_form.html` | Added a location input box with a **"Get Climate"** button below the Climate Parameters heading. Pressing Enter in the input also triggers a fetch. A `fetchWeatherByCity()` JS function handles the API call, auto-fills temperature/humidity/rainfall fields with animation, and shows success or error status. |
+| `webapp/static/css/style.css` | Added `.location-fetch-box` styles — subtle green-tinted background with a dashed border, matching the existing theme. Dark mode support included. |
+
+**How it works:**
+1. User types a city or village name (e.g. "Pune", "Jaipur", "Nagpur")
+2. Clicks **Get Climate** (or presses Enter)
+3. Frontend calls `/api/weather?city=Pune`
+4. Backend proxies the request to OpenWeatherMap API (API key stays server-side)
+5. On success: temperature, humidity, and rainfall are auto-filled into the form with a highlight animation
+6. On error (bad name, network issue): a friendly alert message is shown — the form remains usable
+
+**Error handling covers:**
+- Empty input → focus the input and show a prompt
+- City not found (HTTP 404) → "City 'xyz' not found. Please check the spelling and try again."
+- API key not configured → clear configuration message
+- Network/timeout errors → fallback message to enter values manually
+- No rainfall data available → note to enter seasonal average manually
 

@@ -639,28 +639,39 @@ def export_pdf():
 
 @app.route('/api/weather')
 def api_weather():
-    """Proxy endpoint for OpenWeatherMap — keeps API key server-side."""
+    """Proxy endpoint for OpenWeatherMap — supports lat/lon or city name."""
     api_key = os.environ.get('OPENWEATHERMAP_API_KEY', '')
     if not api_key:
         return jsonify({'error': 'Weather API key not configured. Set OPENWEATHERMAP_API_KEY environment variable.'}), 503
 
+    city = request.args.get('city', '').strip()
     lat = request.args.get('lat')
     lon = request.args.get('lon')
-    if not lat or not lon:
-        return jsonify({'error': 'Latitude and longitude are required.'}), 400
 
-    try:
-        lat_f, lon_f = float(lat), float(lon)
-    except ValueError:
-        return jsonify({'error': 'Invalid latitude or longitude values.'}), 400
+    params = {'appid': api_key, 'units': 'metric'}
+
+    if city:
+        # Search by city name
+        params['q'] = city
+    elif lat and lon:
+        try:
+            lat_f, lon_f = float(lat), float(lon)
+        except ValueError:
+            return jsonify({'error': 'Invalid latitude or longitude values.'}), 400
+        params['lat'] = lat_f
+        params['lon'] = lon_f
+    else:
+        return jsonify({'error': 'Provide a city name or allow location access.'}), 400
 
     try:
         resp = http_requests.get(
             'https://api.openweathermap.org/data/2.5/weather',
-            params={'lat': lat_f, 'lon': lon_f, 'appid': api_key, 'units': 'metric'},
+            params=params,
             timeout=10
         )
 
+        if resp.status_code == 404:
+            return jsonify({'error': f'City "{city}" not found. Please check the spelling and try again.'}), 404
         if resp.status_code == 401:
             return jsonify({'error': 'Weather API key is not yet active. New keys take ~10 minutes to activate. Please try again shortly.'}), 502
         resp.raise_for_status()
