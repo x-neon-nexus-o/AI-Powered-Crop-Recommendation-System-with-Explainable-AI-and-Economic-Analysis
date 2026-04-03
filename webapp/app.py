@@ -763,6 +763,8 @@ def api_weather():
             'humidity': round(humidity, 1) if humidity is not None else None,
             'rainfall': round(rainfall, 1) if rainfall is not None else None,
             'location': f"{location_name}, {country}" if country else location_name,
+            'lat': data.get('coord', {}).get('lat', None),
+            'lon': data.get('coord', {}).get('lon', None),
             'description': description,
             'icon': icon
         }
