@@ -637,6 +637,78 @@ def export_pdf():
 
 # ==================== API ENDPOINTS ====================
 
+@app.route('/api/location-suggestions')
+def api_location_suggestions():
+    """Return location suggestions using OpenWeather Geocoding API."""
+    api_key = os.environ.get('OPENWEATHERMAP_API_KEY', '')
+    if not api_key:
+        return jsonify({'error': 'Weather API key not configured. Set OPENWEATHERMAP_API_KEY environment variable.'}), 503
+
+    query = request.args.get('q', '').strip()
+    if len(query) < 2:
+        return jsonify({'suggestions': []})
+
+    try:
+        limit = int(request.args.get('limit', 6))
+    except ValueError:
+        limit = 6
+    limit = max(1, min(limit, 10))
+
+    try:
+        resp = http_requests.get(
+            'https://api.openweathermap.org/geo/1.0/direct',
+            params={
+                'q': query,
+                'limit': limit,
+                'appid': api_key
+            },
+            timeout=8
+        )
+        if resp.status_code == 401:
+            return jsonify({'error': 'Weather API key is not yet active. New keys take ~10 minutes to activate. Please try again shortly.'}), 502
+
+        resp.raise_for_status()
+        data = resp.json() or []
+
+        seen = set()
+        suggestions = []
+
+        for item in data:
+            name = (item.get('name') or '').strip()
+            state = (item.get('state') or '').strip()
+            country = (item.get('country') or '').strip()
+            lat = item.get('lat')
+            lon = item.get('lon')
+
+            if not name:
+                continue
+
+            parts = [name]
+            if state:
+                parts.append(state)
+            if country:
+                parts.append(country)
+            display = ', '.join(parts)
+
+            key = display.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+
+            suggestions.append({
+                'display': display,
+                'query': display,
+                'lat': lat,
+                'lon': lon
+            })
+
+        return jsonify({'suggestions': suggestions})
+
+    except http_requests.exceptions.Timeout:
+        return jsonify({'error': 'Location service timed out. Please try again.'}), 504
+    except http_requests.exceptions.RequestException as e:
+        return jsonify({'error': f'Location service unavailable: {str(e)}'}), 502
+
 @app.route('/api/weather')
 def api_weather():
     """Proxy endpoint for OpenWeatherMap — supports lat/lon or city name."""

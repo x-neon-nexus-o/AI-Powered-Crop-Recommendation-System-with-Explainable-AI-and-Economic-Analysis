@@ -66,13 +66,14 @@
                         <!-- Location-based climate fetch -->
                         <div class="location-fetch-box mb-3">
                             <label class="form-label fw-medium"><i class="bi bi-geo me-1"></i>Or enter your location name</label>
-                            <div class="input-group">
-                                <input type="text" id="locationInput" class="form-control" placeholder="e.g. Pune, Mumbai, Jaipur" autocomplete="off">
+                            <div class="input-group position-relative">
+                                <input type="text" id="locationInput" class="form-control" placeholder="e.g. Pune, Mumbai, Jaipur" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="locationSuggestions">
                                 <button type="button" class="btn btn-success" id="cityWeatherBtn" onclick="fetchWeatherByCity()">
                                     <i class="bi bi-cloud-sun me-1"></i>Get Climate
                                 </button>
+                                <div id="locationSuggestions" class="list-group position-absolute w-100" style="top:100%; left:0; z-index:1060; display:none;"></div>
                             </div>
-                            <small class="text-muted">Type a city or village name and click Get Climate to auto-fill temperature, humidity &amp; rainfall</small>
+                            <small class="text-muted">Type at least 2 letters to see location suggestions, then click Get Climate to auto-fill temperature, humidity &amp; rainfall</small>
                         </div>
 
                         <!-- Weather status badge -->
@@ -180,6 +181,11 @@
 
 {% block scripts %}
 <script>
+    var autocompleteTimer = null;
+    var autocompleteController = null;
+    var locationSuggestions = [];
+    var activeSuggestionIndex = -1;
+
     function fetchWeather() {
         var btn = document.getElementById('weatherBtn');
         var statusDiv = document.getElementById('weatherStatus');
@@ -285,6 +291,8 @@
         var btn = document.getElementById('cityWeatherBtn');
         var input = document.getElementById('locationInput');
         var city = input.value.trim();
+        var selectedLat = input.dataset.selectedLat;
+        var selectedLon = input.dataset.selectedLon;
 
         if (!city) {
             showWeatherStatus('error', 'Please enter a city or village name first.');
@@ -296,7 +304,14 @@
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Fetching...';
 
-        fetch('/api/weather?city=' + encodeURIComponent(city))
+        hideLocationSuggestions();
+
+        var weatherUrl = '/api/weather?city=' + encodeURIComponent(city);
+        if (selectedLat && selectedLon) {
+            weatherUrl = '/api/weather?lat=' + encodeURIComponent(selectedLat) + '&lon=' + encodeURIComponent(selectedLon);
+        }
+
+        fetch(weatherUrl)
             .then(function(resp) { return resp.json(); })
             .then(function(data) {
                 if (data.error) {
@@ -350,12 +365,157 @@
         btn.innerHTML = '<i class="bi bi-cloud-sun me-1"></i>Get Climate';
     }
 
+    function clearSelectedLocation() {
+        var input = document.getElementById('locationInput');
+        input.dataset.selectedLat = '';
+        input.dataset.selectedLon = '';
+    }
+
+    function hideLocationSuggestions() {
+        var list = document.getElementById('locationSuggestions');
+        var input = document.getElementById('locationInput');
+        list.style.display = 'none';
+        list.innerHTML = '';
+        input.setAttribute('aria-expanded', 'false');
+        activeSuggestionIndex = -1;
+        locationSuggestions = [];
+    }
+
+    function highlightActiveSuggestion() {
+        var list = document.getElementById('locationSuggestions');
+        var children = list.children;
+        for (var i = 0; i < children.length; i++) {
+            children[i].classList.toggle('active', i === activeSuggestionIndex);
+        }
+    }
+
+    function applySuggestion(index) {
+        if (index < 0 || index >= locationSuggestions.length) return;
+
+        var item = locationSuggestions[index];
+        var input = document.getElementById('locationInput');
+
+        input.value = item.display;
+        input.dataset.selectedLat = item.lat;
+        input.dataset.selectedLon = item.lon;
+
+        hideLocationSuggestions();
+    }
+
+    function showLocationSuggestions(items) {
+        var list = document.getElementById('locationSuggestions');
+        var input = document.getElementById('locationInput');
+
+        locationSuggestions = items || [];
+        activeSuggestionIndex = -1;
+
+        if (!locationSuggestions.length) {
+            hideLocationSuggestions();
+            return;
+        }
+
+        list.innerHTML = '';
+
+        locationSuggestions.forEach(function(item, index) {
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'list-group-item list-group-item-action';
+            button.textContent = item.display;
+
+            button.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                applySuggestion(index);
+            });
+
+            list.appendChild(button);
+        });
+
+        list.style.display = 'block';
+        input.setAttribute('aria-expanded', 'true');
+    }
+
+    function fetchLocationSuggestions() {
+        var input = document.getElementById('locationInput');
+        var query = input.value.trim();
+
+        if (query.length < 2) {
+            hideLocationSuggestions();
+            return;
+        }
+
+        if (autocompleteController) {
+            autocompleteController.abort();
+        }
+        autocompleteController = new AbortController();
+
+        fetch('/api/location-suggestions?q=' + encodeURIComponent(query) + '&limit=6', {
+            signal: autocompleteController.signal
+        })
+            .then(function(resp) { return resp.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    hideLocationSuggestions();
+                    return;
+                }
+                showLocationSuggestions(data.suggestions || []);
+            })
+            .catch(function(err) {
+                if (err && err.name === 'AbortError') {
+                    return;
+                }
+                hideLocationSuggestions();
+            });
+    }
+
     // Allow pressing Enter in the location input to trigger fetch
     document.getElementById('locationInput').addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowDown') {
+            if (locationSuggestions.length > 0) {
+                e.preventDefault();
+                activeSuggestionIndex = (activeSuggestionIndex + 1) % locationSuggestions.length;
+                highlightActiveSuggestion();
+            }
+            return;
+        }
+
+        if (e.key === 'ArrowUp') {
+            if (locationSuggestions.length > 0) {
+                e.preventDefault();
+                activeSuggestionIndex = activeSuggestionIndex <= 0 ? locationSuggestions.length - 1 : activeSuggestionIndex - 1;
+                highlightActiveSuggestion();
+            }
+            return;
+        }
+
         if (e.key === 'Enter') {
             e.preventDefault();
+
+            if (locationSuggestions.length > 0 && activeSuggestionIndex >= 0) {
+                applySuggestion(activeSuggestionIndex);
+                return;
+            }
+
             fetchWeatherByCity();
+            return;
         }
+
+        if (e.key === 'Escape') {
+            hideLocationSuggestions();
+        }
+    });
+
+    document.getElementById('locationInput').addEventListener('input', function() {
+        clearSelectedLocation();
+
+        if (autocompleteTimer) {
+            clearTimeout(autocompleteTimer);
+        }
+
+        autocompleteTimer = setTimeout(fetchLocationSuggestions, 350);
+    });
+
+    document.getElementById('locationInput').addEventListener('blur', function() {
+        setTimeout(hideLocationSuggestions, 120);
     });
 
     document.getElementById('predictionForm').addEventListener('submit', function (e) {
