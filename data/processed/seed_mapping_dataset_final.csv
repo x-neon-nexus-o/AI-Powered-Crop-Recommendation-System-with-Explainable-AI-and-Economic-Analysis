@@ -1,0 +1,70 @@
+Category,Crop,Seed_Variety
+Cereals,rice,DRR Dhan 74
+Cereals,rice,CR Dhan 416
+Cereals,rice,IR 64
+Cereals,rice,MTU 1010
+Cereals,rice,BPT 5204
+Cereals,maize,HQPM 1
+Cereals,maize,DHM 117
+Cereals,maize,Vivek Hybrid 27
+Cereals,maize,PMH 1
+Pulses,blackgram,PU 31
+Pulses,blackgram,LBG 752
+Pulses,blackgram,VBN 8
+Pulses,chickpea,JG 11
+Pulses,chickpea,Pusa 372
+Pulses,chickpea,ICCV 2
+Pulses,kidneybeans,PDR 14
+Pulses,kidneybeans,HUR 15
+Pulses,kidneybeans,VL Rajma 125
+Pulses,lentil,Pusa Vaibhav
+Pulses,lentil,PL 406
+Pulses,lentil,IPL 316
+Pulses,mothbeans,RMO 40
+Pulses,mothbeans,CAZRI Moth 2
+Pulses,mothbeans,RMO 257
+Pulses,mungbean,Pusa Vishal
+Pulses,mungbean,SML 668
+Pulses,mungbean,PDM 139
+Pulses,pigeonpeas,ICPL 87119
+Pulses,pigeonpeas,Asha (ICPL 87119)
+Pulses,pigeonpeas,BSMR 736
+Fiber crops,cotton,Bt Cotton RCH 2
+Fiber crops,cotton,Bunny Bt
+Fiber crops,cotton,NCS 855
+Fiber crops,jute,JRO 524
+Fiber crops,jute,JRO 8432
+Fiber crops,jute,JRC 321
+Plantation crops,coffee,Sln 795
+Plantation crops,coffee,Chandragiri
+Plantation crops,coffee,Selection 9
+Plantation crops,coconut,West Coast Tall
+Plantation crops,coconut,Chowghat Orange Dwarf
+Plantation crops,coconut,Kalpa Sree
+Fruits,banana,Grand Naine (G9)
+Fruits,banana,Robusta
+Fruits,banana,Dwarf Cavendish
+Fruits,apple,Red Delicious
+Fruits,apple,Golden Delicious
+Fruits,apple,Granny Smith
+Fruits,mango,Alphonso
+Fruits,mango,Kesar
+Fruits,mango,Dasheri
+Fruits,orange,Nagpur Mandarin
+Fruits,orange,Coorg Mandarin
+Fruits,orange,Sathgudi
+Fruits,papaya,Red Lady 786
+Fruits,papaya,Pusa Delicious
+Fruits,papaya,Coorg Honey Dew
+Fruits,pomegranate,Bhagwa
+Fruits,pomegranate,Ganesh
+Fruits,pomegranate,Arakta
+Fruits,grapes,Thompson Seedless
+Fruits,grapes,Bangalore Blue
+Fruits,grapes,Sonaka
+Vegetables,watermelon,Sugar Baby
+Vegetables,watermelon,Arka Jyoti
+Vegetables,watermelon,Charleston Gray
+Vegetables,muskmelon,Hara Madhu
+Vegetables,muskmelon,Arka Jeet
+Vegetables,muskmelon,Punjab Hybrid

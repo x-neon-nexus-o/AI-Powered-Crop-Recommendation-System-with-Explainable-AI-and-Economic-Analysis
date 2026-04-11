@@ -31,6 +31,7 @@ from economic import (
 )
 from pdf_report import generate_crop_report
 from fertilizer import load_fertilizer_data, recommend_fertilizer
+from seed import load_seed_data, recommend_seeds_for_crop
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'crop-recommendation-secret-key-2024')
@@ -41,6 +42,7 @@ load_models()
 load_shap_explainer()
 load_economic_data()
 load_fertilizer_data()
+load_seed_data()
 print("[+] Application ready!")
 
 
@@ -227,6 +229,34 @@ def predict():
         ph = float(request.form.get('ph', 0))
         rainfall = float(request.form.get('rainfall', 0))
         season = request.form.get('season', 'Kharif')
+        user_state = request.form.get('state', '').strip()
+
+        # Seed preference flags from user toggles and climate-derived defaults.
+        manual_seed_conditions = {
+            'drought': 1 if request.form.get('seed_drought') else 0,
+            'saline': 1 if request.form.get('seed_saline') else 0,
+            'rainfed': 1 if request.form.get('seed_rainfed') else 0,
+            'irrigated': 1 if request.form.get('seed_irrigated') else 0,
+            'disease_resistant': 1 if request.form.get('seed_disease_resistant') else 0,
+            'early_maturity': 1 if request.form.get('seed_early_maturity') else 0,
+            'high_yield': 1 if request.form.get('seed_high_yield') else 0,
+        }
+        climate_seed_conditions = {
+            'drought': 1 if rainfall < 75 else 0,
+            'saline': 1 if ph > 7.8 else 0,
+            'rainfed': 1 if 50 <= rainfall <= 200 else 0,
+            'irrigated': 1 if rainfall < 120 else 0,
+            'disease_resistant': 0,
+            'early_maturity': 0,
+            'high_yield': 0,
+        }
+        seed_conditions = {
+            key: int(bool(manual_seed_conditions[key] or climate_seed_conditions[key]))
+            for key in manual_seed_conditions
+        }
+        # Keep a practical default preference towards high productivity varieties.
+        if not any(seed_conditions.values()):
+            seed_conditions['high_yield'] = 1
         
         # Validate inputs
         is_valid, errors = validate_inputs(N, P, K, temperature, humidity, ph, rainfall)
@@ -264,6 +294,12 @@ def predict():
             fertilizer = recommend_fertilizer(
                 crop_name, N, P, K, ph, rainfall, temperature
             )
+            seed_recommendations = recommend_seeds_for_crop(
+                crop=crop_name,
+                state=user_state,
+                conditions=seed_conditions,
+                top_k=3,
+            )
 
             predictions.append({
                 'crop': crop_name,
@@ -273,13 +309,15 @@ def predict():
                 'category_class': get_category_class(prob),
                 'economic': economic,
                 'rotation': rotation,
-                'fertilizer': fertilizer
+                'fertilizer': fertilizer,
+                'seed_recommendations': seed_recommendations
             })
         
         # Store in session for explanation page
         session['last_prediction'] = {
-            'inputs': {'N': N, 'P': P, 'K': K, 'temperature': temperature, 
-                      'humidity': humidity, 'ph': ph, 'rainfall': rainfall, 'season': season},
+            'inputs': {'N': N, 'P': P, 'K': K, 'temperature': temperature,
+                      'humidity': humidity, 'ph': ph, 'rainfall': rainfall, 'season': season,
+                      'state': user_state, 'seed_conditions': seed_conditions},
             'predictions': [{'crop': p['crop'], 'probability': float(p['probability']), 
                            'confidence': p['confidence']} for p in predictions],
             'session_id': session_id,
@@ -287,7 +325,8 @@ def predict():
         }
         
         inputs = {'N': N, 'P': P, 'K': K, 'temperature': temperature,
-                  'humidity': humidity, 'ph': ph, 'rainfall': rainfall, 'season': season}
+                  'humidity': humidity, 'ph': ph, 'rainfall': rainfall, 'season': season,
+                  'state': user_state, 'seed_conditions': seed_conditions}
         
         return render_template('results.html', 
                                predictions=predictions,

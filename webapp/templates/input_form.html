@@ -84,6 +84,16 @@
                             </div>
                         </div>
 
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">State / Region (for seed recommendation)</label>
+                                <input type="text" name="state" class="form-control"
+                                    value="{{ form_data.state if form_data else '' }}"
+                                    placeholder="e.g. Maharashtra, Punjab, Karnataka">
+                                <small class="text-muted">Optional, but improves region-specific seed variety matching</small>
+                            </div>
+                        </div>
+
                         <!-- Weather status badge -->
                         <div id="weatherStatus" class="mb-3" style="display:none;"></div>
                         <div class="row g-3 mb-4">
@@ -138,6 +148,61 @@
                                         Zaid (March-June)
                                     </option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold mb-3 text-success">
+                            <i class="bi bi-diagram-3 me-2"></i>Seed Selection Preferences (Optional)
+                        </h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="seed_drought" id="seed_drought"
+                                        {% if form_data and form_data.get('seed_drought') %}checked{% endif %}>
+                                    <label class="form-check-label" for="seed_drought">Drought tolerant</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="seed_saline" id="seed_saline"
+                                        {% if form_data and form_data.get('seed_saline') %}checked{% endif %}>
+                                    <label class="form-check-label" for="seed_saline">Saline tolerant</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="seed_rainfed" id="seed_rainfed"
+                                        {% if form_data and form_data.get('seed_rainfed') %}checked{% endif %}>
+                                    <label class="form-check-label" for="seed_rainfed">Rainfed suitable</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="seed_irrigated" id="seed_irrigated"
+                                        {% if form_data and form_data.get('seed_irrigated') %}checked{% endif %}>
+                                    <label class="form-check-label" for="seed_irrigated">Irrigated system</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="seed_disease_resistant" id="seed_disease_resistant"
+                                        {% if form_data and form_data.get('seed_disease_resistant') %}checked{% endif %}>
+                                    <label class="form-check-label" for="seed_disease_resistant">Disease resistant</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="seed_early_maturity" id="seed_early_maturity"
+                                        {% if form_data and form_data.get('seed_early_maturity') %}checked{% endif %}>
+                                    <label class="form-check-label" for="seed_early_maturity">Early maturity</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="seed_high_yield" id="seed_high_yield"
+                                        {% if not form_data or form_data.get('seed_high_yield') %}checked{% endif %}>
+                                    <label class="form-check-label" for="seed_high_yield">High yield focus</label>
+                                </div>
                             </div>
                         </div>
 

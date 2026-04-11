@@ -42,6 +42,11 @@
                 <div class="col-auto">
                     <span class="badge bg-success">Season: {{ inputs.season }}</span>
                 </div>
+                {% if inputs.state %}
+                <div class="col-auto">
+                    <span class="badge bg-primary">State: {{ inputs.state }}</span>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -116,6 +121,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Seed Recommendation for Top Crop -->
+    {% if top.seed_recommendations and top.seed_recommendations|length > 0 %}
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-primary shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-flower1 me-2"></i>Top Seed Varieties for {{ top.crop }}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">
+                        Ranked using region and agronomic feature matching (drought, rainfed, saline, irrigation, disease resistance, maturity, and yield potential).
+                    </p>
+                    <div class="row g-3">
+                        {% for seed in top.seed_recommendations %}
+                        <div class="col-md-4">
+                            <div class="border rounded p-3 h-100 bg-light">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h6 class="fw-bold mb-1">{{ seed.variety_name }}</h6>
+                                    <span class="badge bg-success">Score: {{ "%.2f"|format(seed.score) }}</span>
+                                </div>
+                                <div class="small text-muted mb-2">
+                                    {{ seed.variety_type }} | {{ seed.state }}
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#seedDetails{{ loop.index }}" aria-expanded="false" aria-controls="seedDetails{{ loop.index }}">
+                                    <i class="bi bi-chevron-down me-1"></i>View full details
+                                </button>
+                                <div class="collapse" id="seedDetails{{ loop.index }}">
+                                    <div class="small mb-2">
+                                        <strong>Sponsoring organization:</strong> {{ seed.organization }}
+                                    </div>
+                                    <div class="small text-muted">
+                                        <strong>Description:</strong><br>
+                                        {{ seed.description }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Alternative Recommendations -->
     <div class="row g-4 mb-5">
