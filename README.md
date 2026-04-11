@@ -11,7 +11,7 @@
 <p align="center">
   <a href="#features"><img src="https://img.shields.io/badge/Features-10%20Innovations-success?style=for-the-badge" alt="Features"/></a>
   <a href="#tech-stack"><img src="https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python"/></a>
-  <a href="#accuracy"><img src="https://img.shields.io/badge/Accuracy-99.32%25-brightgreen?style=for-the-badge" alt="Accuracy"/></a>
+  <a href="#accuracy"><img src="https://img.shields.io/badge/Accuracy-99.55%25-brightgreen?style=for-the-badge" alt="Accuracy"/></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License"/></a>
 </p>
 
@@ -95,21 +95,24 @@ Flask-based dashboard with installable **Progressive Web App** support and offli
 <p align="center">
   <img src="https://img.shields.io/badge/Crops%20Supported-22-green?style=for-the-badge" alt="Crops"/>
   <img src="https://img.shields.io/badge/ML%20Models-9-blue?style=for-the-badge" alt="Models"/>
-  <img src="https://img.shields.io/badge/Best%20Test%20Accuracy-99.32%25-brightgreen?style=for-the-badge" alt="Accuracy"/>
+  <img src="https://img.shields.io/badge/Best%20Test%20Accuracy-99.55%25-brightgreen?style=for-the-badge" alt="Accuracy"/>
   <img src="https://img.shields.io/badge/Engineered%20Features-39-orange?style=for-the-badge" alt="Features"/>
   <img src="https://img.shields.io/badge/Fertilizers-19-teal?style=for-the-badge" alt="Fertilizers"/>
 </p>
 
-### **Latest tracked test metrics**
+### **Latest exported model comparison**
 
-| Rank | Model | Test Accuracy | Precision | Recall | F1-Score | Overfitting Gap |
-|------|-------|---------------|-----------|--------|----------|-----------------|
-| 1 | **Random Forest** | **99.32%** | 99.35% | 99.32% | 99.32% | 0.57% |
-| 2 | **SVM (RBF)** | 97.95% | 98.09% | 97.95% | 97.94% | 1.48% |
-| 3 | Logistic Regression | 97.73% | 97.93% | 97.73% | 97.71% | 1.14% |
-| 4 | Decision Tree | 95.68% | 95.92% | 95.68% | 95.70% | 1.88% |
+| Rank | Model | Test Accuracy | Precision | Recall | F1-Score | Prediction Time | Model Size |
+|------|-------|---------------|-----------|--------|----------|-----------------|------------|
+| 1 | **Stacking Ensemble** | **99.55%** | 99.59% | 99.55% | 99.54% | 455.41 ms | 13.35 MB |
+| 2 | **Random Forest** | **99.32%** | 99.34% | 99.32% | 99.32% | 175.60 ms | 5.34 MB |
+| 3 | **LightGBM** | 98.41% | 98.46% | 98.41% | 98.40% | 1700.21 ms | 7.40 MB |
+| 4 | **XGBoost** | 98.18% | 98.23% | 98.18% | 98.17% | 5.04 ms | 1.90 MB |
+| 5 | **SVM (RBF)** | 97.95% | 98.09% | 97.95% | 97.94% | 31.59 ms | 0.31 MB |
+| 6 | Logistic Regression | 97.73% | 97.93% | 97.73% | 97.71% | 1.61 ms | 0.01 MB |
+| 7 | Decision Tree | 95.00% | 95.37% | 95.00% | 94.93% | 1.10 ms | 0.02 MB |
 
-> The stacking ensemble remains the deployed model in the web app for final crop prediction and downstream recommendations.
+> The stacking ensemble remains the deployed model in the web app for final crop prediction and downstream recommendations. These numbers come from the latest exported comparison artifacts in `data/results/`.
 
 ---
 
@@ -664,14 +667,17 @@ Size: 50-100 rotation combinations
 
 ### **Overall Model Comparison**
 
-| Rank | Model | Test Accuracy | Precision | Recall | F1-Score | Overfitting Gap |
-|------|-------|---------------|-----------|--------|----------|-----------------|
-| 1 | **Random Forest** | **99.32%** | 99.35% | 99.32% | 99.32% | 0.57% |
-| 2 | **SVM (RBF)** | 97.95% | 98.09% | 97.95% | 97.94% | 1.48% |
-| 3 | Logistic Regression | 97.73% | 97.93% | 97.73% | 97.71% | 1.14% |
-| 4 | Decision Tree | 95.68% | 95.92% | 95.68% | 95.70% | 1.88% |
+| Rank | Model | Test Accuracy | Precision | Recall | F1-Score | Prediction Time | Model Size |
+|------|-------|---------------|-----------|--------|----------|-----------------|------------|
+| 1 | **Stacking Ensemble** | **99.55%** | 99.59% | 99.55% | 99.54% | 455.41 ms | 13.35 MB |
+| 2 | **Random Forest** | **99.32%** | 99.34% | 99.32% | 99.32% | 175.60 ms | 5.34 MB |
+| 3 | **LightGBM** | 98.41% | 98.46% | 98.41% | 98.40% | 1700.21 ms | 7.40 MB |
+| 4 | **XGBoost** | 98.18% | 98.23% | 98.18% | 98.17% | 5.04 ms | 1.90 MB |
+| 5 | **SVM (RBF)** | 97.95% | 98.09% | 97.95% | 97.94% | 31.59 ms | 0.31 MB |
+| 6 | Logistic Regression | 97.73% | 97.93% | 97.73% | 97.71% | 1.61 ms | 0.01 MB |
+| 7 | Decision Tree | 95.00% | 95.37% | 95.00% | 94.93% | 1.10 ms | 0.02 MB |
 
-> ⭐ **Deployed Model:** Stacking Ensemble — used in the web app for final crop prediction and downstream recommendations. The current metadata snapshot tracks the standalone model metrics above.
+> ⭐ **Deployed Model:** Stacking Ensemble — used in the web app for final crop prediction and downstream recommendations. These numbers come from the latest exported comparison artifacts in `data/results/`.
 
 ### **Dataset Split**
 - **Training samples:** 1,760 (80%)
@@ -684,123 +690,109 @@ Size: 50-100 rotation combinations
 ### **Individual Model Details**
 
 #### **1. Logistic Regression**
-```
-Hyperparameters:
-  Solver: lbfgs | Max iterations: 1000 | Multi-class: One-vs-Rest (OvR)
-  Random state: 42 | n_jobs: -1
 
-Results:
-  Test Accuracy:  97.73%  |  Train Accuracy: 98.86%
-  Precision:      97.93%  |  Recall: 97.73%  |  F1: 97.71%
-  Overfitting Gap: 1.14%  |  Training Time: 0.203s
-```
+Current export snapshot:
+
+| Metric | Value |
+|--------|------:|
+| Test Accuracy | 97.73% |
+| Precision | 97.93% |
+| Recall | 97.73% |
+| F1-Score | 97.71% |
+| Training Time | 0.203 s |
+| Prediction Time | 1.61 ms |
+| Model Size | 0.01 MB |
+| Overfitting Gap | 1.14% |
 
 #### **2. Decision Tree**
-```
-Hyperparameters:
-  Criterion: gini | Max depth: 15 | Min samples split: 10
-  Min samples leaf: 5 | Max features: sqrt | Random state: 42
 
-Tree Statistics:
-  Depth: 15 | Leaves: 50 | Nodes: 99
+Current export snapshot:
 
-Results:
-  Test Accuracy:  95.68%  |  Train Accuracy: 97.56%
-  Precision:      95.92%  |  Recall: 95.68%  |  F1: 95.70%
-  Overfitting Gap: 1.88%  |  Training Time: 0.019s
-```
+| Metric | Value |
+|--------|------:|
+| Test Accuracy | 95.00% |
+| Precision | 95.37% |
+| Recall | 95.00% |
+| F1-Score | 94.93% |
+| Training Time | 0.010 s |
+| Prediction Time | 1.10 ms |
+| Model Size | 0.02 MB |
+| Overfitting Gap | 1.88% |
 
 #### **3. Random Forest**
-```
-Hyperparameters:
-  n_estimators: 100 | Criterion: gini | Max depth: 20
-  Min samples split: 5 | Min samples leaf: 2 | Max features: sqrt
-  Bootstrap: True | OOB score: True | Random state: 42 | n_jobs: -1
 
-Forest Statistics:
-  Avg tree depth: 13.43 | Max depth: 17 | Min depth: 9
-  Avg leaves/tree: 56.9 | OOB Score: 99.38%
+Current export snapshot:
 
-Cross-Validation (5-Fold):
-  Mean: 99.32% | Std: 0.58% | Min: 98.30% | Max: 100.00%
-
-Results:
-  Test Accuracy:  99.32%  |  Train Accuracy: 99.89%
-  Precision:      99.35%  |  Recall: 99.32%  |  F1: 99.32%
-  Overfitting Gap: 0.57%  |  Training Time: 0.376s
-```
+| Metric | Value |
+|--------|------:|
+| Test Accuracy | 99.32% |
+| Precision | 99.34% |
+| Recall | 99.32% |
+| F1-Score | 99.32% |
+| Training Time | 0.308 s |
+| Prediction Time | 175.60 ms |
+| Model Size | 5.34 MB |
+| Overfitting Gap | 0.57% |
 
 #### **4. Support Vector Machine (SVM)**
-```
-Best Hyperparameters (GridSearchCV - 20 combinations, 5-fold CV):
-  Kernel: RBF | C: 100 | Gamma: 0.01 | Probability: True
-  Random state: 42
 
-Support Vectors: 646 (36.70% of training data)
-GridSearch Best CV Score: 98.58%
+Current export snapshot:
 
-Kernel Comparison:
-  Linear:     97.73% (546 SVs)
-  RBF:        97.73% (897 SVs)
-  Polynomial: 94.32% (763 SVs)
-
-Results:
-  Test Accuracy:  97.95%  |  Train Accuracy: 99.43%
-  Precision:      98.09%  |  Recall: 97.95%  |  F1: 97.94%
-  Overfitting Gap: 1.48%  |  GridSearch Time: 52.53s
-```
+| Metric | Value |
+|--------|------:|
+| Test Accuracy | 97.95% |
+| Precision | 98.09% |
+| Recall | 97.95% |
+| F1-Score | 97.94% |
+| Training Time | 87.620 s |
+| Prediction Time | 31.59 ms |
+| Model Size | 0.31 MB |
+| Overfitting Gap | 1.48% |
 
 #### **5. XGBoost**
-```
-Best Hyperparameters (GridSearchCV - 18 combinations):
-  Learning rate: 0.05 | Max depth: 6 | n_estimators: 200
-  Objective: multi:softprob | Subsample: 0.8
-  Colsample_bytree: 0.8 | Random state: 42
 
-GridSearch Best CV Accuracy: 98.64%
+Current export snapshot:
 
-Results:
-  Test Accuracy:  98.64%  |  Train Accuracy: 100.00%
-  Precision:      98.68%  |  Recall: 98.64%  |  F1: 98.63%
-  Overfitting Gap: 1.14%  |  GridSearch Time: 94.76s
-  Base Training Time: 16.14s
-```
+| Metric | Value |
+|--------|------:|
+| Test Accuracy | 98.18% |
+| Precision | 98.23% |
+| Recall | 98.18% |
+| F1-Score | 98.17% |
+| Training Time | 93.00 s |
+| Prediction Time | 5.04 ms |
+| Model Size | 1.90 MB |
 
 #### **6. LightGBM**
-```
-Best Hyperparameters (GridSearchCV - 18 combinations, 3-fold CV):
-  num_leaves: 20 | Learning rate: 0.1 | n_estimators: 100
-  Objective: multiclass | Random state: 42
 
-GridSearch Best CV Accuracy: 98.58%
+Current export snapshot:
 
-Results:
-  Test Accuracy:  98.41%  |  Train Accuracy: 100.00%
-  Precision:      98.48%  |  Recall: 98.41%  |  F1: 98.41%
-  Overfitting Gap: 1.14%  |  GridSearch Time: 279.65s
-  Base Training Time: 4.90s
-```
+| Metric | Value |
+|--------|------:|
+| Test Accuracy | 98.41% |
+| Precision | 98.46% |
+| Recall | 98.41% |
+| F1-Score | 98.40% |
+| Training Time | 979.86 s |
+| Prediction Time | 1700.21 ms |
+| Model Size | 7.40 MB |
 
 #### **7. Stacking Ensemble** ⭐ (Deployed Model)
-```
-Architecture:
-  Base Estimators (Level 0):
-    - Random Forest:  200 trees, max_depth=20
-    - XGBoost:        300 estimators, learning_rate=0.05, max_depth=6
-    - LightGBM:       100 estimators, num_leaves=20
 
-  Meta-Learner (Level 1):
-    - Logistic Regression: C=1.0, solver=lbfgs, max_iter=1000
+Current export snapshot:
 
-  Stack Method: predict_proba | CV Folds: 5
-  Meta Features: 66 (22 classes × 3 base models)
-
-Results:
-  Test Accuracy:  99.32%  |  Train Accuracy: 100.00%
-  Precision:      99.37%  |  Recall: 99.32%  |  F1: 99.32%
-  Overfitting Gap: 0.68%  |  Training Time: 30.43s
-  Model Size: 13.37 MB
-```
+| Metric | Value |
+|--------|------:|
+| Test Accuracy | 99.55% |
+| Precision | 99.59% |
+| Recall | 99.55% |
+| F1-Score | 99.54% |
+| Training Time | 28.80 s |
+| Prediction Time | 455.41 ms |
+| Model Size | 13.35 MB |
+| Overfitting Gap | 0.45% |
+| Base Estimators | RF + XGBoost + LightGBM |
+| Meta Learner | Logistic Regression |
 
 ### **Top 5 Feature Importance (Random Forest)**
 
