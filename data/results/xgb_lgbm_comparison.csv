@@ -1,3 +1,3 @@
 Model,Best_Params,Test_Accuracy,Training_Time
-XGBoost,"{'learning_rate': 0.05, 'max_depth': 6, 'n_estimators': 200}",0.9863636363636363,59.03187656402588
-LightGBM,"{'learning_rate': 0.1, 'n_estimators': 100, 'num_leaves': 20}",0.9840909090909091,435.3843460083008
+XGBoost,"{'colsample_bytree': 0.8, 'learning_rate': 0.05, 'max_depth': 4, 'n_estimators': 100, 'subsample': 0.8}",0.9818181818181818,93.00223207473755
+LightGBM,"{'colsample_bytree': 0.8, 'learning_rate': 0.05, 'n_estimators': 100, 'num_leaves': 31, 'subsample': 0.8}",0.9840909090909091,979.8611052036285
