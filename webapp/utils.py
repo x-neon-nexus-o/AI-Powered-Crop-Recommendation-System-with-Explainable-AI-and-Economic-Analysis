@@ -136,20 +136,23 @@ def engineer_features(N, P, K, temperature, humidity, ph, rainfall):
     features['ph'] = ph
     features['rainfall'] = rainfall
     
+    # Match training notebook numerics (very small epsilon, not +1 smoothing)
+    eps = 1e-5
+
     # 2. Nutrient ratio features (8)
-    features['N_to_P_ratio'] = N / (P + 1)
-    features['N_to_K_ratio'] = N / (K + 1)
-    features['P_to_K_ratio'] = P / (K + 1)
+    features['N_to_P_ratio'] = N / (P + eps)
+    features['N_to_K_ratio'] = N / (K + eps)
+    features['P_to_K_ratio'] = P / (K + eps)
     features['NPK_sum'] = N + P + K
     features['NPK_product'] = N * P * K
-    npk_total = N + P + K + 1
+    npk_total = N + P + K + eps
     features['N_dominance'] = N / npk_total
     features['P_dominance'] = P / npk_total
     features['K_dominance'] = K / npk_total
     
     # 3. Climate interaction features (3)
     features['temp_humidity_interaction'] = temperature * humidity
-    features['climate_index'] = (temperature * humidity) / 100
+    features['climate_index'] = (temperature / 50) * (humidity / 100)
     features['heat_stress_index'] = temperature / (humidity + 1)
     
     # 4. pH features (5)
@@ -160,26 +163,36 @@ def engineer_features(N, P, K, temperature, humidity, ph, rainfall):
     features['K_ph_interaction'] = K * ph
     
     # 5. Water/moisture features (4)
-    features['water_stress_index'] = rainfall / (humidity + 1)
+    features['water_stress_index'] = temperature / (rainfall + 1)
     features['moisture_index'] = humidity * rainfall / 100
     features['rainfall_per_temp'] = rainfall / (temperature + 1)
-    features['water_availability'] = rainfall * humidity / 100
+    features['water_availability'] = (rainfall / 400) * (humidity / 100)
     
     # 6. Composite indices (4)
-    features['growing_condition_index'] = (temperature * humidity * rainfall) / 10000
-    features['resource_availability'] = (N + P + K) * rainfall / 1000
-    features['environmental_stress'] = abs(temperature - 25) + abs(humidity - 60) + abs(ph - 7) * 10
-    features['nutrient_balance'] = 1 / (1 + abs(N - P) + abs(P - K) + abs(N - K))
+    features['growing_condition_index'] = (
+        (N + P + (K / 3))
+        * (rainfall / 100)
+        * (humidity / 100)
+        / (abs(temperature - 25) + 1)
+    )
+    features['resource_availability'] = features['NPK_sum'] + rainfall
+    features['environmental_stress'] = temperature + ((100 - humidity) / 100) + abs(ph - 7) / 4
+    # Use dominance-based balance formula used in feature engineering notebook.
+    features['nutrient_balance'] = 1 / (
+        abs(features['N_dominance'] - 0.33)
+        + abs(features['P_dominance'] - 0.33)
+        + abs(features['K_dominance'] - 0.32)
+    )
     
     # 7. Categorical encoding features (8)
-    features['temp_category_Hot'] = 1 if temperature > 30 else 0
-    features['temp_category_Moderate'] = 1 if 20 <= temperature <= 30 else 0
-    features['humidity_category_Low'] = 1 if humidity < 50 else 0
-    features['humidity_category_Medium'] = 1 if 50 <= humidity < 70 else 0
-    features['ph_category_Alkaline'] = 1 if ph > 7.5 else 0
-    features['ph_category_Neutral'] = 1 if 6.5 <= ph <= 7.5 else 0
-    features['rainfall_category_Low'] = 1 if rainfall < 100 else 0
-    features['rainfall_category_Medium'] = 1 if 100 <= rainfall < 200 else 0
+    features['temp_category_Hot'] = 1 if temperature >= 30 else 0
+    features['temp_category_Moderate'] = 1 if 15 <= temperature < 30 else 0
+    features['humidity_category_Low'] = 1 if humidity < 40 else 0
+    features['humidity_category_Medium'] = 1 if 40 <= humidity < 70 else 0
+    features['ph_category_Alkaline'] = 1 if ph >= 7.5 else 0
+    features['ph_category_Neutral'] = 1 if 5.5 <= ph < 7.5 else 0
+    features['rainfall_category_Low'] = 1 if rainfall < 50 else 0
+    features['rainfall_category_Medium'] = 1 if 50 <= rainfall < 150 else 0
     
     # Convert to array in correct order
     feature_array = np.array([[features[name] for name in FEATURE_NAMES]])

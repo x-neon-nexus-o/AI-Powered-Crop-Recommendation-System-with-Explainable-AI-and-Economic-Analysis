@@ -245,11 +245,13 @@ def predict():
         model = get_model()
         label_encoder = get_label_encoder()
         probabilities = model.predict_proba(features_scaled)[0]
+        model_classes = getattr(model, 'classes_', np.arange(len(probabilities)))
         top_3_indices = np.argsort(probabilities)[-3:][::-1]
         
         predictions = []
         for idx in top_3_indices:
-            crop_name = label_encoder.inverse_transform([idx])[0]
+            class_id = int(model_classes[idx])
+            crop_name = label_encoder.inverse_transform([class_id])[0]
             prob = probabilities[idx]
             
             # Economic data
@@ -804,12 +806,15 @@ def api_predict():
         features = engineer_features(N, P, K, temperature, humidity, ph, rainfall)
         features_scaled = get_scaler().transform(features)
         
-        probabilities = get_model().predict_proba(features_scaled)[0]
+        model = get_model()
+        probabilities = model.predict_proba(features_scaled)[0]
+        model_classes = getattr(model, 'classes_', np.arange(len(probabilities)))
         top_3_indices = np.argsort(probabilities)[-3:][::-1]
         
         predictions = []
         for idx in top_3_indices:
-            crop_name = get_label_encoder().inverse_transform([idx])[0]
+            class_id = int(model_classes[idx])
+            crop_name = get_label_encoder().inverse_transform([class_id])[0]
             predictions.append({
                 'crop': crop_name,
                 'probability': float(probabilities[idx]),

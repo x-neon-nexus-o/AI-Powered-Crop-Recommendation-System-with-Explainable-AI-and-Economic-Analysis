@@ -26,13 +26,15 @@ def predict_crop(N, P, K, temperature, humidity, ph, rainfall):
     label_encoder = get_label_encoder()
     
     probabilities = model.predict_proba(features_scaled)[0]
+    model_classes = getattr(model, 'classes_', np.arange(len(probabilities)))
     
     # Get top 3 predictions
     top_3_indices = np.argsort(probabilities)[-3:][::-1]
     
     predictions = []
     for idx in top_3_indices:
-        crop_name = label_encoder.inverse_transform([idx])[0]
+        class_id = int(model_classes[idx])
+        crop_name = label_encoder.inverse_transform([class_id])[0]
         prob = probabilities[idx]
         
         predictions.append({
@@ -59,8 +61,14 @@ def get_crop_probabilities(probabilities, label_encoder):
         list: All crops with their probabilities
     """
     all_crops = []
+    model_classes = np.arange(len(probabilities))
+    model = get_model()
+    if model is not None and hasattr(model, 'classes_'):
+        model_classes = model.classes_
+
     for idx, prob in enumerate(probabilities):
-        crop_name = label_encoder.inverse_transform([idx])[0]
+        class_id = int(model_classes[idx])
+        crop_name = label_encoder.inverse_transform([class_id])[0]
         all_crops.append({
             'crop': crop_name,
             'probability': float(prob),
