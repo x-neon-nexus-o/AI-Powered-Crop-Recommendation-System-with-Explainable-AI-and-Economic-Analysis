@@ -11,7 +11,7 @@
 <p align="center">
   <a href="#features"><img src="https://img.shields.io/badge/Features-10%20Innovations-success?style=for-the-badge" alt="Features"/></a>
   <a href="#tech-stack"><img src="https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python"/></a>
-  <a href="#accuracy"><img src="https://img.shields.io/badge/Accuracy-98.5%25-brightgreen?style=for-the-badge" alt="Accuracy"/></a>
+  <a href="#accuracy"><img src="https://img.shields.io/badge/Accuracy-99.32%25-brightgreen?style=for-the-badge" alt="Accuracy"/></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License"/></a>
 </p>
 
@@ -36,7 +36,7 @@
 <td width="50%">
 
 ### 🧠 Explainable AI (XAI)
-Unlike black-box ML models, our system provides **SHAP-based explanations** that tell farmers *why* a crop is recommended.
+The system uses **SHAP-based explanations** to show why a crop was recommended.
 
 > *"Rice is recommended because: High Rainfall (+35%), Suitable Temperature (+28%), Optimal pH (+22%)"*
 
@@ -44,7 +44,7 @@ Unlike black-box ML models, our system provides **SHAP-based explanations** that
 <td width="50%">
 
 ### 💰 Economic Viability Analysis
-Go beyond predictions with **ROI calculations**, market price integration, and profit projections per acre.
+Go beyond prediction with **ROI calculations**, market price integration, and profit projections per acre.
 
 > *"ROI: 145% | Profit: ₹32,000/acre | Risk: Low"*
 
@@ -61,10 +61,10 @@ AI-powered **multi-season rotation planning** for sustainable farming and soil h
 </td>
 <td width="50%">
 
-### 🏆 Stacking Ensemble Model
-Combines **Random Forest + XGBoost + LightGBM** with a meta-learner for industry-leading 98.5% accuracy.
+### 🌱 Seed Variety Recommendation
+Region-aware seed filtering and agronomic ranking from the final seed dataset.
 
-> *"Outperforms single models by 2-3% through intelligent model stacking"*
+> *"Top varieties are ranked by crop, state, drought/rainfed/saline suitability, maturity, and yield potential"*
 
 </td>
 </tr>
@@ -72,17 +72,17 @@ Combines **Random Forest + XGBoost + LightGBM** with a meta-learner for industry
 <td width="50%">
 
 ### 🧪 Fertilizer Recommendation
-**KNN-based smart matching** from a 4,500+ row dataset with 19 fertilizers. Includes **YouTube tutorial links** for each fertilizer.
+**KNN-based smart matching** from a 4,500+ row dataset with 19 fertilizers.
 
 > *"Recommended: Urea | Alternatives: DAP, 10:26:26 NPK | Watch Tutorial"*
 
 </td>
 <td width="50%">
 
-### 📱 WhatsApp Sharing & PWA
-Share crop results via **WhatsApp** or clipboard. **Progressive Web App** — installable on mobile/desktop with offline support.
+### 📱 PWA + Web Dashboard
+Flask-based dashboard with installable **Progressive Web App** support and offline fallback.
 
-> *"Share your CropAI recommendations instantly with fellow farmers"*
+> *"Share crop recommendations instantly and use the app on mobile or desktop"*
 
 </td>
 </tr>
@@ -95,10 +95,21 @@ Share crop results via **WhatsApp** or clipboard. **Progressive Web App** — in
 <p align="center">
   <img src="https://img.shields.io/badge/Crops%20Supported-22-green?style=for-the-badge" alt="Crops"/>
   <img src="https://img.shields.io/badge/ML%20Models-9-blue?style=for-the-badge" alt="Models"/>
-  <img src="https://img.shields.io/badge/Accuracy-98.5%25-brightgreen?style=for-the-badge" alt="Accuracy"/>
+  <img src="https://img.shields.io/badge/Best%20Test%20Accuracy-99.32%25-brightgreen?style=for-the-badge" alt="Accuracy"/>
   <img src="https://img.shields.io/badge/Engineered%20Features-39-orange?style=for-the-badge" alt="Features"/>
   <img src="https://img.shields.io/badge/Fertilizers-19-teal?style=for-the-badge" alt="Fertilizers"/>
 </p>
+
+### **Latest tracked test metrics**
+
+| Rank | Model | Test Accuracy | Precision | Recall | F1-Score | Overfitting Gap |
+|------|-------|---------------|-----------|--------|----------|-----------------|
+| 1 | **Random Forest** | **99.32%** | 99.35% | 99.32% | 99.32% | 0.57% |
+| 2 | **SVM (RBF)** | 97.95% | 98.09% | 97.95% | 97.94% | 1.48% |
+| 3 | Logistic Regression | 97.73% | 97.93% | 97.73% | 97.71% | 1.14% |
+| 4 | Decision Tree | 95.68% | 95.92% | 95.68% | 95.70% | 1.88% |
+
+> The stacking ensemble remains the deployed model in the web app for final crop prediction and downstream recommendations.
 
 ---
 
@@ -177,7 +188,7 @@ This semester project develops an advanced crop recommendation system that goes 
 ```
 AI-Powered Crop Recommendation System/
 │
-├── 📓 notebooks/                          # Jupyter Notebooks (16 files)
+├── 📓 notebooks/                          # Jupyter Notebooks (17 files)
 │   ├── 1.Data Collection and Loading.ipynb
 │   ├── 2.Data Cleaning and Preprocessing.ipynb
 │   ├── 3.Exploratory Data Analysis.ipynb
@@ -193,7 +204,8 @@ AI-Powered Crop Recommendation System/
 │   ├── 13.Explainable AI with SHAP.ipynb
 │   ├── 14.Economic Viability Analysis.ipynb
 │   ├── 15.Crop Rotation Planning.ipynb
-│   └── 16.Final Pipeline and Export.ipynb
+│   ├── 16.Final Pipeline and Export.ipynb
+│   └── 17.Seed Recommendation.ipynb
 │
 ├── 📊 data/
 │   ├── raw/                               # Original datasets
@@ -207,7 +219,11 @@ AI-Powered Crop Recommendation System/
 │   │   ├── cleaned_data.csv
 │   │   ├── engineered_features.csv
 │   │   ├── X_train.csv, X_test.csv
-│   │   └── y_train.csv, y_test.csv
+│   │   ├── y_train.csv, y_test.csv
+│   │   ├── seed_dataset_final_complete.csv
+│   │   ├── seed_mapping_dataset_final.csv
+│   │   ├── seed_varieties_final.csv
+│   │   └── seed_varieties_final_with_features.csv
 │   │
 │   ├── results/                           # Analysis outputs
 │   │   ├── model_comparison.csv
@@ -346,7 +362,23 @@ Format: CSV
 Includes: YouTube tutorial links for each fertilizer
 ```
 
-### **4. Crop Rotation Knowledge Base**
+### **4. Final Seed Recommendation Dataset**
+**Source:** Curated government sources and manual mapping
+```
+File: data/processed/seed_dataset_final_complete.csv
+Purpose: Region-aware seed variety recommendation after crop prediction
+Columns:
+- Category, Crop, Name of Variety, Variety/Hybrid, Sponsoring organization, State, Description
+- drought, saline, rainfed, irrigated, disease_resistant, early_maturity, high_yield
+
+Related files:
+- data/processed/seed_mapping_dataset_final.csv
+- data/processed/seed_varieties_final.csv
+- data/processed/seed_varieties_final_with_features.csv
+- data/processed/seed_varieties_state_split.csv
+```
+
+### **5. Crop Rotation Knowledge Base**
 **Source:** Create manually from agricultural research
 ```
 Reference: Indian Council of Agricultural Research (ICAR)
@@ -632,17 +664,14 @@ Size: 50-100 rotation combinations
 
 ### **Overall Model Comparison**
 
-| Rank | Model | Accuracy | Precision | Recall | F1-Score | Prediction Time (ms) | Model Size (MB) |
-|------|-------|----------|-----------|--------|----------|----------------------|-----------------|
-| 1 | **Random Forest** | **99.32%** | 99.35% | 99.32% | 99.32% | 93.32 | 2.92 |
-| 2 | **Stacking Ensemble** ⭐ | **99.32%** | 99.37% | 99.32% | 99.32% | 136.50 | 13.37 |
-| 3 | XGBoost | 98.64% | 98.68% | 98.64% | 98.63% | 91.78 | 3.58 |
-| 4 | LightGBM | 98.41% | 98.48% | 98.41% | 98.41% | 58.19 | 3.00 |
-| 5 | SVM (RBF) | 97.95% | 98.09% | 97.95% | 97.94% | 43.94 | 0.31 |
-| 6 | Logistic Regression | 97.73% | 97.93% | 97.73% | 97.71% | 0.96 | 0.01 |
-| 7 | Decision Tree | 95.68% | 95.92% | 95.68% | 95.70% | 0.59 | 0.02 |
+| Rank | Model | Test Accuracy | Precision | Recall | F1-Score | Overfitting Gap |
+|------|-------|---------------|-----------|--------|----------|-----------------|
+| 1 | **Random Forest** | **99.32%** | 99.35% | 99.32% | 99.32% | 0.57% |
+| 2 | **SVM (RBF)** | 97.95% | 98.09% | 97.95% | 97.94% | 1.48% |
+| 3 | Logistic Regression | 97.73% | 97.93% | 97.73% | 97.71% | 1.14% |
+| 4 | Decision Tree | 95.68% | 95.92% | 95.68% | 95.70% | 1.88% |
 
-> ⭐ **Deployed Model:** Stacking Ensemble — chosen for highest precision and lowest overfitting gap (0.68%)
+> ⭐ **Deployed Model:** Stacking Ensemble — used in the web app for final crop prediction and downstream recommendations. The current metadata snapshot tracks the standalone model metrics above.
 
 ### **Dataset Split**
 - **Training samples:** 1,760 (80%)
